@@ -1,3 +1,25 @@
 # Climax Prompt
 
 Prompt for input via the CLI.
+
+[![python badge]][python website]
+[![poetry badge]][poetry website]
+[![pytest badge]][pytest website]
+![Git][git badge]
+[![GitLab][gitlab badge]][gitlab repo]
+[![github badge]][github repo]
+[![MIT][mit shield]][mit website]
+
+[python badge]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54 "Python"
+[python website]: https://www.python.org/ "Python"
+[poetry badge]: https://img.shields.io/badge/Poetry-%233B82F6.svg?style=for-the-badge&logo=poetry&logoColor=0B3D8D "Poetry"
+[poetry website]: https://python-poetry.org/ "Poetry"
+[pytest badge]: https://img.shields.io/badge/pytest-%23ffffff.svg?style=for-the-badge&logo=pytest&logoColor=2f9fe3 "PyTest"
+[pytest website]: https://docs.pytest.org/en/stable/ "PyTest"
+[git badge]: https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white "Git"
+[gitlab badge]: https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white "GitLab repo"
+[gitlab repo]: https://gitlab.com/SnapperGee/termite-invasion "GitLab repo"
+[github badge]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "GitHub"
+[github repo]: https://github.com/SnapperGee/wedaviz "GitHub"
+[mit shield]: https://img.shields.io/badge/license-MIT-green?style=for-the-badge "MIT"
+[mit website]: https://opensource.org/license/mit "MIT"
