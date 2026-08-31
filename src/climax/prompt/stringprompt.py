@@ -4,7 +4,7 @@ from functools import cached_property
 from typing import Literal
 
 
-def _default_string_validator(_: str) -> Literal[True]:
+def _always_true_string_predicate(_: str) -> Literal[True]:
     return True
 
 
@@ -29,7 +29,7 @@ class StringPrompt:
         return (
             self.string_validator
             if self.string_validator
-            else _default_string_validator
+            else _always_true_string_predicate
         )
 
     @cached_property
