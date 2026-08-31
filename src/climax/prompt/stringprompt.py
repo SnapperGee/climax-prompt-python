@@ -11,7 +11,7 @@ class StringPrompt:
     formatter: Callable[[str], str] | None = field(kw_only=True, default=None)
     ps1: str | None = field(kw_only=True, default=None)
 
-    def exec_string_loop(self) -> str:
+    def exec_string_input_loop(self) -> str:
         ps1: Final = self.ps1 if self.ps1 is not None else ""
         _input = input(self.message + ps1)
         formatted_input = self.formatter(_input) if self.formatter else _input
