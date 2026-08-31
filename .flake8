@@ -1,0 +1,11 @@
+[flake8]
+filename = ./src/**/*.py, ./tests/**/*.py
+max-line-length = 90
+; extend-select = B950
+extend-ignore =
+    # whitespace before ‘,’, ‘;’, or ‘:’
+    E203,
+    # line too long
+    E501,
+    # multiple statements on one line (colon)
+    E701

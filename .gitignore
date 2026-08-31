@@ -1,0 +1,15 @@
+source
+!source/conf.py
+!source/index.rst
+.vscode/
+.idea/
+.DS_Store
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+__pycache__/
+.venv
+.project/
+Thumbs.db
+build/
+*.py[cod]
