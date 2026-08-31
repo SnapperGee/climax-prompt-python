@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
+
 @dataclass(frozen=True)
 class StringPrompt:
     message: str
