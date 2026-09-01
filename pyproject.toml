@@ -29,7 +29,7 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-packages = [{include = "climax/prompt", from = "src"}]
+packages = [{include = "climax/prompt", from = "src/main"}]
 
 [project.urls]
 homepage = "https://gitlab.com/SnapperGee/climax-prompt-python"
