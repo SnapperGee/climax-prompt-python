@@ -48,16 +48,20 @@ class StringPrompt:
         return self.ps1 if self.ps1 is not None else ""
 
     @final
+    def format(self, string: str) -> str:
+        return self._formatter(string)
+
+    @final
     def exec_string_input_loop(self) -> str:
         _input = input(self.message + self._ps1)
-        formatted_input = self._formatter(_input)
+        formatted_input = self.format(_input)
 
         while not self._string_validator(formatted_input):
             invalid_input_string = self._invalid_string_message_generator(
                 _input, formatted_input
             )
             _input = input(invalid_input_string + self.message + self._ps1)
-            formatted_input = self._formatter(_input)
+            formatted_input = self.format(_input)
 
         return formatted_input
 
