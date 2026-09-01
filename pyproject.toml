@@ -22,7 +22,7 @@ dev = [
     "numpydoc (>=1.10.0,<2.0.0)",
     "flake8-bugbear (>=25.11.29,<26.0.0)",
     "pytest (>=9.1.1,<10.0.0)",
-    "groundwork-sphinx-theme (>=1.1.1,<2.0.0)"
+    "furo (>=2025.12.19,<2026.0.0)",
 ]
 
 [project.urls]
