@@ -6,10 +6,6 @@ from typing import Literal, final
 from .stringprompt import StringPrompt, _always_true_predicate
 
 
-def _identity_function[T](arg: T) -> T:
-    return arg
-
-
 def _default_invalid_value_message_generator(_: object) -> Literal[""]:
     return ""
 
