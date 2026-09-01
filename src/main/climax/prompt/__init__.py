@@ -79,7 +79,7 @@ class Prompt[ValueType](StringPrompt):
 
         while not self._validator(converted_input):
             if self.invalid_value_message_generator:
-                print(self.invalid_value_message_generator(converted_input), end=None)
+                print(self.invalid_value_message_generator(converted_input), end="")
 
             string_input = super().exec_string_input_loop()
             converted_input = self.converter(string_input)
