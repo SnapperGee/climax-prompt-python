@@ -19,14 +19,13 @@ class Prompt[ValueType](StringPrompt):
 
     @cached_property
     def _validator(self) -> Callable[[ValueType], bool]:
-        return self.validator if self.validator else _always_true_predicate
+        return self.validator or _always_true_predicate
 
     @cached_property
     def _invalid_value_message_generator(self) -> Callable[[ValueType], str]:
         return (
             self.invalid_value_message_generator
-            if self.invalid_value_message_generator
-            else _default_invalid_value_message_generator
+            or _default_invalid_value_message_generator
         )
 
     def exec_input_loop(self) -> ValueType:

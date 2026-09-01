@@ -27,23 +27,20 @@ class StringPrompt:
     @final
     @cached_property
     def _string_validator(self) -> Callable[[str], bool]:
-        return (
-            self.string_validator if self.string_validator else _always_true_predicate
-        )
+        return self.string_validator or _always_true_predicate
 
     @final
     @cached_property
     def _invalid_string_message_generator(self) -> Callable[[str, str], str]:
         return (
             self.invalid_string_message_generator
-            if self.invalid_string_message_generator
-            else _default_invalid_string_message_generator
+            or _default_invalid_string_message_generator
         )
 
     @final
     @cached_property
     def _formatter(self) -> Callable[[str], str]:
-        return self.formatter if self.formatter else _default_formatter
+        return self.formatter or _default_formatter
 
     @final
     @cached_property
