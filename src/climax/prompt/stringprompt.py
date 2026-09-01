@@ -60,6 +60,6 @@ class StringPrompt:
                 _input, formatted_input
             )
             _input = input(invalid_input_string + self.message + self._ps1)
-            formatted_input = self.formatter(_input) if self.formatter else _input
+            formatted_input = self._formatter(_input)
 
         return formatted_input
