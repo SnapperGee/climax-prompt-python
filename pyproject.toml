@@ -5,7 +5,8 @@ description = "Prompt for input via the CLI."
 authors = [
     {name = "Snap",email = "XxSnapperGeexX@gmail.com"}
 ]
-license = "LICENSE.txt"
+license = "MIT"
+license-files = ["LICENSE.txt"]
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
