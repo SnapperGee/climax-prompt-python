@@ -27,9 +27,7 @@ class StringPrompt:
     @cached_property
     def _string_validator(self) -> Callable[[str], bool]:
         return (
-            self.string_validator
-            if self.string_validator
-            else _always_true_predicate
+            self.string_validator if self.string_validator else _always_true_predicate
         )
 
     @cached_property
