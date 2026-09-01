@@ -5,7 +5,7 @@ from climax.prompt import StringPrompt
 
 class TestStringPrompt:
     def test_stringprompt_fields(self) -> None:
-        message: Final = "Input a palidrome.\n"
+        message: Final = "Input a palindrome.\n"
         string_validator: Final = lambda string: string == string[::-1]
         invalid_string_message_generator: Final = (
             lambda raw_string, _: f'"{raw_string}" is not a palindrome.\n'
