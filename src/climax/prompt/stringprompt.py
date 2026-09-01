@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Literal
+from typing import Literal, final
 
 
 def _always_true_predicate(_: object) -> Literal[True]:
@@ -24,12 +24,14 @@ class StringPrompt:
     formatter: Callable[[str], str] | None = field(kw_only=True, default=None)
     ps1: str | None = field(kw_only=True, default=None)
 
+    @final
     @cached_property
     def _string_validator(self) -> Callable[[str], bool]:
         return (
             self.string_validator if self.string_validator else _always_true_predicate
         )
 
+    @final
     @cached_property
     def _invalid_string_message_generator(self) -> Callable[[str, str], str]:
         return (
@@ -38,14 +40,17 @@ class StringPrompt:
             else _default_invalid_string_message_generator
         )
 
+    @final
     @cached_property
     def _formatter(self) -> Callable[[str], str]:
         return self.formatter if self.formatter else _default_formatter
 
+    @final
     @cached_property
     def _ps1(self) -> str:
         return self.ps1 if self.ps1 is not None else ""
 
+    @final
     def exec_string_input_loop(self) -> str:
         _input = input(self.message + self._ps1)
         formatted_input = self._formatter(_input)
