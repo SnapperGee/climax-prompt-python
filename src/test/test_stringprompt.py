@@ -39,3 +39,14 @@ class TestStringPrompt:
 
         assert string_prompt.formatter is None
         assert string_prompt.ps1 is None
+
+    def test_stringprompt_default_format_method_is_identity_function(self) -> None:
+        string: Final = "snake"
+
+        string_prompt: Final = StringPrompt(
+            "",
+            lambda _: True,
+            lambda _, __: "",
+        )
+
+        assert string_prompt.format(string) is string
