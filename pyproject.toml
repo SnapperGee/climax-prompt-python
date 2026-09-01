@@ -24,6 +24,11 @@ dev = [
     "groundwork-sphinx-theme (>=1.1.1,<2.0.0)"
 ]
 
+[project.urls]
+homepage = "https://gitlab.com/SnapperGee/climax-prompt-python"
+repository = "https://gitlab.com/SnapperGee/climax-prompt-python"
+issues = "https://gitlab.com/SnapperGee/climax-prompt-python/-/issues"
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
@@ -31,10 +36,9 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 packages = [{include = "climax/prompt", from = "src/main"}]
 
-[project.urls]
-homepage = "https://gitlab.com/SnapperGee/climax-prompt-python"
-repository = "https://gitlab.com/SnapperGee/climax-prompt-python"
-issues = "https://gitlab.com/SnapperGee/climax-prompt-python/-/issues"
+[tool.pytest]
+testpaths = ["src/test"]
+addopts = ["--import-mode=importlib"]
 
 [tool.isort]
 profile = "black"
