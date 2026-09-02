@@ -1,7 +1,7 @@
 import builtins
 from collections.abc import Callable
 from typing import Final, Literal
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 from climax.prompt import StringPrompt
 from pytest import mark
@@ -21,6 +21,18 @@ def _invalid_string_message_generator(raw_input: str, formatted_input: str) -> s
 
 def _strip_string(string: str) -> str:
     return string.strip()
+
+
+def _string_is_empty(string: str) -> bool:
+    return len(string) == 0
+
+
+def _string_is_not_empty(string: str) -> bool:
+    return len(string) != 0
+
+
+def _string_is_palindrome(string: str) -> bool:
+    return string == string[::-1]
 
 
 def test_stringprompt_fields() -> None:
@@ -64,18 +76,18 @@ def test_stringprompt_default_format_method_is_identity_function() -> None:
 
 
 @mark.parametrize(
-    "validator,formatter,user_input",
+    "validator,user_input,formatter",
     (
-        (lambda string: len(string) == 0, None, ""),
-        (lambda string: string.isdigit(), None, "123"),
-        (lambda string: string == string[::-1], None, "level"),
-        (lambda string: len(string) == 0, _strip_string, "         "),
-        (lambda string: string.isdigit(), _strip_string, "     123     "),
-        (lambda string: string == string[::-1], _strip_string, "level         "),
+        (_string_is_empty, "", None),
+        (str.isdigit, "123", None),
+        (_string_is_palindrome, "level", None),
+        (_string_is_empty, "         ", _strip_string),
+        (str.isdigit, "     123     ", _strip_string),
+        (_string_is_palindrome, "level         ", _strip_string),
     ),
 )
 def test_stringprompt_execStringInputLoop_with_valid_input(
-    validator: Callable[[str], bool], formatter: Callable[[str], str] | None, user_input: str
+    validator: Callable[[str], bool], user_input: str, formatter: Callable[[str], str] | None
 ) -> None:
     string_prompt: Final = StringPrompt(_MESSAGE, validator, _invalid_string_message_generator, formatter=formatter)
 
@@ -84,3 +96,35 @@ def test_stringprompt_execStringInputLoop_with_valid_input(
 
     assert result == (formatter(user_input) if formatter else user_input)
     mock_input.assert_called_once_with(_MESSAGE)
+
+
+# @mark.parametrize(
+#     "validator,user_input,formatter",
+#     (
+#         (_string_is_not_empty, "", None),
+#         (str.isdigit, "A123", None),
+#         (_string_is_palindrome, "Knights who say ni", None),
+#         (_string_is_not_empty, "         ", _strip_string),
+#         (str.isdigit, "  A   123     ", _strip_string),
+#         (_string_is_palindrome, "Knights who say ni", _strip_string),
+#     ),
+# )
+# def test_stringprompt_execStringInputLoop_with_invalid_input(
+#     validator: Callable[[str], bool], user_input: str, formatter: Callable[[str], str] | None
+# ) -> None:
+#     string_prompt: Final = StringPrompt(_MESSAGE, validator, _invalid_string_message_generator, formatter=formatter)
+
+#     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
+#         result: Final = string_prompt.exec_string_input_loop()
+
+#     assert result is None
+#     assert mock_input.call_args_list == [
+#         call(_MESSAGE),
+#         call(
+#             _invalid_string_message_generator(
+#                 user_input,
+#                 formatter(user_input) if formatter else user_input,
+#             )
+#             + _MESSAGE
+#         ),
+#     ]
