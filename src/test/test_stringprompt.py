@@ -4,7 +4,7 @@ from typing import Final, Literal
 from unittest.mock import call, patch
 
 from climax.prompt import StringPrompt
-from pytest import mark
+from pytest import mark, raises
 
 _MESSAGE: Final = "message\n"
 
@@ -98,33 +98,33 @@ def test_stringprompt_execStringInputLoop_with_valid_input(
     mock_input.assert_called_once_with(_MESSAGE)
 
 
-# @mark.parametrize(
-#     "validator,user_input,formatter",
-#     (
-#         (_string_is_not_empty, "", None),
-#         (str.isdigit, "A123", None),
-#         (_string_is_palindrome, "Knights who say ni", None),
-#         (_string_is_not_empty, "         ", _strip_string),
-#         (str.isdigit, "  A   123     ", _strip_string),
-#         (_string_is_palindrome, "Knights who say ni", _strip_string),
-#     ),
-# )
-# def test_stringprompt_execStringInputLoop_with_invalid_input(
-#     validator: Callable[[str], bool], user_input: str, formatter: Callable[[str], str] | None
-# ) -> None:
-#     string_prompt: Final = StringPrompt(_MESSAGE, validator, _invalid_string_message_generator, formatter=formatter)
+@mark.parametrize(
+    "validator,user_input,formatter",
+    (
+        (_string_is_not_empty, "", None),
+        (str.isdigit, "A123", None),
+        (_string_is_palindrome, "Knights who say ni", None),
+        (_string_is_not_empty, "         ", _strip_string),
+        (str.isdigit, "  A   123     ", _strip_string),
+        (_string_is_palindrome, "Knights who say ni", _strip_string),
+    ),
+)
+def test_stringprompt_execStringInputLoop_with_invalid_input(
+    validator: Callable[[str], bool], user_input: str, formatter: Callable[[str], str] | None
+) -> None:
+    string_prompt: Final = StringPrompt(_MESSAGE, validator, _invalid_string_message_generator, formatter=formatter)
 
-#     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
-#         result: Final = string_prompt.exec_string_input_loop()
+    with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
+        with raises(StopIteration):
+            string_prompt.exec_string_input_loop()
 
-#     assert result is None
-#     assert mock_input.call_args_list == [
-#         call(_MESSAGE),
-#         call(
-#             _invalid_string_message_generator(
-#                 user_input,
-#                 formatter(user_input) if formatter else user_input,
-#             )
-#             + _MESSAGE
-#         ),
-#     ]
+    assert mock_input.call_args_list == [
+        call(_MESSAGE),
+        call(
+            _invalid_string_message_generator(
+                user_input,
+                formatter(user_input) if formatter else user_input,
+            )
+            + _MESSAGE
+        ),
+    ]
