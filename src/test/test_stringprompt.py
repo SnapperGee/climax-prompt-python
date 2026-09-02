@@ -76,55 +76,71 @@ def test_stringprompt_default_format_method_is_identity_function() -> None:
 
 
 @mark.parametrize(
-    "validator,user_input,formatter",
+    "validator,user_input,formatter,ps1",
     (
-        (_string_is_empty, "", None),
-        (str.isdigit, "123", None),
-        (_string_is_palindrome, "level", None),
-        (_string_is_empty, "         ", _strip_string),
-        (str.isdigit, "     123     ", _strip_string),
-        (_string_is_palindrome, "level         ", _strip_string),
+        (_string_is_empty, "", None, None),
+        (str.isdigit, "123", None, None),
+        (_string_is_palindrome, "level", None, None),
+        (_string_is_empty, "         ", _strip_string, None),
+        (str.isdigit, "     123     ", _strip_string, None),
+        (_string_is_palindrome, "level         ", _strip_string, None),
+        (_string_is_empty, "", None, _PS1),
+        (str.isdigit, "123", None, _PS1),
+        (_string_is_palindrome, "level", None, _PS1),
+        (_string_is_empty, "         ", _strip_string, _PS1),
+        (str.isdigit, "     123     ", _strip_string, _PS1),
+        (_string_is_palindrome, "level         ", _strip_string, _PS1),
     ),
 )
 def test_stringprompt_execStringInputLoop_with_valid_input(
-    validator: Callable[[str], bool], user_input: str, formatter: Callable[[str], str] | None
+    validator: Callable[[str], bool], user_input: str, formatter: Callable[[str], str] | None, ps1: str | None
 ) -> None:
-    string_prompt: Final = StringPrompt(_MESSAGE, validator, _invalid_string_message_generator, formatter=formatter)
+    string_prompt: Final = StringPrompt(
+        _MESSAGE, validator, _invalid_string_message_generator, formatter=formatter, ps1=ps1
+    )
 
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = string_prompt.exec_string_input_loop()
 
     assert result == (formatter(user_input) if formatter else user_input)
-    mock_input.assert_called_once_with(_MESSAGE)
+    mock_input.assert_called_once_with(_MESSAGE + (ps1 or ""))
 
 
 @mark.parametrize(
-    "validator,user_input,formatter",
+    "validator,user_input,formatter,ps1",
     (
-        (_string_is_not_empty, "", None),
-        (str.isdigit, "A123", None),
-        (_string_is_palindrome, "Knights who say ni", None),
-        (_string_is_not_empty, "         ", _strip_string),
-        (str.isdigit, "  A   123     ", _strip_string),
-        (_string_is_palindrome, "Knights who say ni", _strip_string),
+        (_string_is_not_empty, "", None, None),
+        (str.isdigit, "A123", None, None),
+        (_string_is_palindrome, "Knights who say ni", None, None),
+        (_string_is_not_empty, "         ", _strip_string, None),
+        (str.isdigit, "  A   123     ", _strip_string, None),
+        (_string_is_palindrome, "Knights who say ni", _strip_string, None),
+        (_string_is_not_empty, "", None, _PS1),
+        (str.isdigit, "A123", None, _PS1),
+        (_string_is_palindrome, "Knights who say ni", None, _PS1),
+        (_string_is_not_empty, "         ", _strip_string, _PS1),
+        (str.isdigit, "  A   123     ", _strip_string, _PS1),
+        (_string_is_palindrome, "Knights who say ni", _strip_string, _PS1),
     ),
 )
 def test_stringprompt_execStringInputLoop_with_invalid_input(
-    validator: Callable[[str], bool], user_input: str, formatter: Callable[[str], str] | None
+    validator: Callable[[str], bool], user_input: str, formatter: Callable[[str], str] | None, ps1: str | None
 ) -> None:
-    string_prompt: Final = StringPrompt(_MESSAGE, validator, _invalid_string_message_generator, formatter=formatter)
+    string_prompt: Final = StringPrompt(
+        _MESSAGE, validator, _invalid_string_message_generator, formatter=formatter, ps1=ps1
+    )
 
-    with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
-        with raises(StopIteration):
-            string_prompt.exec_string_input_loop()
+    with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input, raises(StopIteration):
+        string_prompt.exec_string_input_loop()
 
     assert mock_input.call_args_list == [
-        call(_MESSAGE),
+        call(_MESSAGE + (ps1 or "")),
         call(
             _invalid_string_message_generator(
                 user_input,
                 formatter(user_input) if formatter else user_input,
             )
             + _MESSAGE
+            + (ps1 or "")
         ),
     ]
