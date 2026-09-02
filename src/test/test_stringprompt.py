@@ -1,4 +1,6 @@
+import builtins
 from typing import Final
+from unittest.mock import call, patch
 
 from climax.prompt import StringPrompt
 
@@ -7,10 +9,10 @@ class TestStringPrompt:
     def test_stringprompt_fields(self) -> None:
         message: Final = "Input a palindrome.\n"
         string_validator: Final = lambda string: string == string[::-1]
-        invalid_string_message_generator: Final = (
-            lambda raw_string, _: f'"{raw_string}" is not a palindrome.\n'
-        )
-        formatter: Final = lambda string: string.strip()
+        def invalid_string_message_generator(raw_string: str, _: str) -> str:
+            return f'"{raw_string}" is not a palindrome.\n'
+        def formatter(string: str) -> str:
+            return string.strip()
         ps1: Final = ">>> "
 
         string_prompt: Final = StringPrompt(
@@ -50,3 +52,26 @@ class TestStringPrompt:
         )
 
         assert string_prompt.format(string) is string
+
+    def test_stringprompt_exec_string_input_loop(self) -> None:
+        message: Final = "Enter an integer: "
+        def invalid_message_generator(raw_input: str, _: str) -> str:
+            return f'"{raw_input} is not an integer.\n"'
+
+        string_prompt: Final = StringPrompt(
+            message,
+            lambda string: string.isdigit(),
+            invalid_message_generator,
+        )
+
+        invalid_input: Final = "abc"
+        valid_input: Final = "123"
+
+        with patch.object(builtins, "input", side_effect=(invalid_input, valid_input)) as mock_input:
+            result: Final = string_prompt.exec_string_input_loop()
+
+        assert result == valid_input
+        assert mock_input.call_args_list == [
+            call(message),
+            call(invalid_message_generator(invalid_input, "") + message),
+        ]
