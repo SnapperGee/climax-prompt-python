@@ -32,10 +32,7 @@ class StringPrompt:
     @final
     @cached_property
     def _invalid_string_message_generator(self) -> Callable[[str, str], str]:
-        return (
-            self.invalid_string_message_generator
-            or _default_invalid_string_message_generator
-        )
+        return self.invalid_string_message_generator or _default_invalid_string_message_generator
 
     @final
     @cached_property
@@ -57,9 +54,7 @@ class StringPrompt:
         formatted_input = self.format(_input)
 
         while not self._string_validator(formatted_input):
-            invalid_input_string = self._invalid_string_message_generator(
-                _input, formatted_input
-            )
+            invalid_input_string = self._invalid_string_message_generator(_input, formatted_input)
             _input = input(invalid_input_string + self.message + self._ps1)
             formatted_input = self.format(_input)
 
