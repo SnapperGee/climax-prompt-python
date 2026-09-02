@@ -9,7 +9,9 @@ from pytest import mark
 
 def test_stringprompt_fields() -> None:
     message: Final = "Input a palindrome.\n"
-    string_validator: Final = lambda string: string == string[::-1]
+
+    def string_validator(string: str) -> bool:
+        return string == string[::-1]
 
     def invalid_string_message_generator(raw_string: str, _: str) -> str:
         return f'"{raw_string}" is not a palindrome.\n'
