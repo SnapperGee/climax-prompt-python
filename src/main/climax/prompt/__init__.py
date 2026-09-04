@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Literal, final
+from typing import Literal, final, overload
 
 
 def _always_true_predicate(_: object) -> Literal[True]:
@@ -48,8 +48,16 @@ class StringPrompt:
     def format(self, string: str) -> str:
         return self._formatter(string)
 
+    @overload
+    def exec_string_input_loop(self) -> str: ...
+    @overload
+    def exec_string_input_loop(self, include_raw_input: Literal[False]) -> str: ...
+    @overload
+    def exec_string_input_loop(self, include_raw_input: Literal[True]) -> tuple[str, str]: ...
+    @overload
+    def exec_string_input_loop(self, include_raw_input: bool) -> str | tuple[str, str]: ...
     @final
-    def exec_string_input_loop(self) -> str:
+    def exec_string_input_loop(self, include_raw_input: bool = False) -> str | tuple[str, str]:
         _input = input(self.message + self._ps1)
         formatted_input = self.format(_input)
 
@@ -58,7 +66,7 @@ class StringPrompt:
             _input = input(invalid_input_string + self.message + self._ps1)
             formatted_input = self.format(_input)
 
-        return formatted_input
+        return formatted_input if not include_raw_input else (formatted_input, _input)
 
 
 @final
@@ -72,15 +80,24 @@ class Prompt[ValueType](StringPrompt):
     def _validator(self) -> Callable[[ValueType], bool]:
         return self.validator or _always_true_predicate
 
-    def exec_input_loop(self) -> ValueType:
-        string_input = super().exec_string_input_loop()
-        converted_input = self.converter(string_input)
+    @overload
+    def exec_input_loop(self) -> ValueType: ...
+    @overload
+    def exec_input_loop(self, include_raw_input: Literal[False]) -> ValueType: ...
+    @overload
+    def exec_input_loop(self, include_raw_input: Literal[True]) -> tuple[ValueType, str]: ...
+    @overload
+    def exec_input_loop(self, include_raw_input: bool) -> ValueType | tuple[ValueType, str]: ...
+    @final
+    def exec_input_loop(self, include_raw_input: bool = False) -> ValueType | tuple[ValueType, str]:
+        string_input = super().exec_string_input_loop(include_raw_input)
+        converted_input = self.converter(string_input if isinstance(string_input, str) else string_input[0])
 
         while not self._validator(converted_input):
             if self.invalid_value_message_generator:
                 print(self.invalid_value_message_generator(converted_input), end="")
 
-            string_input = super().exec_string_input_loop()
-            converted_input = self.converter(string_input)
+            string_input = super().exec_string_input_loop(include_raw_input)
+            converted_input = self.converter(string_input if isinstance(string_input, str) else string_input[0])
 
-        return converted_input
+        return converted_input if isinstance(string_input, str) else (converted_input, string_input[1])
