@@ -12,22 +12,29 @@ def _string_identity_function(string: str) -> str:
     return string
 
 
-class StringInputLoopResult(NamedTuple):
-    formatted_string_input: str
-    raw_string_input: str
+class StringInput(NamedTuple):
+    formatted: str
+    raw_unformatted: str
+
+
+type StringValidator = Callable[[StringInput], str | None]
+
+
+def _always_none_string_validator(_result: StringInput) -> None:
+    return None
 
 
 @dataclass(frozen=True)
 class StringPrompt:
     message: str
-    string_validator: Callable[[str], str | None] | None
+    string_validator: StringValidator | None
     formatter: Callable[[str], str] | None = field(kw_only=True, default=None)
     ps1: str | None = field(kw_only=True, default=None)
 
     @final
     @cached_property
-    def _string_validator(self) -> Callable[[str], str | None]:
-        return self.string_validator or _always_none_returning_function
+    def _string_validator(self) -> StringValidator:
+        return self.string_validator or _always_none_string_validator
 
     @final
     @cached_property
@@ -48,19 +55,19 @@ class StringPrompt:
     @overload
     def exec_string_input_loop(self, include_raw_input: Literal[False]) -> str: ...
     @overload
-    def exec_string_input_loop(self, include_raw_input: Literal[True]) -> StringInputLoopResult: ...
+    def exec_string_input_loop(self, include_raw_input: Literal[True]) -> StringInput: ...
     @overload
-    def exec_string_input_loop(self, include_raw_input: bool) -> str | StringInputLoopResult: ...
+    def exec_string_input_loop(self, include_raw_input: bool) -> str | StringInput: ...
     @final
-    def exec_string_input_loop(self, include_raw_input: bool = False) -> str | StringInputLoopResult:
-        _input = input(self.message + self._ps1)
-        formatted_input = self.format(_input)
+    def exec_string_input_loop(self, include_raw_input: bool = False) -> str | StringInput:
+        raw_string_input = input(self.message + self._ps1)
+        string_input = StringInput(self.format(raw_string_input), raw_string_input)
 
-        while (invalid_input_string_message := self._string_validator(formatted_input)) is not None:
-            _input = input(invalid_input_string_message + self.message + self._ps1)
-            formatted_input = self.format(_input)
+        while (invalid_input_string_message := self._string_validator(string_input)) is not None:
+            raw_string_input = input(invalid_input_string_message + self.message + self._ps1)
+            string_input = StringInput(self.format(raw_string_input), raw_string_input)
 
-        return formatted_input if not include_raw_input else StringInputLoopResult(formatted_input, _input)
+        return string_input if include_raw_input else string_input.formatted
 
 
 @final
