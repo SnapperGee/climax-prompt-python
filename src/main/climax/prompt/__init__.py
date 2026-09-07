@@ -4,12 +4,8 @@ from functools import cached_property
 from typing import Literal, NamedTuple, final, overload
 
 
-def _always_true_predicate(_: object) -> Literal[True]:
-    return True
-
-
-def _default_invalid_string_message_generator(_formatted_input: str, _raw_input: str) -> Literal[""]:
-    return ""
+def _always_none_returning_function(_: object) -> None:
+    return None
 
 
 def _string_identity_function(string: str) -> str:
@@ -24,20 +20,14 @@ class StringInputLoopResult(NamedTuple):
 @dataclass(frozen=True)
 class StringPrompt:
     message: str
-    string_validator: Callable[[str], bool] | None
-    invalid_string_message_generator: Callable[[str, str], str] | None
+    string_validator: Callable[[str], str | None] | None
     formatter: Callable[[str], str] | None = field(kw_only=True, default=None)
     ps1: str | None = field(kw_only=True, default=None)
 
     @final
     @cached_property
-    def _string_validator(self) -> Callable[[str], bool]:
-        return self.string_validator or _always_true_predicate
-
-    @final
-    @cached_property
-    def _invalid_string_message_generator(self) -> Callable[[str, str], str]:
-        return self.invalid_string_message_generator or _default_invalid_string_message_generator
+    def _string_validator(self) -> Callable[[str], str | None]:
+        return self.string_validator or _always_none_returning_function
 
     @final
     @cached_property
@@ -66,9 +56,8 @@ class StringPrompt:
         _input = input(self.message + self._ps1)
         formatted_input = self.format(_input)
 
-        while not self._string_validator(formatted_input):
-            invalid_input_string = self._invalid_string_message_generator(_input, formatted_input)
-            _input = input(invalid_input_string + self.message + self._ps1)
+        while (invalid_input_string_message := self._string_validator(formatted_input)) is not None:
+            _input = input(invalid_input_string_message + self.message + self._ps1)
             formatted_input = self.format(_input)
 
         return formatted_input if not include_raw_input else StringInputLoopResult(formatted_input, _input)
@@ -78,12 +67,11 @@ class StringPrompt:
 @dataclass(frozen=True)
 class Prompt[ValueType](StringPrompt):
     converter: Callable[[str], ValueType]
-    validator: Callable[[ValueType], bool] | None
-    invalid_value_message_generator: Callable[[ValueType], str] | None
+    validator: Callable[[ValueType], str | None] | None
 
     @cached_property
-    def _validator(self) -> Callable[[ValueType], bool]:
-        return self.validator or _always_true_predicate
+    def _validator(self) -> Callable[[ValueType], str | None]:
+        return self.validator or _always_none_returning_function
 
     @overload
     def exec_input_loop(self) -> ValueType: ...
@@ -98,9 +86,9 @@ class Prompt[ValueType](StringPrompt):
         string_input = super().exec_string_input_loop(include_raw_input)
         converted_input = self.converter(string_input if isinstance(string_input, str) else string_input[0])
 
-        while not self._validator(converted_input):
-            if self.invalid_value_message_generator:
-                print(self.invalid_value_message_generator(converted_input), end="")
+        while (invalid_input_string_message := self._validator(converted_input)) is not None:
+            if invalid_input_string_message:
+                print(invalid_input_string_message, end="")
 
             string_input = super().exec_string_input_loop(include_raw_input)
             converted_input = self.converter(string_input if isinstance(string_input, str) else string_input[0])
