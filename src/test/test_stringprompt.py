@@ -3,7 +3,7 @@ from collections.abc import Callable
 from typing import Final, Literal
 from unittest.mock import call, patch
 
-from climax.prompt import StringPrompt
+from climax.prompt import StringInputLoopResult, StringPrompt
 from pytest import mark, raises
 
 _MESSAGE: Final = "message\n"
@@ -160,8 +160,11 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_raw_string_return
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = string_prompt.exec_string_input_loop(True)
 
-    assert result == (formatter(user_input) if formatter else user_input, user_input)
     mock_input.assert_called_once_with(_MESSAGE + (ps1 or ""))
+
+    assert isinstance(result, StringInputLoopResult)
+    assert result.formatted_string_input == (formatter(user_input) if formatter else user_input)
+    assert result.raw_string_input == user_input
 
 
 @mark.parametrize(
