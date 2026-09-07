@@ -16,7 +16,7 @@ def _string_identity_function(string: str) -> str:
     return string
 
 
-class InputLoopResponse(NamedTuple):
+class StringInputLoopResult(NamedTuple):
     formatted_string_input: str
     raw_string_input: str
 
@@ -58,11 +58,11 @@ class StringPrompt:
     @overload
     def exec_string_input_loop(self, include_raw_input: Literal[False]) -> str: ...
     @overload
-    def exec_string_input_loop(self, include_raw_input: Literal[True]) -> InputLoopResponse: ...
+    def exec_string_input_loop(self, include_raw_input: Literal[True]) -> StringInputLoopResult: ...
     @overload
-    def exec_string_input_loop(self, include_raw_input: bool) -> str | InputLoopResponse: ...
+    def exec_string_input_loop(self, include_raw_input: bool) -> str | StringInputLoopResult: ...
     @final
-    def exec_string_input_loop(self, include_raw_input: bool = False) -> str | InputLoopResponse:
+    def exec_string_input_loop(self, include_raw_input: bool = False) -> str | StringInputLoopResult:
         _input = input(self.message + self._ps1)
         formatted_input = self.format(_input)
 
@@ -71,7 +71,7 @@ class StringPrompt:
             _input = input(invalid_input_string + self.message + self._ps1)
             formatted_input = self.format(_input)
 
-        return formatted_input if not include_raw_input else InputLoopResponse(formatted_input, _input)
+        return formatted_input if not include_raw_input else StringInputLoopResult(formatted_input, _input)
 
 
 @final
