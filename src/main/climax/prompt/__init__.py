@@ -1,19 +1,24 @@
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Literal, final, overload
+from typing import Literal, NamedTuple, final, overload
 
 
 def _always_true_predicate(_: object) -> Literal[True]:
     return True
 
 
-def _default_invalid_string_message_generator(_: str, __: str) -> Literal[""]:
+def _default_invalid_string_message_generator(_formatted_input: str, _raw_input: str) -> Literal[""]:
     return ""
 
 
-def _default_formatter(string: str) -> str:
+def _string_identity_function(string: str) -> str:
     return string
+
+
+class InputLoopResponse(NamedTuple):
+    formatted_string_input: str
+    raw_string_input: str
 
 
 @dataclass(frozen=True)
@@ -37,7 +42,7 @@ class StringPrompt:
     @final
     @cached_property
     def _formatter(self) -> Callable[[str], str]:
-        return self.formatter or _default_formatter
+        return self.formatter or _string_identity_function
 
     @final
     @cached_property
@@ -53,11 +58,11 @@ class StringPrompt:
     @overload
     def exec_string_input_loop(self, include_raw_input: Literal[False]) -> str: ...
     @overload
-    def exec_string_input_loop(self, include_raw_input: Literal[True]) -> tuple[str, str]: ...
+    def exec_string_input_loop(self, include_raw_input: Literal[True]) -> InputLoopResponse: ...
     @overload
-    def exec_string_input_loop(self, include_raw_input: bool) -> str | tuple[str, str]: ...
+    def exec_string_input_loop(self, include_raw_input: bool) -> str | InputLoopResponse: ...
     @final
-    def exec_string_input_loop(self, include_raw_input: bool = False) -> str | tuple[str, str]:
+    def exec_string_input_loop(self, include_raw_input: bool = False) -> str | InputLoopResponse:
         _input = input(self.message + self._ps1)
         formatted_input = self.format(_input)
 
@@ -66,7 +71,7 @@ class StringPrompt:
             _input = input(invalid_input_string + self.message + self._ps1)
             formatted_input = self.format(_input)
 
-        return formatted_input if not include_raw_input else (formatted_input, _input)
+        return formatted_input if not include_raw_input else InputLoopResponse(formatted_input, _input)
 
 
 @final
