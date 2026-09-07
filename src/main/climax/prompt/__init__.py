@@ -54,10 +54,8 @@ class StringPrompt:
     def exec_string_input_loop(self, include_raw_input: Literal[False]) -> str: ...
     @overload
     def exec_string_input_loop(self, include_raw_input: Literal[True]) -> tuple[str, str]: ...
-    @overload
-    def exec_string_input_loop(self, include_raw_input: bool) -> str | tuple[str, str]: ...
     @final
-    def exec_string_input_loop(self, include_raw_input: bool = False) -> str | tuple[str, str]:
+    def exec_string_input_loop(self, include_raw_input: Literal[True, False] = False) -> str | tuple[str, str]:
         _input = input(self.message + self._ps1)
         formatted_input = self.format(_input)
 
