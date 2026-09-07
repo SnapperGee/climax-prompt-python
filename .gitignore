@@ -1,4 +1,4 @@
-source
+source/
 !source/conf.py
 !source/index.rst
 .vscode/
@@ -9,7 +9,7 @@ source
 .ruff_cache/
 .ipynb_checkpoints/
 __pycache__/
-.venv
+.venv/
 .project/
 Thumbs.db
 build/
