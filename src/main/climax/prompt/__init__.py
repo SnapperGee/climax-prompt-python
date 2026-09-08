@@ -46,10 +46,6 @@ class StringPrompt:
     def _ps1(self) -> str:
         return self.ps1 if self.ps1 is not None else ""
 
-    @final
-    def format(self, string: str) -> str:
-        return self._formatter(string)
-
     @overload
     def exec_string_input_loop(self) -> str: ...
     @overload
@@ -61,11 +57,11 @@ class StringPrompt:
     @final
     def exec_string_input_loop(self, include_raw_input: bool = False) -> str | StringInput:
         raw_string_input = input(self.message + self._ps1)
-        string_input = StringInput(self.format(raw_string_input), raw_string_input)
+        string_input = StringInput(self._formatter(raw_string_input), raw_string_input)
 
         while (invalid_input_string_message := self._string_validator(string_input)) is not None:
             raw_string_input = input(invalid_input_string_message + self.message + self._ps1)
-            string_input = StringInput(self.format(raw_string_input), raw_string_input)
+            string_input = StringInput(self._formatter(raw_string_input), raw_string_input)
 
         return string_input if include_raw_input else string_input.formatted
 

@@ -56,17 +56,6 @@ def test_stringprompt_default_field_values() -> None:
     assert string_prompt.ps1 is None
 
 
-def test_stringprompt_default_format_method_is_identity_function() -> None:
-    string: Final = "snake"
-
-    string_prompt: Final = StringPrompt(
-        _MESSAGE,
-        _always_none_string_validator,
-    )
-
-    assert string_prompt.format(string) is string
-
-
 @mark.parametrize(
     "validator,user_input,formatter,ps1",
     (
