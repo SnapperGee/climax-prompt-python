@@ -3,16 +3,18 @@ from collections.abc import Callable
 from typing import Final
 from unittest.mock import call, patch
 
-from climax.prompt import StringInput, StringPrompt, StringValidator
+from climax.prompt import (
+    StringInput,
+    StringPrompt,
+    StringValidator,
+    _always_none_string_validator,
+    _string_identity_function,
+)
 from pytest import mark, raises
 
 _MESSAGE: Final = "message\n"
 
 _PS1: Final = ">>> "
-
-
-def _always_none_string_validator(_: tuple[str, str]) -> None:
-    return None
 
 
 def _string_is_empty(strings: tuple[str, str]) -> str | None:
@@ -35,13 +37,13 @@ def test_stringprompt_fields() -> None:
 
     string_prompt: Final = StringPrompt(
         _MESSAGE,
-        _always_none_string_validator,
+        _string_is_empty,
         formatter=str.strip,
         ps1=_PS1,
     )
 
     assert string_prompt.message is _MESSAGE
-    assert string_prompt.string_validator is _always_none_string_validator
+    assert string_prompt.string_validator is _string_is_empty
     assert string_prompt.formatter is str.strip
     assert string_prompt.ps1 is _PS1
 
@@ -49,9 +51,11 @@ def test_stringprompt_fields() -> None:
 def test_stringprompt_default_field_values() -> None:
     string_prompt: Final = StringPrompt(
         _MESSAGE,
-        _always_none_string_validator,
+        None,
     )
 
+    assert string_prompt._formatter is _string_identity_function
+    assert string_prompt._string_validator is _always_none_string_validator
     assert string_prompt.formatter is None
     assert string_prompt.ps1 is None
 
