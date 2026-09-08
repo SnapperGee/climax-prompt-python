@@ -20,9 +20,9 @@ can process any arbitrary type.
 
 The `StringPrompt.exec_string_input_loop(...)` and `Prompt.exec_input_loop(...)`
 methods of each class create a loop that prompts a user for input and will
-reprompt until valid input is inputted and return that inputted string.
+reprompt until valid input is inputted and return that inputted string or value.
 
-## `StringPrompt` Usage Examples
+## `StringPrompt` Usage Example
 
 The `StringPrompt` class can be used as such:
 
@@ -52,25 +52,22 @@ print(f'You inputted the palindrome: "{inputted_palindrome}"')
 Calling the `StringPrompt.exec_string_input_loop(...)` method will result in the
 following process:
 
-1. the `StringPrompt.message` to be printed to stdout followed by the
+1. The `StringPrompt.message` to be printed to stdout followed by the
    `StringPrompt.ps1` if set.
 
-1. the string inputted to stdin then gets passed to the
-   `StringPrompt.formatter(str)` if set otherwise the string remains unchanged.
+1. The string inputted to stdin then gets passed to the
+   `StringPrompt.formatter(str)`.
 
-1. The formatted (or unformatted) string then gets passed to the
-   `StringPrompt.string_validator(str)` string predicate.
+1. The formatted and raw unformatted input string then gets passed to the
+   `StringPrompt.string_validator`.
 
-1. If validation passes (the `StringPrompt.string_validator(str)` returns
+1. If validation passes (the `StringPrompt.string_validator` returns
    `None`) then the formatted string input or both the formatted and unformatted
    string input gets returned.
 
-1. If validation fails (the `StringPrompt.string_validator(str)` returns a string
-   error message) then the string error message gets printed to stdout and the
-   process is repeated.
-
-It's important to note that string input gets formatted ***before*** being
-validated.
+1. If validation fails (the `StringPrompt.string_validator(str)` returns a
+   string error message) then the string error message gets printed to stdout
+   and the process is repeated.
 
 When the method in the example above is called this will result in the following
 prompt in the terminal:
@@ -100,10 +97,10 @@ def string_is_integer(strings: StringInput) -> str | None:
 
 def is_positive_even_integer(integer: int) -> str | None:
     if integer <= 0:
-        return f"Integer isn't positive: {integer}"
+        return f"Integer isn't positive: {integer}\n"
 
     if integer % 2 != 0:
-        return f"Integer isn't even: {integer}"
+        return f"Integer isn't even: {integer}\n"
 
     return None
 
@@ -118,7 +115,7 @@ positive_even_integer_prompt = Prompt[int](
 # the input that passes the prompt's validation will be retrieved
 inputted_positive_even_integer: int = positive_even_integer_prompt.exec_input_loop()
 
-print("You inputted the positive even integer: ", inputted_positive_even_integer)
+print("You inputted the positive even integer:", inputted_positive_even_integer)
 ```
 
 Calling the `Prompt.exec_input_loop(...)` method will result in the same process
@@ -133,12 +130,12 @@ converted string input as outlined below ***if*** string input validation passes
 1. The converted string input is then passed to the `Prompt.validator(...)`.
 
 1. If validation passes (the `Prompt.validator(...)` returns `None`) then the
-   *converted* string input or both the *converted* and unformatted
-   string input gets returned.
+   *converted* string input or both the *converted* and raw unformatted string
+   input gets returned.
 
 1. If validation fails (the `Prompt.validator(...)` returns a string error
-   message) then the converted error message gets printed to stdout and the
-   process is repeated.
+   message) then the error message gets printed to stdout and the process is
+   repeated.
 
 When the method in the example above is called this will result in the following
 prompt in the terminal:
@@ -147,9 +144,11 @@ prompt in the terminal:
 Input a positive even integer: slither             # simulated user input
 Provided input is not an integer: "slither"
 Input a positive even integer: -33                 # simulated user input
-Inputted integer isn't positive and/or even: -33
-Input a positive even integer: 21                  # simulated user input
-You inputted the positive even integer: 21
+Integer isn't positive: -34
+Input a positive even integer: 7                   # simulated user input
+Integer isn't even: 7
+Input a positive even integer: 22                  # simulated user input
+You inputted the positive even integer: 22
 ```
 
 [python badge]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54 "Python"
