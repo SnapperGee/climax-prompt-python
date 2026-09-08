@@ -143,7 +143,7 @@ prompt in the terminal:
 ```text
 Input a positive even integer: slither             # simulated user input
 Provided input is not an integer: "slither"
-Input a positive even integer: -33                 # simulated user input
+Input a positive even integer: -34                 # simulated user input
 Integer isn't positive: -34
 Input a positive even integer: 7                   # simulated user input
 Integer isn't even: 7
