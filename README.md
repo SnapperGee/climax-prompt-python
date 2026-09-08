@@ -176,7 +176,7 @@ pip install climax-prompt
 [poetry badge]: https://img.shields.io/badge/Poetry-%233B82F6.svg?style=for-the-badge&logo=poetry&logoColor=0B3D8D "Poetry"
 [poetry website]: https://python-poetry.org/ "Poetry"
 [git badge]: https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white "Git"
-[gitlab badge]: https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white "GitLab repo"
+[gitlab badge]: https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white "GitLab"
 [gitlab repo]: https://gitlab.com/SnapperGee/termite-invasion "GitLab repo"
 [github badge]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "GitHub"
 [github repo]: https://github.com/SnapperGee/wedaviz "GitHub"
