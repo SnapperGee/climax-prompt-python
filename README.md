@@ -173,27 +173,11 @@ The repo for this project uses [ruff][ruff website] and [mypy][mypy website] for
 linting, [ruff][ruff website] for formatting, and [pytest][pytest website] for
 testing.
 
-Linting can be performed via the shell scripts (all have same result):
-
-```sh
-./lint.sh
-sh lint.sh
-bash lint.sh
-```
-
-Formatting can be performed via the shell scripts (all have same result):
-
-```sh
-./format.sh
-sh format.sh
-bash format.sh
-```
-
-and testing can be executed via:
-
-```sh
-poetry run pytest
-```
+- Linting can be performed via the `lint.sh` shell script in the rood of the
+  repo. This runs both the `ruff` checker and `mypy` static type checker.
+- Formatting can be performed via the `format.sh` shell script in the root of
+  the repo.
+- Unit tests can be run via the `poetry run pytest` command.
 
 ### Remotes
 
