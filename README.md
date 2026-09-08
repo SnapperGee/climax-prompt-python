@@ -86,7 +86,7 @@ You inputted the palindrome: "level"
 The `Prompt` class can be used as such:
 
 ```python
-from climax.prompt import Prompt
+from climax.prompt import Prompt, StringInput
 
 def string_is_integer(strings: StringInput) -> str | None:
     return (
@@ -149,6 +149,22 @@ Input a positive even integer: 7                   # simulated user input
 Integer isn't even: 7
 Input a positive even integer: 22                  # simulated user input
 You inputted the positive even integer: 22
+```
+
+## Installing Package
+
+This package is available on pypi and can be installed via any of the standard
+methods:
+
+```sh
+# via poetry
+poetry add climax-prompt
+
+# via uv
+uv add climax-prompt
+
+# via pip
+pip install climax-prompt
 ```
 
 [python badge]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54 "Python"
