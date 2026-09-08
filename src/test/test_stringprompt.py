@@ -16,19 +16,19 @@ def _always_none_string_validator(_: tuple[str, str]) -> None:
 
 
 def _string_is_empty(strings: tuple[str, str]) -> str | None:
-    return None if len(strings[0]) == 0 else f'String is not empty: "{strings[1]}"'
+    return None if len(strings[0]) == 0 else f'String is not empty: "{strings[1]}".\n'
 
 
 def _string_is_not_empty(strings: tuple[str, str]) -> str | None:
-    return None if len(strings[0]) != 0 else "String is empty"
+    return None if len(strings[0]) != 0 else "String is empty.\n"
 
 
 def _string_is_palindrome(strings: tuple[str, str]) -> str | None:
-    return None if strings[0] == strings[0][::-1] else f'String is not a palindrome: "{strings[1]}"'
+    return None if strings[0] == strings[0][::-1] else f'String is not a palindrome: "{strings[1]}".\n'
 
 
 def _string_is_digit(strings: tuple[str, str]) -> str | None:
-    return None if strings[0].isdigit() else f'String is not a digit: "{strings[1]}"'
+    return None if strings[0].isdigit() else f'String is not a digit: "{strings[1]}".\n'
 
 
 def test_stringprompt_fields() -> None:
