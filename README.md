@@ -44,7 +44,7 @@ palindrome_prompt = StringPrompt(
 )
 
 # the formatted input that passes the string prompt's validation will be retrieved
-inputted_palindrome = palindrome_prompt.exec_string_input_loop()
+inputted_palindrome: str = palindrome_prompt.exec_string_input_loop()
 
 print(f'You inputted the palindrome: "{inputted_palindrome}"')
 ```
