@@ -186,7 +186,7 @@ is also mirrored to [github][github repo].
 
 ## License
 
-This package is licensed under the MIT license and be found in
+This package is licensed under the MIT license and can be found in
 [LICENSE.txt][mit license].
 
 [python badge]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54 "Python"
