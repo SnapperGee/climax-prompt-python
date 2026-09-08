@@ -27,12 +27,18 @@ reprompt until valid input is inputted and return that inputted string.
 The `StringPrompt` class can be used as such:
 
 ```python
-from climax.prompt import StringPrompt
+from climax.prompt import StringInput, StringPrompt
+
+def is_palindrome(strings: StringInput) -> str | None:
+    return (
+        f'Provided input is not a palindrome: "{strings.formatted}"\n'
+        if strings.formatted != strings.formatted[::-1]
+        else None
+    )
 
 palindrome_prompt = StringPrompt(
     "Input a palindrome...\n",
-    lambda string_input: string_input == string_input[::-1],
-    lambda invalid_formatted_string_input, _invalid_raw_string_input: f'Provided input is not a palindrome: "{invalid_formatted_string_input}"\n',
+    is_palindrome,
     formatter=lambda string_input: string_input.strip().lower(),
     ps1=">>> ",
 )
@@ -55,14 +61,13 @@ following process:
 1. The formatted (or unformatted) string then gets passed to the
    `StringPrompt.string_validator(str)` string predicate.
 
-1. If validation passes (the `StringPrompt.string_validator(str)` string
-   predicate returns `True`) then the formatted string input or both the
-   formatted and unformatted string input gets returned.
+1. If validation passes (the `StringPrompt.string_validator(str)` returns
+   `None`) then the formatted string input or both the formatted and unformatted
+   string input gets returned.
 
-1. If validation fails (the `StringPrompt.string_validator(str)` string
-   predicate returns `False`) then the formatted and unformatted string input
-   gets passed to the `StringPrompt.invalid_string_message_generator(str,str)`
-   to create a string that gets printed to stdout and the process is repeated.
+1. If validation fails (the `StringPrompt.string_validator(str)` returns a string
+   error message) then the string error message gets printed to stdout and the
+   process is repeated.
 
 It's important to note that string input gets formatted ***before*** being
 validated.
@@ -86,14 +91,28 @@ The `Prompt` class can be used as such:
 ```python
 from climax.prompt import Prompt
 
+def string_is_integer(strings: StringInput) -> str | None:
+    return (
+        None
+        if strings.formatted.isdigit()
+        else f'Provided input is not an integer: "{strings.raw_unformatted}"\n'
+    )
+
+def is_positive_even_integer(integer: int) -> str | None:
+    if integer <= 0:
+        return f"Integer isn't positive: {integer}"
+
+    if integer % 2 != 0:
+        return f"Integer isn't even: {integer}"
+
+    return None
+
 positive_even_integer_prompt = Prompt[int](
     "Input a positive even integer: ",
-    lambda string_input: string_input.isdigit(), # could also have just passed `str.isdigit`
-    lambda invalid_formatted_string_input, _invalid_raw_string_input: f'Provided input is not an integer: "{invalid_formatted_string_input}"\n',
-    lambda string_input: int(string_input), # could also just have passed `int`
-    lambda int_input: int_input > 0 and int_input % 2 == 0,
-    lambda invalid_int_input: f"Inputted integer isn't positive and/or even: {invalid_int_input}"
-    formatter=str.strip
+    string_is_integer,
+    lambda string_input: int(string_input), # could also just have passed `int` constructor method directly
+    is_positive_even_integer,
+    formatter=str.strip,
 )
 
 # the input that passes the prompt's validation will be retrieved
@@ -113,14 +132,13 @@ converted string input as outlined below ***if*** string input validation passes
 
 1. The converted string input is then passed to the `Prompt.validator(...)`.
 
-1. If validation passes (the `Prompt.validator(...)` predicate returns `True`)
-   then the *converted* string input or both the *converted* and unformatted
+1. If validation passes (the `Prompt.validator(...)` returns `None`) then the
+   *converted* string input or both the *converted* and unformatted
    string input gets returned.
 
-1. If validation fails (the `Prompt.validator(...)` predicate returns `False`)
-   then the converted string input gets passed to the
-   `Prompt.invalid_value_message_generator(...)` to create a string that gets
-   printed to stdout and the process is repeated.
+1. If validation fails (the `Prompt.validator(...)` returns a string error
+   message) then the converted error message gets printed to stdout and the
+   process is repeated.
 
 When the method in the example above is called this will result in the following
 prompt in the terminal:
