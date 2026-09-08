@@ -75,7 +75,7 @@ prompt in the terminal:
 ```text
 Input a palindrome...
 >>> slITher                 # simulated user input
-Provided input is not a palindrome: "slither" # not that the formatted string input is used in the message
+Provided input is not a palindrome: "slither" # formatted string input is used in this message
 Input a palindrome...
 >>> level                   # simulated user input
 You inputted the palindrome: "level"
@@ -139,8 +139,8 @@ When the method in the example above is called this will result in the following
 prompt in the terminal:
 
 ```text
-Input a positive even integer: slither             # simulated user input
-Provided input is not an integer: "slither"
+Input a positive even integer:    slither          # simulated user input
+Provided input is not an integer: "   slither"     # raw unformatted string used in error message
 Input a positive even integer: -34                 # simulated user input
 Integer isn't positive: -34
 Input a positive even integer: 7                   # simulated user input
