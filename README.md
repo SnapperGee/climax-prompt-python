@@ -22,9 +22,9 @@ The `StringPrompt.exec_string_input_loop(...)` and `Prompt.exec_input_loop(...)`
 methods of each class create a loop that prompts a user for input and will
 reprompt until valid input is inputted and return that inputted string or value.
 
-## `StringPrompt` Usage Example
+## Usage Examples
 
-The `StringPrompt` class can be used as such:
+### `StringPrompt` Usage Example
 
 ```python
 from climax.prompt import StringInput, StringPrompt
@@ -81,9 +81,7 @@ Input a palindrome...
 You inputted the palindrome: "level"
 ```
 
-## `Prompt` Usage Example
-
-The `Prompt` class can be used as such:
+### `Prompt` Usage Example
 
 ```python
 from climax.prompt import Prompt, StringInput
@@ -167,18 +165,59 @@ uv add climax-prompt
 pip install climax-prompt
 ```
 
+## Repo
+
+### Tooling Tasks
+
+The repo for this project uses [ruff][ruff website] and [mypy][mypy website] for
+linting, [ruff][ruff website] for formatting, and [pytest][pytest website] for
+testing.
+
+Linting can be performed via the shell scripts (all have same result):
+
+```sh
+./lint.sh
+sh lint.sh
+bash lint.sh
+```
+
+Formatting can be performed via the shell scripts (all have same result):
+
+```sh
+./format.sh
+sh format.sh
+bash format.sh
+```
+
+and testing can be executed via:
+
+```sh
+poetry run pytest
+```
+
+### Remotes
+
+The primary remote repo for this package is hosted on [gitlab][gitlab repo], but
+is also mirrored to [github][github repo].
+
+## License
+
+This package is licensed under the MIT license and be found in
+[LICENSE.txt](./LICENSE.txt).
+
 [python badge]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54 "Python"
 [python website]: https://www.python.org/ "Python"
 [pytest badge]: https://img.shields.io/badge/pytest-%23ffffff.svg?style=for-the-badge&logo=pytest&logoColor=2f9fe3 "PyTest"
 [pytest website]: https://docs.pytest.org/en/stable/ "PyTest"
 [ruff badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=for-the-badge "Ruff"
 [ruff website]: https://docs.astral.sh/ruff/ "Ruff"
+[mypy website]: https://mypy-lang.org/ "mypy"
 [poetry badge]: https://img.shields.io/badge/Poetry-%233B82F6.svg?style=for-the-badge&logo=poetry&logoColor=0B3D8D "Poetry"
 [poetry website]: https://python-poetry.org/ "Poetry"
 [git badge]: https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white "Git"
 [gitlab badge]: https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white "GitLab"
-[gitlab repo]: https://gitlab.com/SnapperGee/termite-invasion "GitLab repo"
+[gitlab repo]: https://gitlab.com/SnapperGee/climax-prompt-python "GitLab repo"
 [github badge]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "GitHub"
-[github repo]: https://github.com/SnapperGee/wedaviz "GitHub"
+[github repo]: https://github.com/SnapperGee/climax-prompt-python "GitHub"
 [mit shield]: https://img.shields.io/badge/license-MIT-green?style=for-the-badge "MIT"
 [mit website]: https://opensource.org/license/mit "MIT"
