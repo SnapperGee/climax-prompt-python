@@ -91,11 +91,10 @@ class Prompt[ValueType](StringPrompt):
         string_input = super().exec_string_input_loop(include_raw_input)
         converted_input = self.converter(string_input if isinstance(string_input, str) else string_input[0])
 
-        while (invalid_input_string_message := self._validator(converted_input)) is not None:
-            if invalid_input_string_message:
-                print(invalid_input_string_message, end="")
+        while (invalid_input_string_message := self._validator(converted_input)):
+            print(invalid_input_string_message, end="")
 
             string_input = super().exec_string_input_loop(include_raw_input)
             converted_input = self.converter(string_input if isinstance(string_input, str) else string_input.formatted)
 
-        return converted_input if isinstance(string_input, str) else (converted_input, string_input[1])
+        return converted_input if isinstance(string_input, str) else (converted_input, string_input.raw_unformatted)
