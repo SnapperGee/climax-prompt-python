@@ -96,6 +96,6 @@ class Prompt[ValueType](StringPrompt):
                 print(invalid_input_string_message, end="")
 
             string_input = super().exec_string_input_loop(include_raw_input)
-            converted_input = self.converter(string_input if isinstance(string_input, str) else string_input[0])
+            converted_input = self.converter(string_input if isinstance(string_input, str) else string_input.formatted)
 
         return converted_input if isinstance(string_input, str) else (converted_input, string_input[1])
