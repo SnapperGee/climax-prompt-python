@@ -89,7 +89,7 @@ class Prompt[ValueType](StringPrompt):
     @final
     def exec_input_loop(self, include_raw_input: bool = False) -> ValueType | tuple[ValueType, str]:
         string_input = super().exec_string_input_loop(include_raw_input)
-        converted_input = self.converter(string_input if isinstance(string_input, str) else string_input[0])
+        converted_input = self.converter(string_input if isinstance(string_input, str) else string_input.formatted)
 
         while (invalid_input_string_message := self._validator(converted_input)) is not None:
             if invalid_input_string_message:
