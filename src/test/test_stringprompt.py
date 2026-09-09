@@ -169,11 +169,12 @@ def test_stringprompt_execStringInputLoop_with_invalid_input(
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input, raises(StopIteration):
         string_prompt.exec_string_input_loop()
 
+    message: Final = MESSAGE + (ps1 or "")
+
     assert mock_input.call_args_list == [
-        call(MESSAGE + (ps1 or "")),
+        call(message),
         call(
             (validator(StringInput(formatter(user_input) if formatter else user_input, user_input)) or "")
-            + MESSAGE
-            + (ps1 or "")
+            + message
         ),
     ]
