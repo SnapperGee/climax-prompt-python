@@ -72,7 +72,7 @@ def test_stringprompt_default_field_values() -> None:
     ),
 )
 def test_stringprompt_execStringInputLoop_with_valid_input_and_no_raw_string_return_argument(
-    validator: StringValidator, user_input: str, formatter: Callable[[str], str] | None, ps1: str | None
+    validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
 
@@ -101,7 +101,7 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_no_raw_string_ret
     ),
 )
 def test_stringprompt_execStringInputLoop_with_valid_input_and_false_raw_string_return_argument(
-    validator: StringValidator, user_input: str, formatter: Callable[[str], str] | None, ps1: str | None
+    validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
 
@@ -130,7 +130,7 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_false_raw_string_
     ),
 )
 def test_stringprompt_execStringInputLoop_with_valid_input_and_raw_string_return_argument(
-    validator: StringValidator, user_input: str, formatter: Callable[[str], str] | None, ps1: str | None
+    validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
 
@@ -162,7 +162,7 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_raw_string_return
     ),
 )
 def test_stringprompt_execStringInputLoop_with_invalid_input(
-    validator: StringValidator, user_input: str, formatter: Callable[[str], str] | None, ps1: str | None
+    validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
 
