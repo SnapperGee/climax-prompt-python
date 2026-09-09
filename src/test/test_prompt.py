@@ -116,7 +116,7 @@ def test_prompt_execInputLoop_with_valid_input_and_false_raw_string_return_argum
         (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, PS1, "     26.1111     ", 26.1111),
     ),
 )
-def test_stringprompt_execInputLoop_with_valid_input_and_raw_string_return_argument(
+def test_prompt_execInputLoop_with_valid_input_and_raw_string_return_argument(
     string_validator: StringValidator,
     _type: type,
     validator: Validator,
