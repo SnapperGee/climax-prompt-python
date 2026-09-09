@@ -84,20 +84,20 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_no_raw_string_ret
 
 
 @mark.parametrize(
-    "validator,user_input,formatter,ps1",
+    "validator,formatter,ps1,user_input",
     (
-        (_string_is_empty, "", None, None),
-        (string_is_digit, "123", None, None),
-        (_string_is_palindrome, "level", None, None),
-        (_string_is_empty, "         ", str.strip, None),
-        (string_is_digit, "     123     ", str.strip, None),
-        (_string_is_palindrome, "level         ", str.strip, None),
-        (_string_is_empty, "", None, PS1),
-        (string_is_digit, "123", None, PS1),
-        (_string_is_palindrome, "level", None, PS1),
-        (_string_is_empty, "         ", str.strip, PS1),
-        (string_is_digit, "     123     ", str.strip, PS1),
-        (_string_is_palindrome, "level         ", str.strip, PS1),
+        (_string_is_empty, None, None, ""),
+        (string_is_digit, None, None, "123"),
+        (_string_is_palindrome, None, None, "level"),
+        (_string_is_empty, str.strip, None, "         "),
+        (string_is_digit, str.strip, None, "     123     "),
+        (_string_is_palindrome, str.strip, None, "level         "),
+        (_string_is_empty, None, PS1, ""),
+        (string_is_digit, None, PS1, "123"),
+        (_string_is_palindrome, None, PS1, "level"),
+        (_string_is_empty, str.strip, PS1, "         "),
+        (string_is_digit, str.strip, PS1, "     123     "),
+        (_string_is_palindrome, str.strip, PS1, "level         "),
     ),
 )
 def test_stringprompt_execStringInputLoop_with_valid_input_and_false_raw_string_return_argument(
@@ -113,20 +113,20 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_false_raw_string_
 
 
 @mark.parametrize(
-    "validator,user_input,formatter,ps1",
+    "validator,formatter,ps1,user_input",
     (
-        (_string_is_empty, "", None, None),
-        (string_is_digit, "123", None, None),
-        (_string_is_palindrome, "level", None, None),
-        (_string_is_empty, "         ", str.strip, None),
-        (string_is_digit, "     123     ", str.strip, None),
-        (_string_is_palindrome, "level         ", str.strip, None),
-        (_string_is_empty, "", None, PS1),
-        (string_is_digit, "123", None, PS1),
-        (_string_is_palindrome, "level", None, PS1),
-        (_string_is_empty, "         ", str.strip, PS1),
-        (string_is_digit, "     123     ", str.strip, PS1),
-        (_string_is_palindrome, "level         ", str.strip, PS1),
+        (_string_is_empty, None, None, ""),
+        (string_is_digit, None, None, "123"),
+        (_string_is_palindrome, None, None, "level"),
+        (_string_is_empty, str.strip, None, "         "),
+        (string_is_digit, str.strip, None, "     123     "),
+        (_string_is_palindrome, str.strip, None, "level         "),
+        (_string_is_empty, None, PS1, ""),
+        (string_is_digit, None, PS1, "123"),
+        (_string_is_palindrome, None, PS1, "level"),
+        (_string_is_empty, str.strip, PS1, "         "),
+        (string_is_digit, str.strip, PS1, "     123     "),
+        (_string_is_palindrome, str.strip, PS1, "level         "),
     ),
 )
 def test_stringprompt_execStringInputLoop_with_valid_input_and_raw_string_return_argument(
@@ -145,20 +145,20 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_raw_string_return
 
 
 @mark.parametrize(
-    "validator,user_input,formatter,ps1",
+    "validator,formatter,ps1,user_input",
     (
-        (_string_is_not_empty, "", None, None),
-        (string_is_digit, "A123", None, None),
-        (_string_is_palindrome, "Knights who say ni", None, None),
-        (_string_is_not_empty, "         ", str.strip, None),
-        (string_is_digit, "  A   123     ", str.strip, None),
-        (_string_is_palindrome, "Knights who say ni", str.strip, None),
-        (_string_is_not_empty, "", None, PS1),
-        (string_is_digit, "A123", None, PS1),
-        (_string_is_palindrome, "Knights who say ni", None, PS1),
-        (_string_is_not_empty, "         ", str.strip, PS1),
-        (string_is_digit, "  A   123     ", str.strip, PS1),
-        (_string_is_palindrome, "Knights who say ni", str.strip, PS1),
+        (_string_is_not_empty, None, None, ""),
+        (string_is_digit, None, None, "A123"),
+        (_string_is_palindrome, None, None, "Knights who say ni"),
+        (_string_is_not_empty, str.strip, None, "         "),
+        (string_is_digit, str.strip, None, "  A   123     "),
+        (_string_is_palindrome, str.strip, None, "Knights who say ni"),
+        (_string_is_not_empty, None, PS1, ""),
+        (string_is_digit, None, PS1, "A123"),
+        (_string_is_palindrome, None, PS1, "Knights who say ni"),
+        (_string_is_not_empty, str.strip, PS1, "         "),
+        (string_is_digit, str.strip, PS1, "  A   123     "),
+        (_string_is_palindrome, str.strip, PS1, "Knights who say ni"),
     ),
 )
 def test_stringprompt_execStringInputLoop_with_invalid_input(
