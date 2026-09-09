@@ -19,6 +19,8 @@ class StringInput(NamedTuple):
 
 type StringValidator = Callable[[StringInput], str | None]
 
+type Validator[T] = Callable[[T], str | None]
+
 
 def _always_none_string_validator(_result: StringInput) -> None:
     return None
@@ -70,7 +72,7 @@ class StringPrompt:
 @dataclass(frozen=True)
 class Prompt[ValueType](StringPrompt):
     converter: Callable[[str], ValueType]
-    validator: Callable[[ValueType], str | None] | None
+    validator: Validator[ValueType] | None
 
     @cached_property
     def _validator(self) -> Callable[[ValueType], str | None]:
