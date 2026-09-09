@@ -12,6 +12,8 @@ from climax.prompt import (
 )
 from pytest import mark, raises
 
+from .validators import string_is_digit
+
 _MESSAGE: Final = "message\n"
 
 _PS1: Final = ">>> "
@@ -27,10 +29,6 @@ def _string_is_not_empty(strings: tuple[str, str]) -> str | None:
 
 def _string_is_palindrome(strings: tuple[str, str]) -> str | None:
     return None if strings[0] == strings[0][::-1] else f'String is not a palindrome: "{strings[1]}".\n'
-
-
-def _string_is_digit(strings: tuple[str, str]) -> str | None:
-    return None if strings[0].isdigit() else f'String is not a digit: "{strings[1]}".\n'
 
 
 def test_stringprompt_fields() -> None:
@@ -64,16 +62,16 @@ def test_stringprompt_default_field_values() -> None:
     "validator,user_input,formatter,ps1",
     (
         (_string_is_empty, "", None, None),
-        (_string_is_digit, "123", None, None),
+        (string_is_digit, "123", None, None),
         (_string_is_palindrome, "level", None, None),
         (_string_is_empty, "         ", str.strip, None),
-        (_string_is_digit, "     123     ", str.strip, None),
+        (string_is_digit, "     123     ", str.strip, None),
         (_string_is_palindrome, "level         ", str.strip, None),
         (_string_is_empty, "", None, _PS1),
-        (_string_is_digit, "123", None, _PS1),
+        (string_is_digit, "123", None, _PS1),
         (_string_is_palindrome, "level", None, _PS1),
         (_string_is_empty, "         ", str.strip, _PS1),
-        (_string_is_digit, "     123     ", str.strip, _PS1),
+        (string_is_digit, "     123     ", str.strip, _PS1),
         (_string_is_palindrome, "level         ", str.strip, _PS1),
     ),
 )
@@ -93,16 +91,16 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_no_raw_string_ret
     "validator,user_input,formatter,ps1",
     (
         (_string_is_empty, "", None, None),
-        (_string_is_digit, "123", None, None),
+        (string_is_digit, "123", None, None),
         (_string_is_palindrome, "level", None, None),
         (_string_is_empty, "         ", str.strip, None),
-        (_string_is_digit, "     123     ", str.strip, None),
+        (string_is_digit, "     123     ", str.strip, None),
         (_string_is_palindrome, "level         ", str.strip, None),
         (_string_is_empty, "", None, _PS1),
-        (_string_is_digit, "123", None, _PS1),
+        (string_is_digit, "123", None, _PS1),
         (_string_is_palindrome, "level", None, _PS1),
         (_string_is_empty, "         ", str.strip, _PS1),
-        (_string_is_digit, "     123     ", str.strip, _PS1),
+        (string_is_digit, "     123     ", str.strip, _PS1),
         (_string_is_palindrome, "level         ", str.strip, _PS1),
     ),
 )
@@ -122,16 +120,16 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_false_raw_string_
     "validator,user_input,formatter,ps1",
     (
         (_string_is_empty, "", None, None),
-        (_string_is_digit, "123", None, None),
+        (string_is_digit, "123", None, None),
         (_string_is_palindrome, "level", None, None),
         (_string_is_empty, "         ", str.strip, None),
-        (_string_is_digit, "     123     ", str.strip, None),
+        (string_is_digit, "     123     ", str.strip, None),
         (_string_is_palindrome, "level         ", str.strip, None),
         (_string_is_empty, "", None, _PS1),
-        (_string_is_digit, "123", None, _PS1),
+        (string_is_digit, "123", None, _PS1),
         (_string_is_palindrome, "level", None, _PS1),
         (_string_is_empty, "         ", str.strip, _PS1),
-        (_string_is_digit, "     123     ", str.strip, _PS1),
+        (string_is_digit, "     123     ", str.strip, _PS1),
         (_string_is_palindrome, "level         ", str.strip, _PS1),
     ),
 )
@@ -154,16 +152,16 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_raw_string_return
     "validator,user_input,formatter,ps1",
     (
         (_string_is_not_empty, "", None, None),
-        (_string_is_digit, "A123", None, None),
+        (string_is_digit, "A123", None, None),
         (_string_is_palindrome, "Knights who say ni", None, None),
         (_string_is_not_empty, "         ", str.strip, None),
-        (_string_is_digit, "  A   123     ", str.strip, None),
+        (string_is_digit, "  A   123     ", str.strip, None),
         (_string_is_palindrome, "Knights who say ni", str.strip, None),
         (_string_is_not_empty, "", None, _PS1),
-        (_string_is_digit, "A123", None, _PS1),
+        (string_is_digit, "A123", None, _PS1),
         (_string_is_palindrome, "Knights who say ni", None, _PS1),
         (_string_is_not_empty, "         ", str.strip, _PS1),
-        (_string_is_digit, "  A   123     ", str.strip, _PS1),
+        (string_is_digit, "  A   123     ", str.strip, _PS1),
         (_string_is_palindrome, "Knights who say ni", str.strip, _PS1),
     ),
 )
