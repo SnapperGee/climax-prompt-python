@@ -189,4 +189,4 @@ def test_prompt_execInputLoop_with_invalid_input(
         assert mock_input.call_args_list[1] == call(string_error_message + message_with_ps1)
     else:
         error_message: Final = validator(_type(formatted_user_input)) or ""
-        assert mock_print.assert_called_once_with(error_message, end="")
+        mock_print.assert_called_once_with(error_message, end="")
