@@ -57,7 +57,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
 def test_prompt_execInputLoop_with_valid_input_and_no_raw_string_return_argument(
     string_validator: StringValidator,
     _type: type,
-    validator: Validator,
+    validator: Validator[int | float],
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
@@ -88,7 +88,7 @@ def test_prompt_execInputLoop_with_valid_input_and_no_raw_string_return_argument
 def test_prompt_execInputLoop_with_valid_input_and_false_raw_string_return_argument(
     string_validator: StringValidator,
     _type: type,
-    validator: Validator,
+    validator: Validator[int | float],
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
@@ -119,7 +119,7 @@ def test_prompt_execInputLoop_with_valid_input_and_false_raw_string_return_argum
 def test_prompt_execInputLoop_with_valid_input_and_raw_string_return_argument(
     string_validator: StringValidator,
     _type: type,
-    validator: Validator,
+    validator: Validator[int | float],
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
@@ -163,7 +163,7 @@ def test_prompt_execInputLoop_with_valid_input_and_raw_string_return_argument(
 def test_prompt_execInputLoop_with_invalid_input(
     string_validator: StringValidator,
     _type: type,
-    validator: Validator,
+    validator: Validator[int | float],
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
