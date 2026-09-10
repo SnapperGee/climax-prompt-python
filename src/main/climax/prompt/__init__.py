@@ -61,9 +61,30 @@ class StringPrompt:
     """
 
     message: str
+    r"""A ``string`` message presented to the user."""
+
     string_validator: StringValidator | None
+    r"""Validates ``string`` input.
+
+    If validation fails it returns a ``string`` message explaining why
+    validation failed that gets displayed to the user. It has access to both the
+    formatted and raw unformatted ``string`` input.
+
+    If field is set to ``None``, then all ``string`` input is considered valid.
+
+    See Also
+    --------
+    :obj:`StringValidator`: The type of function used for validation.
+    """
+
     formatter: Callable[[str], str] | None = field(kw_only=True, default=None)
+    r"""Formats ``string`` input.
+
+    If field is set to ``None`` then no formatting is performed.
+    """
+
     ps1: str | None = field(kw_only=True, default=None)
+    r"""Optional ``string`` appended to the :attr:`message` ``string`` indicating where input will be entered."""
 
     @final
     @cached_property
