@@ -56,11 +56,24 @@ passes validation.
 
 
 def _always_none_string_validator(_result: StringInput) -> None:
-    return None
+    """
+    A function that consumes a :type:`StringInput` object and returns ``None``.
+    """
+    return
 
 
 @dataclass(frozen=True)
 class StringPrompt:
+    """
+    Create a loop prompting a user for input until valid input is given. The
+    inputted value is always interpreted and returned as a ``string``.
+
+    See Also
+    --------
+    :class:`Prompt`: A class derived from this one capable of processing inputs
+    of any arbitrary type.
+    """
+
     message: str
     string_validator: StringValidator | None
     formatter: Callable[[str], str] | None = field(kw_only=True, default=None)
