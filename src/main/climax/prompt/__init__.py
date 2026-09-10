@@ -5,21 +5,54 @@ from typing import Literal, NamedTuple, final, overload
 
 
 def _always_none_returning_function(_: object) -> None:
-    return None
+    """
+    A function that consumes an ``object`` and returns ``None``.
+    """
+    return
 
 
 def _string_identity_function(string: str) -> str:
+    """
+    An identity function that consumes a ``string`` and returns the same ``string``.
+    """
     return string
 
 
 class StringInput(NamedTuple):
+    """
+    A container for a formatted ``string`` and raw unformatted ``string``.
+
+    Attributes
+    ----------
     formatted: str
+        A formatted ``string``.
     raw_unformatted: str
+            A raw unformatted ``string``.
+    """
 
+    formatted: str
+    """
+    A formatted ``string``.
+    """
 
-type StringValidator = Callable[[StringInput], str | None]
+    raw_unformatted: str
+    """
+    A raw unformatted ``string``.
+    """
+
 
 type Validator[T] = Callable[[T], str | None]
+"""
+A function that consumes and processes a value and either returns a ``string``
+message explaining why it failed validation or ``None`` if it passes validation.
+"""
+
+type StringValidator = Validator[StringInput]
+"""
+A function that consumes and processes a :class:`StringInput` and either returns
+a ``string`` message explaining why it failed validation or ``None`` if it
+passes validation.
+"""
 
 
 def _always_none_string_validator(_result: StringInput) -> None:
