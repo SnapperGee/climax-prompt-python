@@ -31,7 +31,7 @@ from climax.prompt import StringInput, StringPrompt
 
 def is_palindrome(strings: StringInput) -> str | None:
     return (
-        f'Provided input is not a palindrome: "{strings.formatted}"\n'
+        f'Provided input is not a palindrome: "{strings.unformatted}"\n'
         if strings.formatted != strings.formatted[::-1]
         else None
     )
@@ -74,10 +74,10 @@ prompt in the terminal:
 
 ```text
 Input a palindrome...
->>> slITher                 # simulated user input
-Provided input is not a palindrome: "slither" # formatted string input is used in this message
+>>> slITher                                   # simulated user input
+Provided input is not a palindrome: "slITher" # raw unformatted string used in error message
 Input a palindrome...
->>> level                   # simulated user input
+>>> level                                     # simulated user input
 You inputted the palindrome: "level"
 ```
 
@@ -89,7 +89,7 @@ from climax.prompt import Prompt, StringInput
 def string_is_integer(strings: StringInput) -> str | None:
     return (
         None
-        if strings.formatted.isdigit()
+        if strings.formatted.isdecimal()
         else f'Provided input is not an integer: "{strings.raw_unformatted}"\n'
     )
 
@@ -140,7 +140,7 @@ prompt in the terminal:
 
 ```text
 Input a positive even integer:    slither          # simulated user input
-Provided input is not an integer: "   slither"     # raw unformatted string used in error message
+Provided input is not an integer: "slither"        # formatted string input is used in this message
 Input a positive even integer: -34                 # simulated user input
 Integer isn't positive: -34
 Input a positive even integer: 7                   # simulated user input
