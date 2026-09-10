@@ -184,7 +184,7 @@ testing.
 The primary remote repo for this package is hosted on [gitlab][gitlab repo], but
 is also mirrored to [github][github repo].
 
-## License
+## MIT License
 
 This package is licensed under the MIT license and can be found in
 [LICENSE.txt][mit license].
