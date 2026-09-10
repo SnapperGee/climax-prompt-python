@@ -50,7 +50,7 @@ def _always_none_string_validator(_result: StringInput) -> None:
 
 @dataclass(frozen=True)
 class StringPrompt:
-    r"""Create a loop prompting a user for input until valid input is given.
+    r"""Create a loop prompting a user for ``string`` input until valid input is given.
 
     The inputted value is always interpreted and returned as a ``string``.
 
@@ -74,7 +74,7 @@ class StringPrompt:
 
     See Also
     --------
-    :obj:`StringValidator`: The type of function used for validation.
+    :obj:`StringValidator`: The type of function used for :class:`StringInput` validation.
     """
 
     formatter: Callable[[str], str] | None = field(kw_only=True, default=None)
@@ -147,8 +147,38 @@ class StringPrompt:
 @final
 @dataclass(frozen=True)
 class Prompt[ValueType](StringPrompt):
+    r"""Create a loop prompting a user for input until valid input is given.
+
+    The inputted value is initially interpreted as a ``string`` and validated
+    and then (if it passes validation) gets converted to an arbitrary type that
+    then gets validated again.
+
+    Type Parameters
+    ---------------
+    ValueType
+        The type the ``string`` input gets converted to.
+
+    See Also
+    --------
+    :class:`StringPrompt`: The base class this class is derived from capable of
+    processing only ``string`` inputs.
+    """
+
     converter: Callable[[str], ValueType]
+    r"""Function that converts the ``string`` input to the ``ValueType``."""
+
     validator: Validator[ValueType] | None
+    r"""Validates the converted ``string`` input.
+
+    If validation fails it returns a ``string`` message explaining why
+    validation failed that gets displayed to the user.
+
+    If field is set to ``None``, then all values are considered valid.
+
+    See Also
+    --------
+    :obj:`Validator`: The type of function used for validation.
+    """
 
     @cached_property
     def _validator(self) -> Callable[[ValueType], str | None]:
