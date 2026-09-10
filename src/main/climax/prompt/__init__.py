@@ -5,68 +5,54 @@ from typing import Literal, NamedTuple, final, overload
 
 
 def _always_none_returning_function(_: object) -> None:
-    """
-    A function that consumes an ``object`` and returns ``None``.
-    """
+    r"""A function that consumes an ``object`` and returns ``None``."""
     return
 
 
 def _string_identity_function(string: str) -> str:
-    """
-    An identity function that consumes a ``string`` and returns the same ``string``.
-    """
+    r"""An identity function that consumes a ``string`` and returns the same ``string``."""
     return string
 
 
 class StringInput(NamedTuple):
-    """
-    A container for a formatted ``string`` and raw unformatted ``string``.
-
-    Attributes
-    ----------
-    formatted: str
-        A formatted ``string``.
-    raw_unformatted: str
-            A raw unformatted ``string``.
-    """
+    r"""A container for a formatted ``string`` and raw unformatted ``string``."""
 
     formatted: str
-    """
-    A formatted ``string``.
-    """
+    r"""A formatted ``string``."""
 
     raw_unformatted: str
-    """
-    A raw unformatted ``string``.
-    """
+    r"""A raw unformatted ``string``."""
 
 
 type Validator[T] = Callable[[T], str | None]
-"""
-A function that consumes and processes a value and either returns a ``string``
-message explaining why it failed validation or ``None`` if it passes validation.
+r"""A function that validates a value.
+
+If validation fails then a ``string`` explaining why it failed should be
+returned, otherwise ``None`` should be returned.
 """
 
 type StringValidator = Validator[StringInput]
-"""
-A function that consumes and processes a :class:`StringInput` and either returns
-a ``string`` message explaining why it failed validation or ``None`` if it
-passes validation.
+r"""A function that validates a :class:`StringInput`.
+
+If validation fails then a ``string`` explaining why it failed should be
+returned, otherwise ``None`` should be returned.
+
+See Also
+--------
+:obj:`Validator`: The type this type is derived from.
 """
 
 
 def _always_none_string_validator(_result: StringInput) -> None:
-    """
-    A function that consumes a :type:`StringInput` object and returns ``None``.
-    """
+    r"""A function that consumes a :type:`StringInput` object and returns ``None``."""
     return
 
 
 @dataclass(frozen=True)
 class StringPrompt:
-    """
-    Create a loop prompting a user for input until valid input is given. The
-    inputted value is always interpreted and returned as a ``string``.
+    r"""Create a loop prompting a user for input until valid input is given.
+
+    The inputted value is always interpreted and returned as a ``string``.
 
     See Also
     --------
