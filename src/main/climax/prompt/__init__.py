@@ -111,6 +111,29 @@ class StringPrompt:
     def exec_string_input_loop(self, include_raw_input: bool) -> str | StringInput: ...
     @final
     def exec_string_input_loop(self, include_raw_input: bool = False) -> str | StringInput:
+        r"""Execute a ``string`` input prompt loop.
+
+        The loop will require a user to input a ``string`` that passes the
+        :attr:`string_validator` validation and will return either the formatted
+        ``string`` or both the formatted and raw unformatted ``string``
+        indicated by the ``include_raw_input`` parameter.
+
+        Parameters
+        ----------
+        include_raw_input: bool, optional
+            Flag indicating whether to include the raw unformatted ``string``
+            input in the return. Defaults to ``False``.
+
+        Returns
+        -------
+        validated_string_input: str | StringInput
+            The validated formatted ``string`` input or both the validated
+            formatted and raw unformatted ``string`` input.
+
+        See Also
+        --------
+        :obj:`StringInput`
+        """
         raw_string_input = input(self.message + self._ps1)
         string_input = StringInput(self._formatter(raw_string_input), raw_string_input)
 
