@@ -194,6 +194,27 @@ class Prompt[ValueType](StringPrompt):
     def exec_input_loop(self, include_raw_input: bool) -> ValueType | tuple[ValueType, str]: ...
     @final
     def exec_input_loop(self, include_raw_input: bool = False) -> ValueType | tuple[ValueType, str]:
+        r"""Execute an input prompt loop.
+
+        The loop will require a user to input a ``string`` that passes the
+        :attr:`string_validator`, gets converted via the :attr:`converter`, and
+        then validated with the :attr:`validator`, and will return either the
+        value (resulting from the converted ``string`` input) or both the value
+        and raw unformatted ``string`` input indicated by the
+        ``include_raw_input`` parameter.
+
+        Parameters
+        ----------
+        include_raw_input: bool, optional
+            Flag indicating whether to include the raw unformatted ``string``
+            input in the return. Defaults to ``False``.
+
+        Returns
+        -------
+        validated_string_input: str | StringInput
+            The validated formatted ``string`` input or both the validated
+            formatted and raw unformatted ``string`` input.
+        """
         string_input = super().exec_string_input_loop(include_raw_input)
         converted_input = self.converter(string_input if isinstance(string_input, str) else string_input.formatted)
 
