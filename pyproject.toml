@@ -47,5 +47,5 @@ extend-select = ["I"]
 [tool.mypy]
 files = ["src"]
 strict = true
-mypy_path = ["src/main", "src/test"]
+mypy_path = ["src/main"]
 explicit_package_bases = true
