@@ -5,6 +5,7 @@ Prompt for input via the CLI.
 [![python badge]][python website]
 [![pytest badge]][pytest website]
 [![ruff badge]][ruff website]
+[![Sphinx][sphinx badge]][sphinx website]
 [![poetry badge]][poetry website]
 ![Git][git badge]
 [![GitLab][gitlab badge]][gitlab repo]
@@ -170,14 +171,18 @@ pip install climax-prompt
 ### Tooling Tasks
 
 The repo for this project uses [ruff][ruff website] and [mypy][mypy website] for
-linting, [ruff][ruff website] for formatting, and [pytest][pytest website] for
-testing.
+linting, [ruff][ruff website] for formatting, [pytest][pytest website] for
+testing, and [sphinx][sphinx website] (with [numpydoc][numpydoc website]) for
+generating API documentation.
 
 - Linting can be performed via the `lint.sh` shell script in the rood of the
   repo. This runs both the `ruff` checker and `mypy` static type checker.
 - Formatting can be performed via the `format.sh` shell script in the root of
   the repo.
 - Unit tests can be run via the `poetry run pytest` command.
+- The html api docs can be generated and served on `127.0.0.1:8000` by running
+  the command `make serve`. **Be sure to activate the venv beforehand**
+  **otherwise it will error out with `sphinx-build: not found`.**
 
 ### Remotes
 
@@ -195,6 +200,9 @@ This package is licensed under the MIT license and can be found in
 [pytest website]: https://docs.pytest.org/en/stable/ "PyTest"
 [ruff badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=for-the-badge "Ruff"
 [ruff website]: https://docs.astral.sh/ruff/ "Ruff"
+[sphinx website]: https://www.sphinx-doc.org/ "Sphinx"
+[sphinx badge]: https://img.shields.io/badge/Made%20with-Sphinx-1f425f.svg?style=for-the-badge "Sphinx"
+[numpydoc website]: https://numpydoc.readthedocs.io/en/latest/ "numpydoc"
 [mypy website]: https://mypy-lang.org/ "mypy"
 [poetry badge]: https://img.shields.io/badge/Poetry-%233B82F6.svg?style=for-the-badge&logo=poetry&logoColor=0B3D8D "Poetry"
 [poetry website]: https://python-poetry.org/ "Poetry"
