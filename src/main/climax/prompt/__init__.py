@@ -57,7 +57,7 @@ class StringPrompt:
     See Also
     --------
     :class:`Prompt` : A class derived from this one that can process inputs of
-    arbitrary types (not just ``str``).
+        arbitrary types (not just ``str``).
     """
 
     message: str
@@ -161,7 +161,7 @@ class Prompt[ValueType](StringPrompt):
     See Also
     --------
     :class:`StringPrompt` : The base class from which this class is derived,
-    which processes only ``str`` inputs.
+        which processes only ``str`` inputs.
     """
 
     converter: Callable[[str], ValueType]
