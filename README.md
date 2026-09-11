@@ -58,8 +58,8 @@ following process:
 1. The string inputted to stdin then gets passed to the
    `StringPrompt.formatter(str)`.
 
-1. The formatted and raw unformatted input string then gets passed to the
-   `StringPrompt.string_validator`.
+1. The formatted and raw unformatted original input string then gets passed to
+   the `StringPrompt.string_validator`.
 
 1. If validation passes (the `StringPrompt.string_validator` returns
    `None`) then the formatted string input or both the formatted and unformatted
@@ -75,7 +75,7 @@ prompt in the terminal:
 ```text
 Input a palindrome...
 >>> slITher                                   # simulated user input
-Provided input is not a palindrome: "slITher" # raw unformatted string used in error message
+Provided input is not a palindrome: "slITher" # raw unformatted original string used in error message
 Input a palindrome...
 >>> level                                     # simulated user input
 You inputted the palindrome: "level"
@@ -90,7 +90,7 @@ def string_is_integer(strings: StringInput) -> str | None:
     return (
         None
         if strings.formatted.isdecimal()
-        else f'Provided input is not an integer: "{strings.raw_unformatted}"\n'
+        else f'Provided input is not an integer: "{strings.original}"\n'
     )
 
 def is_positive_even_integer(integer: int) -> str | None:
@@ -128,8 +128,8 @@ converted string input as outlined below ***if*** string input validation passes
 1. The converted string input is then passed to the `Prompt.validator(...)`.
 
 1. If validation passes (the `Prompt.validator(...)` returns `None`) then the
-   *converted* string input or both the *converted* and raw unformatted string
-   input gets returned.
+   *converted* string input or both the *converted* and raw unformatted original
+   string input gets returned.
 
 1. If validation fails (the `Prompt.validator(...)` returns a string error
    message) then the error message gets printed to stdout and the process is

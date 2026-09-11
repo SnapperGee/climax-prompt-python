@@ -71,7 +71,7 @@ def test_stringprompt_default_field_values() -> None:
         (_string_is_palindrome, str.strip, PS1, "level         "),
     ),
 )
-def test_stringprompt_execStringInputLoop_with_valid_input_and_no_raw_string_return_argument(
+def test_stringprompt_execStringInputLoop_with_valid_input_and_no_original_string_return_argument(
     validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
@@ -100,7 +100,7 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_no_raw_string_ret
         (_string_is_palindrome, str.strip, PS1, "level         "),
     ),
 )
-def test_stringprompt_execStringInputLoop_with_valid_input_and_false_raw_string_return_argument(
+def test_stringprompt_execStringInputLoop_with_valid_input_and_false_original_string_return_argument(
     validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
@@ -129,7 +129,7 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_false_raw_string_
         (_string_is_palindrome, str.strip, PS1, "level         "),
     ),
 )
-def test_stringprompt_execStringInputLoop_with_valid_input_and_raw_string_return_argument(
+def test_stringprompt_execStringInputLoop_with_valid_input_and_original_original_string_return_argument(
     validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
@@ -141,7 +141,7 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_raw_string_return
 
     assert isinstance(result, StringInput)
     assert result.formatted == (formatter(user_input) if formatter else user_input)
-    assert result.raw_unformatted == user_input
+    assert result.original == user_input
 
 
 @mark.parametrize(

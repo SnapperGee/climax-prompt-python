@@ -20,8 +20,8 @@ class StringInput(NamedTuple):
     formatted: str
     r"""A formatted ``string``."""
 
-    raw_unformatted: str
-    r"""A raw unformatted ``string``."""
+    original: str
+    r"""The raw unformatted original ``string``."""
 
 
 type Validator[T] = Callable[[T], str | None]
@@ -68,7 +68,7 @@ class StringPrompt:
 
     If validation fails it returns a ``string`` message explaining why
     validation failed that gets displayed to the user. It has access to both the
-    formatted and raw unformatted ``string`` input.
+    formatted and raw unformatted original ``string`` input.
 
     If field is set to ``None``, then all ``string`` input is considered valid.
 
@@ -104,25 +104,25 @@ class StringPrompt:
     @overload
     def exec_string_input_loop(self) -> str: ...
     @overload
-    def exec_string_input_loop(self, include_raw_input: Literal[False]) -> str: ...
+    def exec_string_input_loop(self, include_original_input: Literal[False]) -> str: ...
     @overload
-    def exec_string_input_loop(self, include_raw_input: Literal[True]) -> StringInput: ...
+    def exec_string_input_loop(self, include_original_input: Literal[True]) -> StringInput: ...
     @overload
-    def exec_string_input_loop(self, include_raw_input: bool) -> str | StringInput: ...
+    def exec_string_input_loop(self, include_original_input: bool) -> str | StringInput: ...
     @final
-    def exec_string_input_loop(self, include_raw_input: bool = False) -> str | StringInput:
+    def exec_string_input_loop(self, include_original_input: bool = False) -> str | StringInput:
         r"""Execute a ``string`` input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
         :attr:`string_validator` validation and will return either the formatted
         ``string`` or both the formatted and raw unformatted ``string``
-        indicated by the ``include_raw_input`` parameter.
+        indicated by the ``include_original_input`` parameter.
 
         Parameters
         ----------
-        include_raw_input : bool, optional
-            Flag indicating whether to include the raw unformatted ``string``
-            input in the return. Defaults to ``False``.
+        include_original_input : bool, optional
+            Flag indicating whether to include the raw unformatted original
+            ``string`` input in the return. Defaults to ``False``.
 
         Returns
         -------
@@ -141,7 +141,7 @@ class StringPrompt:
             raw_string_input = input(invalid_input_string_message + self.message + self._ps1)
             string_input = StringInput(self._formatter(raw_string_input), raw_string_input)
 
-        return string_input if include_raw_input else string_input.formatted
+        return string_input if include_original_input else string_input.formatted
 
 
 @final
@@ -184,13 +184,13 @@ class Prompt[ValueType](StringPrompt):
     @overload
     def exec_input_loop(self) -> ValueType: ...
     @overload
-    def exec_input_loop(self, include_raw_input: Literal[False]) -> ValueType: ...
+    def exec_input_loop(self, include_original_input: Literal[False]) -> ValueType: ...
     @overload
-    def exec_input_loop(self, include_raw_input: Literal[True]) -> tuple[ValueType, str]: ...
+    def exec_input_loop(self, include_original_input: Literal[True]) -> tuple[ValueType, str]: ...
     @overload
-    def exec_input_loop(self, include_raw_input: bool) -> ValueType | tuple[ValueType, str]: ...
+    def exec_input_loop(self, include_original_input: bool) -> ValueType | tuple[ValueType, str]: ...
     @final
-    def exec_input_loop(self, include_raw_input: bool = False) -> ValueType | tuple[ValueType, str]:
+    def exec_input_loop(self, include_original_input: bool = False) -> ValueType | tuple[ValueType, str]:
         r"""Execute an input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
@@ -198,13 +198,13 @@ class Prompt[ValueType](StringPrompt):
         then validated with the :attr:`validator`, and will return either the
         value (resulting from the converted ``string`` input) or both the value
         and raw unformatted ``string`` input indicated by the
-        ``include_raw_input`` parameter.
+        ``include_original_input`` parameter.
 
         Parameters
         ----------
-        include_raw_input : bool, optional
-            Flag indicating whether to include the raw unformatted ``string``
-            input in the return. Defaults to ``False``.
+        include_original_input : bool, optional
+            Flag indicating whether to include the raw unformatted original
+            ``string`` input in the return. Defaults to ``False``.
 
         Returns
         -------
@@ -212,14 +212,14 @@ class Prompt[ValueType](StringPrompt):
             The value (resulting from the converted ``string`` input) or both
             the value and raw unformatted ``string`` input.
         """
-        string_input = super().exec_string_input_loop(include_raw_input)
+        string_input = super().exec_string_input_loop(include_original_input)
         converted_input = self.converter(string_input if isinstance(string_input, str) else string_input.formatted)
 
         while (invalid_input_string_message := self._validator(converted_input)) is not None:
             if invalid_input_string_message:
                 print(invalid_input_string_message, end="")
 
-            string_input = super().exec_string_input_loop(include_raw_input)
+            string_input = super().exec_string_input_loop(include_original_input)
             converted_input = self.converter(string_input if isinstance(string_input, str) else string_input.formatted)
 
-        return converted_input if isinstance(string_input, str) else (converted_input, string_input.raw_unformatted)
+        return converted_input if isinstance(string_input, str) else (converted_input, string_input.original)
