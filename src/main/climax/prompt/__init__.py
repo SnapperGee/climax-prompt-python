@@ -15,7 +15,7 @@ def _string_identity_function(string: str) -> str:
 
 
 class StringInput(NamedTuple):
-    r"""A container for a formatted ``string`` and raw unformatted ``string``."""
+    r"""A container for a formatted ``string`` and the original unformatted ``string``."""
 
     formatted: str
     r"""A formatted ``string``."""
@@ -39,12 +39,12 @@ returned, otherwise ``None`` should be returned.
 
 See Also
 --------
-:obj:`Validator`: The type this type is derived from.
+:obj:`Validator` : The type this type is based on.
 """
 
 
 def _always_none_string_validator(_result: StringInput) -> None:
-    r"""A function that consumes a :type:`StringInput` object and returns ``None``."""
+    r"""A function that consumes a :class:`StringInput` object and returns ``None``."""
     return
 
 
@@ -52,12 +52,12 @@ def _always_none_string_validator(_result: StringInput) -> None:
 class StringPrompt:
     r"""Create a loop prompting a user for ``string`` input until valid input is given.
 
-    The inputted value is always interpreted and returned as a ``string``.
+    The input value is always interpreted and returned as a ``string``.
 
     See Also
     --------
-    :class:`Prompt`: A class derived from this one capable of processing inputs
-    of any arbitrary type.
+    :class:`Prompt` : A class derived from this one that can process inputs of
+    arbitrary types (not just ``str``).
     """
 
     message: str
@@ -74,7 +74,7 @@ class StringPrompt:
 
     See Also
     --------
-    :obj:`StringValidator`: The type of function used for :class:`StringInput` validation.
+    :obj:`StringValidator` : The type of function used for :class:`StringInput` validation.
     """
 
     formatter: Callable[[str], str] | None = field(kw_only=True, default=None)
@@ -120,13 +120,13 @@ class StringPrompt:
 
         Parameters
         ----------
-        include_raw_input: bool, optional
+        include_raw_input : bool, optional
             Flag indicating whether to include the raw unformatted ``string``
             input in the return. Defaults to ``False``.
 
         Returns
         -------
-        validated_string_input: str | StringInput
+        str | StringInput
             The validated formatted ``string`` input or both the validated
             formatted and raw unformatted ``string`` input.
 
@@ -149,9 +149,9 @@ class StringPrompt:
 class Prompt[ValueType](StringPrompt):
     r"""Create a loop prompting a user for input until valid input is given.
 
-    The inputted value is initially interpreted as a ``string`` and validated
-    and then (if it passes validation) gets converted to an arbitrary type that
-    then gets validated again.
+    The input value is initially interpreted as a ``string`` and validated and
+    then (if it passes validation) gets converted to an arbitrary type that then
+    gets validated again.
 
     Type Parameters
     ---------------
@@ -160,12 +160,12 @@ class Prompt[ValueType](StringPrompt):
 
     See Also
     --------
-    :class:`StringPrompt`: The base class this class is derived from capable of
-    processing only ``string`` inputs.
+    :class:`StringPrompt` : The base class from which this class is derived,
+    which processes only ``str`` inputs.
     """
 
     converter: Callable[[str], ValueType]
-    r"""Function that converts the ``string`` input to the ``ValueType``."""
+    r"""Function that converts the ``str`` input to ``ValueType``."""
 
     validator: Validator[ValueType] | None
     r"""Validates the converted ``string`` input.
@@ -177,7 +177,7 @@ class Prompt[ValueType](StringPrompt):
 
     See Also
     --------
-    :obj:`Validator`: The type of function used for validation.
+    :obj:`Validator` : The type of function used for validation.
     """
 
     @cached_property
@@ -205,15 +205,15 @@ class Prompt[ValueType](StringPrompt):
 
         Parameters
         ----------
-        include_raw_input: bool, optional
+        include_raw_input : bool, optional
             Flag indicating whether to include the raw unformatted ``string``
             input in the return. Defaults to ``False``.
 
         Returns
         -------
-        validated_string_input: str | StringInput
-            The validated formatted ``string`` input or both the validated
-            formatted and raw unformatted ``string`` input.
+        ValueType | tuple[ValueType, str]
+            The value (resulting from the converted ``string`` input) or both
+            the value and raw unformatted ``string`` input.
         """
         string_input = super().exec_string_input_loop(include_raw_input)
         converted_input = self.converter(string_input if isinstance(string_input, str) else string_input.formatted)
