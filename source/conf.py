@@ -15,6 +15,7 @@ author = "Snap"
 
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "numpydoc"
 ]
 
@@ -28,3 +29,5 @@ exclude_patterns = []
 
 html_theme = "furo"
 html_static_path = ["_static"]
+
+numpydoc_class_members_toctree = False

@@ -227,6 +227,10 @@ This package is licensed under the MIT license and can be found in
    :target: ./LICENSE.txt
 
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+.. autosummary::
+   :toctree: generated
+
+   climax.prompt
+   climax.prompt.Prompt
+   climax.prompt.StringPrompt
+   climax.prompt.StringInput
