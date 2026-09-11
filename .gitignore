@@ -1,4 +1,4 @@
-source/
+source/*
 !source/conf.py
 !source/index.rst
 .vscode/
