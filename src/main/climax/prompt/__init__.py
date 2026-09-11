@@ -153,10 +153,7 @@ class Prompt[ValueType](StringPrompt):
     then (if it passes validation) gets converted to an arbitrary type that then
     gets validated again.
 
-    Type Parameters
-    ---------------
-    ValueType
-        The type the ``string`` input gets converted to.
+    ``ValueType`` is the type to which the ``str`` input is converted.
 
     See Also
     --------
