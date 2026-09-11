@@ -7,7 +7,7 @@ Prompt for input via the CLI.
 [![ruff badge]][ruff website]
 [![Sphinx][sphinx badge]][sphinx website]
 [![poetry badge]][poetry website]
-![Git][git badge]
+[![Git][git badge]][git website]
 [![GitLab][gitlab badge]][gitlab repo]
 [![github badge]][github repo]
 [![MIT][mit shield]][mit license]
@@ -206,7 +206,8 @@ This package is licensed under the MIT license and can be found in
 [mypy website]: https://mypy-lang.org/ "mypy"
 [poetry badge]: https://img.shields.io/badge/Poetry-%233B82F6.svg?style=for-the-badge&logo=poetry&logoColor=0B3D8D "Poetry"
 [poetry website]: https://python-poetry.org/ "Poetry"
-[git badge]: https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white "Git"
+[git badge]: https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white "git"
+[git website]: https://git-scm.com/ "git"
 [gitlab badge]: https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white "GitLab"
 [gitlab repo]: https://gitlab.com/SnapperGee/climax-prompt-python "GitLab repo"
 [github badge]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "GitHub"
