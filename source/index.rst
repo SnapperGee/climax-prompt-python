@@ -29,12 +29,14 @@ Usage Examples
 
    from climax.prompt import StringInput, StringPrompt
 
+
    def is_palindrome(strings: StringInput) -> str | None:
        return (
            f'Provided input is not a palindrome: "{strings.unformatted}"\n'
            if strings.formatted != strings.formatted[::-1]
            else None
        )
+
 
    palindrome_prompt = StringPrompt(
        "Input a palindrome...\n",
@@ -87,12 +89,10 @@ following prompt in the terminal:
 
    from climax.prompt import Prompt, StringInput
 
+
    def string_is_integer(strings: StringInput) -> str | None:
-       return (
-           None
-           if strings.formatted.isdecimal()
-           else f'Provided input is not an integer: "{strings.original}"\n'
-       )
+       return None if strings.formatted.isdecimal() else f'Provided input is not an integer: "{strings.original}"\n'
+
 
    def is_positive_even_integer(integer: int) -> str | None:
        if integer <= 0:
@@ -103,10 +103,11 @@ following prompt in the terminal:
 
        return None
 
+
    positive_even_integer_prompt = Prompt[int](
        "Input a positive even integer: ",
        string_is_integer,
-       lambda string_input: int(string_input), # could also just have passed `int` constructor method directly
+       lambda string_input: int(string_input),  # could also just have passed `int` constructor method directly
        is_positive_even_integer,
        formatter=str.strip,
    )
@@ -182,16 +183,17 @@ and `mypy <https://mypy-lang.org/>`__ for linting,
 `numpydoc <https://numpydoc.readthedocs.io/en/latest/>`__) for
 generating API documentation.
 
--  Linting can be performed via the ``lint.sh`` shell script in the rood
-   of the repo. This runs both the ``ruff`` checker and ``mypy`` static
+All repo tasks can be executed via the ``make`` targets listed below:
+
+-  ``setup`` - Installs all package dependencies and pre-commit hook(s).
+-  ``lint`` - This runs both the ``ruff`` checker and ``mypy`` static
    type checker.
--  Formatting can be performed via the ``format.sh`` shell script in the
-   root of the repo.
--  Unit tests can be run via the ``poetry run pytest`` command.
--  The html api docs can be generated and served on ``127.0.0.1:8000``
-   by running the command ``make serve``. **Be sure to activate the venv
-   beforehand** **otherwise it will error out with
-   ``sphinx-build: not found``.**
+-  ``format`` - Formats source code with ``ruff``.
+-  ``test`` - Runs unit tests.
+-  ``serve`` - Generates and serves html API docs on ``127.0.0.1:8000``.
+
+In addition to the ``make`` targets listed above, all ``sphinx`` targets
+are available and valid as well.
 
 Remotes
 ~~~~~~~
@@ -225,7 +227,6 @@ This package is licensed under the MIT license and can be found in
    :target: https://github.com/SnapperGee/climax-prompt-python
 .. |MIT| image:: https://img.shields.io/badge/license-MIT-green?style=for-the-badge
    :target: ./LICENSE.txt
-
 
 .. autosummary::
    :toctree: generated
