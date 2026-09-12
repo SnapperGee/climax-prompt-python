@@ -8,7 +8,7 @@ SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build/docs
 
-.PHONY: help setup serve Makefile
+.PHONY: help setup test serve Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -17,6 +17,9 @@ help:
 setup:
 	poetry install
 	poetry run pre-commit install
+
+test:
+	poetry run pytest
 
 serve:
 	@$(MAKE) html
