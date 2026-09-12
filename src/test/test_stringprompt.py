@@ -7,9 +7,10 @@ from climax.prompt import (
     StringInput,
     StringPrompt,
     StringValidator,
-    _always_none_string_validator,
-    _string_identity_function,
+    # always_none_returning_function,
+    # string_identity_function,
 )
+from climax.prompt._util import always_none_returning_function, string_identity_function
 from pytest import mark, raises
 
 from .util import MESSAGE, PS1, string_is_digit
@@ -48,8 +49,8 @@ def test_stringprompt_default_field_values() -> None:
         None,
     )
 
-    assert string_prompt._formatter is _string_identity_function
-    assert string_prompt._string_validator is _always_none_string_validator
+    assert string_prompt._formatter is string_identity_function
+    assert string_prompt._string_validator is always_none_returning_function
     assert string_prompt.formatter is None
     assert string_prompt.ps1 is None
 
