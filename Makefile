@@ -8,11 +8,15 @@ SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build/docs
 
-.PHONY: help Makefile serve
+.PHONY: help setup serve Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+setup:
+	poetry install
+	poetry run pre-commit install
 
 serve:
 	@$(MAKE) html
