@@ -183,7 +183,7 @@ All repo tasks can be executed via the `make` targets listed below:
 - `format` - Formats source code with `ruff`.
 - `test` - Runs unit tests.
 - `serve` - Generates and serves html API docs on `127.0.0.1:8000`.
-- `readme` - Generate `source/README.rst` by converting the root `README.md` to rst.
+- `readme` - Generate `source/README.rst` by using `pandoc` to convert the root `README.md` to rst.
 
 In addition to the `make` targets listed above, all `sphinx` targets are
 available and valid as well.
