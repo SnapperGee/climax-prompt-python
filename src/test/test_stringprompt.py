@@ -7,8 +7,6 @@ from climax.prompt import (
     StringInput,
     StringPrompt,
     StringValidator,
-    # always_none_returning_function,
-    # string_identity_function,
 )
 from climax.prompt._util import always_none_returning_function, string_identity_function
 from pytest import mark, raises
