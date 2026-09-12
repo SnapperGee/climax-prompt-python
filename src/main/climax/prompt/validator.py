@@ -1,6 +1,6 @@
 from collections.abc import Callable
 
-from .stringinput import StringInput
+from .string_input import StringInput
 
 type Validator[T] = Callable[[T], str | None]
 r"""A function that validates a value.

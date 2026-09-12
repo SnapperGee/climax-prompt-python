@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import Literal, final, overload
 
-from .stringprompt import StringPrompt
+from .string_prompt import StringPrompt
 from .validator import Validator
 
 

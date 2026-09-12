@@ -4,7 +4,7 @@ from functools import cached_property
 from typing import Literal, final, overload
 
 from ._util import always_none_returning_function, string_identity_function
-from .stringinput import StringInput
+from .string_input import StringInput
 from .validator import StringValidator
 
 
