@@ -4,11 +4,11 @@
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 SPHINXOPTS    ?=
-SPHINXBUILD   ?= sphinx-build
+SPHINXBUILD   ?= poetry run sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build/docs
 
-.PHONY: help setup test serve Makefile
+.PHONY: help setup lint format test serve Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -17,6 +17,12 @@ help:
 setup:
 	poetry install
 	poetry run pre-commit install
+
+lint:
+	poetry run ruff check ./src && poetry run mypy
+
+format:
+	poetry run ruff check --select I --fix ./src && poetry run ruff format ./src
 
 test:
 	poetry run pytest
