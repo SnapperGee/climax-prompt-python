@@ -8,7 +8,7 @@ SPHINXBUILD   ?= poetry run sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build/docs
 
-.PHONY: help setup lint format test serve Makefile
+.PHONY: help setup lint format test serve readme Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -30,6 +30,9 @@ test:
 serve:
 	@$(MAKE) html
 	python3 -m http.server --directory $(BUILDDIR)/html -b 127.0.0.1 8000
+
+readme:
+	poetry run pandoc --from=markdown --to=rst --output=source/README.rst README.md
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
