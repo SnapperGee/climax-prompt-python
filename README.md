@@ -87,7 +87,7 @@ You inputted the palindrome: "level"
 ### `Prompt` Usage Example
 
 ```python
-from climax.prompt import Prompt, StringInput
+from climax.prompt import Prompt, PromptResult, StringInput
 
 
 def string_is_integer(strings: StringInput) -> str | None:
@@ -112,10 +112,12 @@ positive_even_integer_prompt = Prompt[int](
     formatter=str.strip,
 )
 
-# the input that passes the prompt's validation will be retrieved
-inputted_positive_even_integer: int = positive_even_integer_prompt.exec_input_loop()
+positive_even_integer_prompt_result: PromptResult = positive_even_integer_prompt.exec_input_loop()
 
-print("You inputted the positive even integer:", inputted_positive_even_integer)
+if positive_even_integer_prompt_result.conversion_exception:
+    print("Error converting input to an int:", positive_even_integer_prompt_result.original_input_string)
+
+print("You inputted the positive even integer:", positive_even_integer_prompt_result.value)
 ```
 
 Calling the `Prompt.exec_input_loop(...)` method will result in the same process
@@ -127,11 +129,15 @@ converted string input as outlined below ***if*** string input validation passes
 1. The *formatted* validated string input is passed to the
    `Prompt.converter(str)`.
 
-1. The converted string input is then passed to the `Prompt.validator(...)`.
+1. If an exception occurs during conversion, then a `PromptResult` is returned
+   with the original input string and `Exception` that was raised.
 
-1. If validation passes (the `Prompt.validator(...)` returns `None`) then the
-   *converted* string input or both the *converted* and raw unformatted original
-   string input gets returned.
+1. If conversion succeeds without raising an exception, the  string input is
+   then passed to the `Prompt.validator(...)`.
+
+1. If validation passes (the `Prompt.validator(...)` returns `None`) then a
+   `PromptResult` containing the original input string and its converted value
+   is returned.
 
 1. If validation fails (the `Prompt.validator(...)` returns a string error
    message) then the error message gets printed to stdout and the process is
