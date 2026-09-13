@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import final
+from typing import Self, final
 
 
 @final
@@ -15,3 +15,11 @@ class PromptResult[ValueType]:
                 f"{type(self).__name__}: truthy `conversion_exception` with "
                 f"non-None `value`:\n{self.value=}\n\n{self.conversion_exception!r}"
             )
+
+    @classmethod
+    def create(cls, original_input_string: str, value_or_conversion_exception: ValueType | Exception) -> Self:
+        return (
+            cls(original_input_string, None, value_or_conversion_exception)
+            if isinstance(value_or_conversion_exception, Exception)
+            else cls(original_input_string, value_or_conversion_exception)
+        )
