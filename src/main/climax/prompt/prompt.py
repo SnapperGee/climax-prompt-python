@@ -1,8 +1,9 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Literal, final, overload
+from typing import final
 
+from .prompt_result import PromptResult
 from .string_prompt import StringPrompt
 from .validator import Validator
 
@@ -49,16 +50,8 @@ class Prompt[ValueType](StringPrompt):
     def _validator(self) -> Callable[[ValueType], str | None]:
         return self.validator or _always_none_returning_function
 
-    @overload
-    def exec_input_loop(self) -> ValueType: ...
-    @overload
-    def exec_input_loop(self, include_original_input: Literal[False]) -> ValueType: ...
-    @overload
-    def exec_input_loop(self, include_original_input: Literal[True]) -> tuple[ValueType, str]: ...
-    @overload
-    def exec_input_loop(self, include_original_input: bool) -> ValueType | tuple[ValueType, str]: ...
     @final
-    def exec_input_loop(self, include_original_input: bool = False) -> ValueType | tuple[ValueType, str]:
+    def exec_input_loop(self) -> PromptResult:
         r"""Execute an input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
@@ -80,14 +73,28 @@ class Prompt[ValueType](StringPrompt):
             The value (resulting from the converted ``string`` input) or both
             the value and raw unformatted ``string`` input.
         """
-        string_input = super().exec_string_input_loop(include_original_input)
-        converted_input = self.converter(string_input if isinstance(string_input, str) else string_input.formatted)
+        formatted_string_input, original_string_input = super().exec_string_input_loop(True)
+
+        try:
+            converted_input = self.converter(
+                formatted_string_input if isinstance(formatted_string_input, str) else formatted_string_input.formatted
+            )
+        except Exception as exception:  # noqa: BLE001
+            return PromptResult[ValueType](original_string_input, None, exception)
 
         while (invalid_input_string_message := self._validator(converted_input)) is not None:
             if invalid_input_string_message:
                 print(invalid_input_string_message, end="")
 
-            string_input = super().exec_string_input_loop(include_original_input)
-            converted_input = self.converter(string_input if isinstance(string_input, str) else string_input.formatted)
+            formatted_string_input, original_string_input = super().exec_string_input_loop(True)
 
-        return converted_input if isinstance(string_input, str) else (converted_input, string_input.original)
+            try:
+                converted_input = self.converter(
+                    formatted_string_input
+                    if isinstance(formatted_string_input, str)
+                    else formatted_string_input.formatted
+                )
+            except Exception as exception:  # noqa: BLE001
+                return PromptResult[ValueType](original_string_input, None, exception)
+
+        return PromptResult[ValueType](original_string_input, converted_input)
