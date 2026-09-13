@@ -15,6 +15,10 @@ from pytest import mark, raises
 from .util import MESSAGE, PS1, string_is_digit
 
 
+def _always_none_returning_function(_: object) -> None:
+    return
+
+
 def _is_even_positive_integer(integer: int) -> str | None:
     if integer <= 0:
         return f"Integer is not positive: {integer}\n"
@@ -102,7 +106,7 @@ def test_prompt_execInputLoop_with_valid_input(
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
-    expected: float,
+    expected: PromptResult[int | float],
 ) -> None:
     prompt: Final = Prompt(MESSAGE, string_validator, _type, validator, formatter=formatter, ps1=ps1)
 
@@ -166,3 +170,41 @@ def test_prompt_execInputLoop_with_invalid_input(
     else:
         error_message: Final = validator(_type(formatted_user_input)) or ""
         mock_print.assert_called_once_with(error_message, end="")
+
+
+@mark.parametrize(
+    "_type,validator,formatter,ps1,user_input,expected",
+    (
+        (
+            int,
+            _is_even_positive_integer,
+            str.strip,
+            None,
+            "abc",
+            PromptResult("abc", None, ValueError("invalid literal for int() with base 10: 'abc'")),
+        ),
+        (
+            float,
+            _float_contains_non_zero_decimals,
+            str.strip,
+            PS1,
+            "XXX",
+            PromptResult("XXX", None, ValueError("could not convert string to float: 'XXX'")),
+        ),
+    ),
+)
+def test_prompt_execInputLoop_with_conversion_error(
+    _type: type,
+    validator: Validator[int | float],
+    formatter: Callable[[str], str] | None,
+    ps1: str | None,
+    user_input: str,
+    expected: PromptResult[int | float],
+) -> None:
+    prompt: Final = Prompt(MESSAGE, _always_none_returning_function, _type, validator, formatter=formatter, ps1=ps1)
+
+    with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
+        result: Final = prompt.exec_input_loop()
+
+    assert result == expected
+    mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
