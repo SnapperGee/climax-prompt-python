@@ -5,6 +5,7 @@ from unittest.mock import call, patch
 
 from climax.prompt import (
     Prompt,
+    PromptResult,
     StringInput,
     StringValidator,
     Validator,
@@ -44,17 +45,57 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
 @mark.parametrize(
     "string_validator,_type,validator,formatter,ps1,user_input,expected",
     (
-        (string_is_digit, int, _is_even_positive_integer, None, None, "124", 124),
-        (string_is_digit, int, _is_even_positive_integer, str.strip, None, "     2     ", 2),
-        (string_is_digit, int, _is_even_positive_integer, None, PS1, "253242", 253242),
-        (string_is_digit, int, _is_even_positive_integer, str.strip, PS1, "     26     ", 26),
-        (_string_is_float, float, _float_contains_non_zero_decimals, None, None, "124.1", 124.1),
-        (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, None, "     1.04     ", 1.04),
-        (_string_is_float, float, _float_contains_non_zero_decimals, None, PS1, "253242.252523", 253242.252523),
-        (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, PS1, "     26.1111     ", 26.1111),
+        (string_is_digit, int, _is_even_positive_integer, None, None, "124", PromptResult("124", 124)),
+        (
+            string_is_digit,
+            int,
+            _is_even_positive_integer,
+            str.strip,
+            None,
+            "     2     ",
+            PromptResult("     2     ", 2),
+        ),
+        (string_is_digit, int, _is_even_positive_integer, None, PS1, "253242", PromptResult("253242", 253242)),
+        (
+            string_is_digit,
+            int,
+            _is_even_positive_integer,
+            str.strip,
+            PS1,
+            "     26     ",
+            PromptResult("     26     ", 26),
+        ),
+        (_string_is_float, float, _float_contains_non_zero_decimals, None, None, "124.1", PromptResult("124.1", 124.1)),
+        (
+            _string_is_float,
+            float,
+            _float_contains_non_zero_decimals,
+            str.strip,
+            None,
+            "     1.04     ",
+            PromptResult("     1.04     ", 1.04),
+        ),
+        (
+            _string_is_float,
+            float,
+            _float_contains_non_zero_decimals,
+            None,
+            PS1,
+            "253242.252523",
+            PromptResult("253242.252523", 253242.252523),
+        ),
+        (
+            _string_is_float,
+            float,
+            _float_contains_non_zero_decimals,
+            str.strip,
+            PS1,
+            "     26.1111     ",
+            PromptResult("     26.1111     ", 26.1111),
+        ),
     ),
 )
-def test_prompt_execInputLoop_with_valid_input_and_no_raw_string_return_argument(
+def test_prompt_execInputLoop_with_valid_input(
     string_validator: StringValidator,
     _type: type,
     validator: Validator[int | float],
@@ -70,71 +111,6 @@ def test_prompt_execInputLoop_with_valid_input_and_no_raw_string_return_argument
 
     assert result == expected
     mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
-
-
-@mark.parametrize(
-    "string_validator,_type,validator,formatter,ps1,user_input,expected",
-    (
-        (string_is_digit, int, _is_even_positive_integer, None, None, "124", 124),
-        (string_is_digit, int, _is_even_positive_integer, str.strip, None, "     2     ", 2),
-        (string_is_digit, int, _is_even_positive_integer, None, PS1, "253242", 253242),
-        (string_is_digit, int, _is_even_positive_integer, str.strip, PS1, "     26     ", 26),
-        (_string_is_float, float, _float_contains_non_zero_decimals, None, None, "124.1", 124.1),
-        (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, None, "     1.04     ", 1.04),
-        (_string_is_float, float, _float_contains_non_zero_decimals, None, PS1, "253242.252523", 253242.252523),
-        (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, PS1, "     26.1111     ", 26.1111),
-    ),
-)
-def test_prompt_execInputLoop_with_valid_input_and_false_raw_string_return_argument(
-    string_validator: StringValidator,
-    _type: type,
-    validator: Validator[int | float],
-    formatter: Callable[[str], str] | None,
-    ps1: str | None,
-    user_input: str,
-    expected: float,
-) -> None:
-    prompt: Final = Prompt(MESSAGE, string_validator, _type, validator, formatter=formatter, ps1=ps1)
-
-    with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
-        result: Final = prompt.exec_input_loop(False)
-
-    assert result == expected
-    mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
-
-
-@mark.parametrize(
-    "string_validator,_type,validator,formatter,ps1,user_input,expected",
-    (
-        (string_is_digit, int, _is_even_positive_integer, None, None, "124", 124),
-        (string_is_digit, int, _is_even_positive_integer, str.strip, None, "     2     ", 2),
-        (string_is_digit, int, _is_even_positive_integer, None, PS1, "253242", 253242),
-        (string_is_digit, int, _is_even_positive_integer, str.strip, PS1, "     26     ", 26),
-        (_string_is_float, float, _float_contains_non_zero_decimals, None, None, "124.1", 124.1),
-        (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, None, "     1.04     ", 1.04),
-        (_string_is_float, float, _float_contains_non_zero_decimals, None, PS1, "253242.252523", 253242.252523),
-        (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, PS1, "     26.1111     ", 26.1111),
-    ),
-)
-def test_prompt_execInputLoop_with_valid_input_and_raw_string_return_argument(
-    string_validator: StringValidator,
-    _type: type,
-    validator: Validator[int | float],
-    formatter: Callable[[str], str] | None,
-    ps1: str | None,
-    user_input: str,
-    expected: float,
-) -> None:
-    prompt: Final = Prompt(MESSAGE, string_validator, _type, validator, formatter=formatter, ps1=ps1)
-
-    with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
-        result: Final = prompt.exec_input_loop(True)
-
-    mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
-
-    assert isinstance(result, tuple)
-    assert result[0] == expected
-    assert result[1] == user_input
 
 
 @mark.parametrize(
