@@ -51,7 +51,7 @@ class Prompt[ValueType](StringPrompt):
         return self.validator or _always_none_returning_function
 
     @final
-    def exec_input_loop(self) -> PromptResult:
+    def exec_input_loop(self) -> PromptResult[ValueType]:
         r"""Execute an input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
