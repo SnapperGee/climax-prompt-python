@@ -1,4 +1,4 @@
-from typing import Final, Literal
+from typing import Final
 
 MESSAGE: Final = "message\n"
 
