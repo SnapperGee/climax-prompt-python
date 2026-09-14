@@ -19,7 +19,7 @@ setup:
 	poetry run pre-commit install
 
 lint:
-	poetry run ruff check ./src && poetry run mypy
+	poetry run ruff check --extend-select I ./src && poetry run mypy
 
 format:
 	poetry run ruff check --extend-select I --fix ./src && poetry run ruff format ./src
