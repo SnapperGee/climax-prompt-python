@@ -15,7 +15,7 @@ Prompt for input via the CLI.
 ## Synopsis
 
 This package exports primarily 2 classes that contain the majority of its
-functionality. The `StringPrompt` and `Prompt` classes. The main difference
+functionality. The `Prompt` and `StringPrompt` classes. The main difference
 between the 2 is that `StringPrompt`s only processes strings while `Prompt`s
 can process any arbitrary type.
 
@@ -28,7 +28,7 @@ reprompt until valid input is inputted and return that inputted string or value.
 ### `StringPrompt` Usage Example
 
 ```python
-from climax.prompt import StringInput, StringPrompt
+from climax.prompt import PromptStringInput, StringPrompt
 
 
 def is_palindrome(strings: StringInput) -> str | None:
@@ -46,10 +46,11 @@ palindrome_prompt = StringPrompt(
     ps1=">>> ",
 )
 
-# the formatted input that passes the string prompt's validation will be retrieved
-inputted_palindrome: str = palindrome_prompt.exec_string_input_loop()
+# the formatted input that passes the string prompt's validation and the original
+# # raw string input will be retrieved
+formatted_palindrome_string_input, original_palindrome_string_input: PromptStringInput = palindrome_prompt.exec_string_input_loop()
 
-print(f'You inputted the palindrome: "{inputted_palindrome}"')
+print(f'You inputted the palindrome: "{formatted_palindrome_string_input}"')
 ```
 
 Calling the `StringPrompt.exec_string_input_loop(...)` method will result in the
@@ -65,8 +66,7 @@ following process:
    the `StringPrompt.string_validator`.
 
 1. If validation passes (the `StringPrompt.string_validator` returns
-   `None`) then the formatted string input or both the formatted and unformatted
-   string input gets returned.
+   `None`) then both the formatted and original unformatted string input gets returned.
 
 1. If validation fails (the `StringPrompt.string_validator(str)` returns a
    string error message) then the string error message gets printed to stdout
@@ -87,7 +87,7 @@ You inputted the palindrome: "level"
 ### `Prompt` Usage Example
 
 ```python
-from climax.prompt import Prompt, PromptResult, StringInput
+from climax.prompt import Prompt, PromptInput, StringInput
 
 
 def string_is_integer(strings: StringInput) -> str | None:
@@ -129,14 +129,14 @@ converted string input as outlined below ***if*** string input validation passes
 1. The *formatted* validated string input is passed to the
    `Prompt.converter(str)`.
 
-1. If an exception occurs during conversion, then a `PromptResult` is returned
-   with the original input string and `Exception` that was raised.
+1. If an exception occurs during conversion, then a `PromptInput` is returned
+   with the original input string and the `Exception` that was raised.
 
-1. If conversion succeeds without raising an exception, the  string input is
+1. If conversion succeeds without raising an exception, the string input is
    then passed to the `Prompt.validator(...)`.
 
 1. If validation passes (the `Prompt.validator(...)` returns `None`) then a
-   `PromptResult` containing the original input string and its converted value
+   `PromptInput` containing the original input string and its converted value
    is returned.
 
 1. If validation fails (the `Prompt.validator(...)` returns a string error
