@@ -66,9 +66,8 @@ class StringPrompt:
         r"""Execute a ``string`` input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
-        :attr:`string_validator` validation and will return either the formatted
-        ``string`` or both the formatted and raw unformatted ``string``
-        indicated by the ``include_original_input`` parameter.
+        :attr:`string_validator` validation and will return both the formatted
+        and original raw unformatted ``string`` inputted by the user.
 
         Returns
         -------

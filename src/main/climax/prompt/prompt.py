@@ -61,17 +61,12 @@ class Prompt[ValueType](StringPrompt):
         and raw unformatted ``string`` input indicated by the
         ``include_original_input`` parameter.
 
-        Parameters
-        ----------
-        include_original_input : bool, optional
-            Flag indicating whether to include the raw unformatted original
-            ``string`` input in the return. Defaults to ``False``.
-
         Returns
         -------
-        ValueType | tuple[ValueType, str]
-            The value (resulting from the converted ``string`` input) or both
-            the value and raw unformatted ``string`` input.
+        PromptInput
+            The original raw unformatted ``string`` input and either the
+            converted value of the formatted ``string`` input or the raised
+            exception if one is raised during conversion.
         """
         formatted_string_input, original_string_input = super().exec_string_input_loop()
 
