@@ -5,7 +5,7 @@ from unittest.mock import call, patch
 
 from climax.prompt import (
     Prompt,
-    PromptResult,
+    PromptInput,
     StringPromptInput,
     StringValidator,
     Validator,
@@ -49,7 +49,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
 @mark.parametrize(
     "string_validator,_type,validator,formatter,ps1,user_input,expected",
     (
-        (string_is_digit, int, _is_even_positive_integer, None, None, "124", PromptResult("124", 124)),
+        (string_is_digit, int, _is_even_positive_integer, None, None, "124", PromptInput("124", 124)),
         (
             string_is_digit,
             int,
@@ -57,9 +57,9 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             None,
             "     2     ",
-            PromptResult("     2     ", 2),
+            PromptInput("     2     ", 2),
         ),
-        (string_is_digit, int, _is_even_positive_integer, None, PS1, "253242", PromptResult("253242", 253242)),
+        (string_is_digit, int, _is_even_positive_integer, None, PS1, "253242", PromptInput("253242", 253242)),
         (
             string_is_digit,
             int,
@@ -67,9 +67,9 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             PS1,
             "     26     ",
-            PromptResult("     26     ", 26),
+            PromptInput("     26     ", 26),
         ),
-        (_string_is_float, float, _float_contains_non_zero_decimals, None, None, "124.1", PromptResult("124.1", 124.1)),
+        (_string_is_float, float, _float_contains_non_zero_decimals, None, None, "124.1", PromptInput("124.1", 124.1)),
         (
             _string_is_float,
             float,
@@ -77,7 +77,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             None,
             "     1.04     ",
-            PromptResult("     1.04     ", 1.04),
+            PromptInput("     1.04     ", 1.04),
         ),
         (
             _string_is_float,
@@ -86,7 +86,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             PS1,
             "253242.252523",
-            PromptResult("253242.252523", 253242.252523),
+            PromptInput("253242.252523", 253242.252523),
         ),
         (
             _string_is_float,
@@ -95,7 +95,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             PS1,
             "     26.1111     ",
-            PromptResult("     26.1111     ", 26.1111),
+            PromptInput("     26.1111     ", 26.1111),
         ),
     ),
 )
@@ -106,7 +106,7 @@ def test_prompt_execInputLoop_with_valid_input(
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
-    expected: PromptResult[int | float],
+    expected: PromptInput[int | float],
 ) -> None:
     prompt: Final = Prompt(MESSAGE, string_validator, _type, validator, formatter=formatter, ps1=ps1)
 
@@ -181,7 +181,7 @@ def test_prompt_execInputLoop_with_invalid_input(
             str.strip,
             None,
             "abc",
-            PromptResult("abc", None, ValueError("invalid literal for int() with base 10: 'abc'")),
+            PromptInput("abc", None, ValueError("invalid literal for int() with base 10: 'abc'")),
         ),
         (
             float,
@@ -189,7 +189,7 @@ def test_prompt_execInputLoop_with_invalid_input(
             str.strip,
             PS1,
             "XXX",
-            PromptResult("XXX", None, ValueError("could not convert string to float: 'XXX'")),
+            PromptInput("XXX", None, ValueError("could not convert string to float: 'XXX'")),
         ),
     ),
 )
@@ -199,7 +199,7 @@ def test_prompt_execInputLoop_with_conversion_error(
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
-    expected: PromptResult[int | float],
+    expected: PromptInput[int | float],
 ) -> None:
     prompt: Final = Prompt(MESSAGE, _always_none_returning_function, _type, validator, formatter=formatter, ps1=ps1)
 

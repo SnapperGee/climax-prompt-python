@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import final
 
-from .prompt_result import PromptResult
+from .prompt_input import PromptInput
 from .string_prompt import StringPrompt
 from .validator import Validator
 
@@ -51,7 +51,7 @@ class Prompt[ValueType](StringPrompt):
         return self.validator or _always_none_returning_function
 
     @final
-    def exec_input_loop(self) -> PromptResult[ValueType]:
+    def exec_input_loop(self) -> PromptInput[ValueType]:
         r"""Execute an input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
@@ -80,7 +80,7 @@ class Prompt[ValueType](StringPrompt):
                 formatted_string_input if isinstance(formatted_string_input, str) else formatted_string_input.formatted
             )
         except Exception as exception:  # noqa: BLE001
-            return PromptResult[ValueType](original_string_input, None, exception)
+            return PromptInput[ValueType](original_string_input, None, exception)
 
         while (invalid_input_string_message := self._validator(converted_input)) is not None:
             if invalid_input_string_message:
@@ -95,6 +95,6 @@ class Prompt[ValueType](StringPrompt):
                     else formatted_string_input.formatted
                 )
             except Exception as exception:  # noqa: BLE001
-                return PromptResult[ValueType](original_string_input, None, exception)
+                return PromptInput[ValueType](original_string_input, None, exception)
 
-        return PromptResult[ValueType](original_string_input, converted_input)
+        return PromptInput[ValueType](original_string_input, converted_input)

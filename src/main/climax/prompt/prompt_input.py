@@ -11,7 +11,7 @@ def _exception_key(exception: Exception | None) -> tuple[type[Exception], tuple[
 
 @final
 @dataclass(frozen=True)
-class PromptResult[ValueType]:
+class PromptInput[ValueType]:
     original_input_string: str
     value: ValueType | None
     conversion_exception: Exception | None = None
@@ -24,7 +24,7 @@ class PromptResult[ValueType]:
             )
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, PromptResult):
+        if not isinstance(other, PromptInput):
             return NotImplemented
 
         if self.original_input_string != other.original_input_string or self.value != other.value:
