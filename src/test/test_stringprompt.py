@@ -4,8 +4,8 @@ from typing import Final
 from unittest.mock import call, patch
 
 from climax.prompt import (
-    StringInput,
     StringPrompt,
+    StringPromptInput,
     StringValidator,
 )
 from climax.prompt._util import always_none_returning_function, string_identity_function
@@ -138,7 +138,7 @@ def test_stringprompt_execStringInputLoop_with_valid_input_and_original_original
 
     mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
 
-    assert isinstance(result, StringInput)
+    assert isinstance(result, StringPromptInput)
     assert result.formatted == (formatter(user_input) if formatter else user_input)
     assert result.original == user_input
 
@@ -173,7 +173,7 @@ def test_stringprompt_execStringInputLoop_with_invalid_input(
     assert mock_input.call_args_list == [
         call(message_with_ps1),
         call(
-            (validator(StringInput(formatter(user_input) if formatter else user_input, user_input)) or "")
+            (validator(StringPromptInput(formatter(user_input) if formatter else user_input, user_input)) or "")
             + message_with_ps1
         ),
     ]

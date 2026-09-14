@@ -6,7 +6,7 @@ from unittest.mock import call, patch
 from climax.prompt import (
     Prompt,
     PromptResult,
-    StringInput,
+    StringPromptInput,
     StringValidator,
     Validator,
 )
@@ -160,7 +160,7 @@ def test_prompt_execInputLoop_with_invalid_input(
     formatted_user_input: Final = formatter(user_input) if formatter else user_input
     message_with_ps1: Final = MESSAGE + (ps1 or "")
 
-    string_error_message: Final = string_validator(StringInput(formatted_user_input, user_input))
+    string_error_message: Final = string_validator(StringPromptInput(formatted_user_input, user_input))
 
     assert mock_input.call_count == 2
     assert mock_input.call_args_list[0] == call(message_with_ps1)

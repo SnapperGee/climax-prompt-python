@@ -1,7 +1,7 @@
 from typing import NamedTuple
 
 
-class StringInput(NamedTuple):
+class StringPromptInput(NamedTuple):
     r"""A container for a formatted ``string`` and the original unformatted ``string``."""
 
     formatted: str
