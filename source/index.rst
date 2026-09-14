@@ -5,7 +5,8 @@
 
    climax.prompt
    climax.prompt.Prompt
+   climax.prompt.PromptInput
    climax.prompt.StringPrompt
-   climax.prompt.StringInput
+   climax.prompt.StringPromptInput
    climax.prompt.validator.StringValidator
    climax.prompt.validator.Validator
