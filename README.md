@@ -223,4 +223,4 @@ This package is licensed under the MIT license and can be found in
 [github badge]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "GitHub"
 [github repo]: https://github.com/SnapperGee/climax-prompt-python "GitHub"
 [mit shield]: https://img.shields.io/badge/license-MIT-green?style=for-the-badge "MIT"
-[mit license]: ./LICENSE.txt "MIT"
+[mit license]: https://gitlab.com/snap-climax/python-prompt/-/blob/dev/LICENSE.txt "MIT"

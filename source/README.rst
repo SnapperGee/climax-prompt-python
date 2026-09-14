@@ -67,9 +67,9 @@ result in the following process:
    ``None``) then both the formatted and original unformatted string
    input gets returned.
 
-5. If validation fails (the ``StringPrompt.string_validator(str)``
-   returns a string error message) then the string error message gets
-   printed to stdout and the process is repeated.
+5. If validation fails (the ``StringPrompt.string_validator`` returns a
+   string error message) then the string error message gets printed to
+   stdout and the process is repeated.
 
 When the method in the example above is called this will result in the
 following prompt in the terminal:
@@ -150,7 +150,7 @@ following prompt in the terminal:
 
 .. code:: text
 
-   Input a positive even integer:    slither          # simulated user input
+   Input a positive even integer:    sliTHer          # simulated user input
    Provided input is not an integer: "slither"        # formatted string input is used in this message
    Input a positive even integer: -34                 # simulated user input
    Integer isn't positive: -34
@@ -216,7 +216,7 @@ MIT License
 -----------
 
 This package is licensed under the MIT license and can be found in
-`LICENSE.txt <./LICENSE.txt>`__.
+`LICENSE.txt <https://gitlab.com/snap-climax/python-prompt/-/blob/dev/LICENSE.txt>`__.
 
 .. |python badge| image:: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
    :target: https://www.python.org/
@@ -235,4 +235,4 @@ This package is licensed under the MIT license and can be found in
 .. |github badge| image:: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
    :target: https://github.com/SnapperGee/climax-prompt-python
 .. |MIT| image:: https://img.shields.io/badge/license-MIT-green?style=for-the-badge
-   :target: ./LICENSE.txt
+   :target: https://gitlab.com/snap-climax/python-prompt/-/blob/dev/LICENSE.txt
