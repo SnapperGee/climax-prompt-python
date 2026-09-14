@@ -12,6 +12,11 @@ def _exception_key(exception: Exception | None) -> tuple[type[Exception], tuple[
 @final
 @dataclass(frozen=True)
 class PromptInput[ValueType]:
+    r"""Container for a string and either a value or exception.
+
+    Intended for use as the return type of the :meth:`climax.prompt.Prompt.exec_input_loop`.
+    """
+
     original_input_string: str
     r"""The raw unformatted original ``string``."""
 
