@@ -9,6 +9,7 @@ from climax.prompt import (
     StringValidator,
     Validator,
 )
+from climax.prompt.input_string_conversion_error import InputStringConversionError
 from climax.prompt.prompt_input import _PromptInput
 from pytest import mark, raises
 
@@ -189,7 +190,9 @@ def test_prompt_execInputLoop_with_invalid_input(
             str.strip,
             None,
             "abc",
-            _PromptInput("abc", None, ValueError("invalid literal for int() with base 10: 'abc'")),
+            _PromptInput(
+                "abc", None, InputStringConversionError(ValueError("invalid literal for int() with base 10: 'abc'"))
+            ),
         ),
         (
             float,
@@ -197,7 +200,9 @@ def test_prompt_execInputLoop_with_invalid_input(
             str.strip,
             PS1,
             "XXX",
-            _PromptInput("XXX", None, ValueError("could not convert string to float: 'XXX'")),
+            _PromptInput(
+                "XXX", None, InputStringConversionError(ValueError("could not convert string to float: 'XXX'"))
+            ),
         ),
     ),
 )

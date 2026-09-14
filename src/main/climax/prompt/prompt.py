@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import final
 
+from .input_string_conversion_error import InputStringConversionError
 from .prompt_input import PromptInputFailedConversion, PromptInputSuccessfulConversion
 from .string_prompt import StringPrompt
 from .validator import Validator
@@ -75,7 +76,7 @@ class Prompt[ValueType](StringPrompt):
                 formatted_string_input if isinstance(formatted_string_input, str) else formatted_string_input.formatted
             )
         except Exception as exception:  # noqa: BLE001
-            return PromptInputFailedConversion(original_string_input, None, exception)
+            return PromptInputFailedConversion(original_string_input, None, InputStringConversionError(exception))
 
         while (invalid_input_string_message := self._validator(converted_input)) is not None:
             if invalid_input_string_message:
@@ -86,6 +87,6 @@ class Prompt[ValueType](StringPrompt):
             try:
                 converted_input = self.converter(formatted_string_input)
             except Exception as exception:  # noqa: BLE001
-                return PromptInputFailedConversion(original_string_input, None, exception)
+                return PromptInputFailedConversion(original_string_input, None, InputStringConversionError(exception))
 
         return PromptInputSuccessfulConversion[ValueType](original_string_input, converted_input, None)

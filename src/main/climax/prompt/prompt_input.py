@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Self, final
 
+from .input_string_conversion_error import InputStringConversionError
+
 
 def _exception_key(exception: Exception | None) -> tuple[type[Exception], tuple[object, ...]] | None:
     if exception is None:
@@ -33,7 +35,7 @@ class _PromptInput[ValueType]:
     set to a truthy value otherwise a ``ValueError`` is raised.
     """
 
-    conversion_exception: Exception | None
+    conversion_exception: InputStringConversionError | None
     r"""The exception thrown during conversion if one is thrown.
 
     If this field is set to a truthy value, then :attr:`value` must be set to
@@ -65,7 +67,7 @@ class _PromptInput[ValueType]:
     @classmethod
     def create(cls, original_input_string: str, value_or_exception: ValueType | Exception) -> Self:
         return (
-            cls(original_input_string, None, value_or_exception)
+            cls(original_input_string, None, InputStringConversionError(value_or_exception))
             if isinstance(value_or_exception, Exception)
             else cls(original_input_string, value_or_exception, None)
         )
@@ -87,4 +89,4 @@ class PromptInputSuccessfulConversion[ValueType](_PromptInput[ValueType]):
 class PromptInputFailedConversion(_PromptInput[None]):
     original_input_string: str
     value: None
-    conversion_exception: Exception
+    conversion_exception: InputStringConversionError
