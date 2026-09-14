@@ -1,7 +1,11 @@
 repos:
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.16.7
-  hooks:
-    - id: ruff-check
-      args: [ --fix, "--extend-select=I" ]
-    - id: "ruff-format"
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.7
+    hooks:
+      - id: ruff-check
+        args: [ --fix, "--extend-select=I" ]
+      - id: "ruff-format"
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
