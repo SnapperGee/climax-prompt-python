@@ -13,8 +13,25 @@ def _exception_key(exception: Exception | None) -> tuple[type[Exception], tuple[
 @dataclass(frozen=True)
 class PromptInput[ValueType]:
     original_input_string: str
+    r"""The raw unformatted original ``string``."""
+
     value: ValueType | None
+    r"""The value of the converted formatted input string.
+
+    If an exception is raised during conversion then this value gets set to ``None``.
+
+    If this field is set to ``None`` then :attr:`conversion_exception` muse be
+    set to a truthy value otherwise a ``ValueError`` is raised.
+    """
+
     conversion_exception: Exception | None = None
+    r"""The exception thrown during conversion if one is thrown.
+
+    If this field is set to a truthy value, then :attr:`value` must be set to
+    ``None`` otherwise a ``ValueError`` is raised.
+
+    Defaults to ``None``.
+    """
 
     def __post_init__(self) -> None:
         if self.conversion_exception and self.value is not None:
