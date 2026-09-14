@@ -11,10 +11,3 @@ class InputStringConversionError(Exception):
         super().__init__(f"Input string conversion failed: {cause}" if message is None else message)
         self.__cause__ = cause
         self.cause = cause
-
-    def equals(self, other: object) -> bool:
-        return self is other or (
-            isinstance(other, InputStringConversionError)
-            and type(self.cause) is type(other.cause)
-            and self.cause.args == other.cause.args
-        )
