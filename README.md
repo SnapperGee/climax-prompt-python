@@ -84,7 +84,7 @@ Input a palindrome...
 Provided input is not a palindrome: "slITher" # original unformatted string used in error message
 Input a palindrome...
 >>> levEl                                     # simulated user input
-You inputted the palindrome: "level"
+You inputted the palindrome: "level"          # formatted input used for validation and used in this print statement
 ```
 
 ### `Prompt` Usage Example
@@ -122,8 +122,10 @@ positive_even_integer_prompt_result: PromptResult = positive_even_integer_prompt
 
 if positive_even_integer_prompt_result.conversion_exception:
     print("Error converting input to an int:", positive_even_integer_prompt_result.original_input_string)
-
-print("You inputted the positive even integer:", positive_even_integer_prompt_result.value)
+else:
+    # prompt result value can safely be used in a type safe way after checking there's no
+    # conversion exception
+    print("You inputted the positive even integer:", positive_even_integer_prompt_result.value)
 ```
 
 Calling the `Prompt.exec_input_loop` method will result in the same process

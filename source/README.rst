@@ -84,7 +84,7 @@ following prompt in the terminal:
    Provided input is not a palindrome: "slITher" # original unformatted string used in error message
    Input a palindrome...
    >>> levEl                                     # simulated user input
-   You inputted the palindrome: "level"
+   You inputted the palindrome: "level"          # formatted input used for validation and used in this print statement
 
 ``Prompt`` Usage Example
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,14 +93,12 @@ following prompt in the terminal:
 
    from climax.prompt import Prompt, PromptInput, PromptStringInput
 
+
    # string validator gets passed a tuple containing the formatted and original
    # unformatted string input
    def string_is_integer(string: PromptStringInput) -> str | None:
-       return (
-           None
-           if string.formatted.isdecimal()
-           else f'Provided input is not an integer: "{string.formatted}"\n'
-       )
+       return None if string.formatted.isdecimal() else f'Provided input is not an integer: "{string.formatted}"\n'
+
 
    # validator gets passed whatever the string input gets converted to
    def is_positive_even_integer(integer: int) -> str | None:
@@ -116,7 +114,7 @@ following prompt in the terminal:
    positive_even_integer_prompt = Prompt[int](
        "Input a positive even integer: ",
        string_is_integer,
-       int, # can pass any function/lambda that consumes a string and outputs the specified type
+       int,  # can pass any function/lambda that consumes a string and outputs the specified type
        is_positive_even_integer,
        formatter=str.strip,
    )
@@ -125,8 +123,10 @@ following prompt in the terminal:
 
    if positive_even_integer_prompt_result.conversion_exception:
        print("Error converting input to an int:", positive_even_integer_prompt_result.original_input_string)
-
-   print("You inputted the positive even integer:", positive_even_integer_prompt_result.value)
+   else:
+       # prompt result value can safely be used in a type safe way after checking there's no
+       # conversion exception
+       print("You inputted the positive even integer:", positive_even_integer_prompt_result.value)
 
 Calling the ``Prompt.exec_input_loop`` method will result in the same
 process outlined above when ``StringPrompt.exec_string_input_loop`` is
