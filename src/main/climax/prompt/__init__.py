@@ -6,8 +6,8 @@ primary way users interface with this API.
 
 The main difference between these 2 classes is that the
 :class:`~string_prompt.StringPrompt` class only works with and processes
-``string``s while the :class:`~prompt.Prompt` class is capable of working with
-and processing any arbitrary types, not just ``string``s.
+``string`` while the :class:`~prompt.Prompt` class is capable of working with
+and processing any arbitrary types, not just ``string``.
 """
 
 from .prompt import Prompt

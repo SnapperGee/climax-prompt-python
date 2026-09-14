@@ -15,6 +15,10 @@ class PromptInput[ValueType]:
     r"""Container for a string and either a value or exception.
 
     Intended for use as the return type of the :meth:`climax.prompt.Prompt.exec_input_loop`.
+
+    If a :attr:`~PromptInput.value` is set to a non-``None`` value and a
+    :attr:`~PromptInput.conversion_exception` is also set (to any truthy value)
+    at the same time then a ``ValueError`` is thrown.
     """
 
     original_input_string: str
@@ -23,7 +27,8 @@ class PromptInput[ValueType]:
     value: ValueType | None
     r"""The value of the converted formatted input string.
 
-    If an exception is raised during conversion then this value gets set to ``None``.
+    If an exception is raised during conversion then this value should be set to
+    ``None``.
 
     If this field is set to ``None`` then :attr:`conversion_exception` muse be
     set to a truthy value otherwise a ``ValueError`` is raised.
