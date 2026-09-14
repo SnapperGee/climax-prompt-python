@@ -16,5 +16,5 @@ class InputStringConversionError(Exception):
         return self is other or (
             isinstance(other, InputStringConversionError)
             and type(self.cause) is type(other.cause)
-            and self.args == other.args
+            and self.cause.args == other.cause.args
         )
