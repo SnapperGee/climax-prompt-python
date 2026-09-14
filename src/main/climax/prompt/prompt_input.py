@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import final
+from typing import Self, final
 
 
 def _exception_key(exception: Exception | None) -> tuple[type[Exception], tuple[object, ...]] | None:
@@ -9,9 +9,8 @@ def _exception_key(exception: Exception | None) -> tuple[type[Exception], tuple[
     return (type(exception), exception.args)
 
 
-@final
 @dataclass(frozen=True)
-class PromptInput[ValueType]:
+class _PromptInput[ValueType]:
     r"""Container for a string and either a value or exception.
 
     Intended for use as the return type of the :meth:`climax.prompt.Prompt.exec_input_loop`.
@@ -34,13 +33,11 @@ class PromptInput[ValueType]:
     set to a truthy value otherwise a ``ValueError`` is raised.
     """
 
-    conversion_exception: Exception | None = None
+    conversion_exception: Exception | None
     r"""The exception thrown during conversion if one is thrown.
 
     If this field is set to a truthy value, then :attr:`value` must be set to
     ``None`` otherwise a ``ValueError`` is raised.
-
-    Defaults to ``None``.
     """
 
     def __post_init__(self) -> None:
@@ -51,7 +48,7 @@ class PromptInput[ValueType]:
             )
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, PromptInput):
+        if not isinstance(other, _PromptInput):
             return NotImplemented
 
         if self.original_input_string != other.original_input_string or self.value != other.value:
@@ -61,3 +58,30 @@ class PromptInput[ValueType]:
 
     def __hash__(self) -> int:
         return hash((self.original_input_string, self.value, _exception_key(self.conversion_exception)))
+
+    @classmethod
+    def create(cls, original_input_string: str, value_or_exception: ValueType | Exception) -> Self:
+        return (
+            cls(original_input_string, None, value_or_exception)
+            if isinstance(value_or_exception, Exception)
+            else cls(original_input_string, value_or_exception, None)
+        )
+
+
+type PromptInput[ValueType] = _PromptInput[ValueType]
+
+
+@final
+@dataclass(frozen=True)
+class PromptInputSuccessfulConversion[ValueType](_PromptInput[ValueType]):
+    original_input_string: str
+    value: ValueType
+    conversion_exception: None
+
+
+@final
+@dataclass(frozen=True)
+class PromptInputFailedConversion(_PromptInput[None]):
+    original_input_string: str
+    value: None
+    conversion_exception: Exception
