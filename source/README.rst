@@ -9,15 +9,16 @@ Prompt for input via the CLI.
 Synopsis
 --------
 
-This package exports primarily 2 classes that contain the majority of
-its functionality. The ``Prompt`` and ``StringPrompt`` classes. The main
+This package exports 2 classes that contain the majority of its primary
+functionality. The ``Prompt`` and ``StringPrompt`` classes. The main
 difference between the 2 is that ``StringPrompt``\ s only processes
 strings while ``Prompt``\ s can process any arbitrary type.
 
-The ``StringPrompt.exec_string_input_loop(...)`` and
-``Prompt.exec_input_loop(...)`` methods of each class create a loop that
-prompts a user for input and will reprompt until valid input is inputted
-and return that inputted string or value.
+The ``Prompt.exec_input_loop`` and
+``StringPrompt.exec_string_input_loop`` methods of each class create a
+loop that prompts a user for input and will reprompt until valid input
+is inputted and return the inputted string or value (if the string is
+converted to a non string value).
 
 Usage Examples
 --------------
@@ -30,10 +31,12 @@ Usage Examples
    from climax.prompt import PromptStringInput, StringPrompt
 
 
-   def is_palindrome(strings: StringInput) -> str | None:
+   # string validator gets passed a tuple containing the formatted and original
+   # unformatted string input
+   def is_palindrome(string: PromptStringInput) -> str | None:
        return (
-           f'Provided input is not a palindrome: "{strings.unformatted}"\n'
-           if strings.formatted != strings.formatted[::-1]
+           f'Provided input is not a palindrome: "{string.original}"\n'
+           if string.formatted != string.formatted[::-1]
            else None
        )
 
@@ -41,18 +44,18 @@ Usage Examples
    palindrome_prompt = StringPrompt(
        "Input a palindrome...\n",
        is_palindrome,
-       formatter=lambda string_input: string_input.strip().lower(),
+       formatter=lambda a_string: a_string.strip().lower(),
        ps1=">>> ",
    )
 
-   # the formatted input that passes the string prompt's validation and the original
-   # # raw string input will be retrieved
+   # once validation passes the formatted and original unformatted string input
+   # gets returned
    formatted_palindrome_string_input, original_palindrome_string_input: PromptStringInput = palindrome_prompt.exec_string_input_loop()
 
    print(f'You inputted the palindrome: "{formatted_palindrome_string_input}"')
 
-Calling the ``StringPrompt.exec_string_input_loop(...)`` method will
-result in the following process:
+Calling the ``StringPrompt.exec_string_input_loop`` method will result
+in the following process:
 
 1. The ``StringPrompt.message`` to be printed to stdout followed by the
    ``StringPrompt.ps1`` if set.
@@ -68,8 +71,8 @@ result in the following process:
    input gets returned.
 
 5. If validation fails (the ``StringPrompt.string_validator`` returns a
-   string error message) then the string error message gets printed to
-   stdout and the process is repeated.
+   ``string`` error message) then the ``string`` error message gets
+   printed to stdout and the process is repeated.
 
 When the method in the example above is called this will result in the
 following prompt in the terminal:
@@ -78,9 +81,9 @@ following prompt in the terminal:
 
    Input a palindrome...
    >>> slITher                                   # simulated user input
-   Provided input is not a palindrome: "slITher" # raw unformatted original string used in error message
+   Provided input is not a palindrome: "slITher" # original unformatted string used in error message
    Input a palindrome...
-   >>> level                                     # simulated user input
+   >>> levEl                                     # simulated user input
    You inputted the palindrome: "level"
 
 ``Prompt`` Usage Example
@@ -88,13 +91,18 @@ following prompt in the terminal:
 
 .. code:: python
 
-   from climax.prompt import Prompt, PromptInput, StringInput
+   from climax.prompt import Prompt, PromptInput, PromptStringInput
 
+   # string validator gets passed a tuple containing the formatted and original
+   # unformatted string input
+   def string_is_integer(string: PromptStringInput) -> str | None:
+       return (
+           None
+           if string.formatted.isdecimal()
+           else f'Provided input is not an integer: "{string.formatted}"\n'
+       )
 
-   def string_is_integer(strings: StringInput) -> str | None:
-       return None if strings.formatted.isdecimal() else f'Provided input is not an integer: "{strings.original}"\n'
-
-
+   # validator gets passed whatever the string input gets converted to
    def is_positive_even_integer(integer: int) -> str | None:
        if integer <= 0:
            return f"Integer isn't positive: {integer}\n"
@@ -108,7 +116,7 @@ following prompt in the terminal:
    positive_even_integer_prompt = Prompt[int](
        "Input a positive even integer: ",
        string_is_integer,
-       lambda string_input: int(string_input),  # could also just have passed `int` constructor method directly
+       int, # can pass any function/lambda that consumes a string and outputs the specified type
        is_positive_even_integer,
        formatter=str.strip,
    )
@@ -120,12 +128,12 @@ following prompt in the terminal:
 
    print("You inputted the positive even integer:", positive_even_integer_prompt_result.value)
 
-Calling the ``Prompt.exec_input_loop(...)`` method will result in the
-same process outlined above when
-``StringPrompt.exec_string_input_loop(...)`` is called, except it
-performs additional conversion of the string input and validation on
-that converted string input as outlined below **if** string input
-validation passes (otherwise the reprompt process is identical):
+Calling the ``Prompt.exec_input_loop`` method will result in the same
+process outlined above when ``StringPrompt.exec_string_input_loop`` is
+called, except it performs additional conversion of the string input and
+validation on that converted string input as outlined below **if**
+string input validation passes (otherwise the reprompt process is
+identical):
 
 1. The *formatted* validated string input is passed to the
    ``Prompt.converter(str)``.
@@ -135,13 +143,13 @@ validation passes (otherwise the reprompt process is identical):
    was raised.
 
 3. If conversion succeeds without raising an exception, the string input
-   is then passed to the ``Prompt.validator(...)``.
+   is then passed to the ``Prompt.validator``.
 
-4. If validation passes (the ``Prompt.validator(...)`` returns ``None``)
-   then a ``PromptInput`` containing the original input string and its
+4. If validation passes (the ``Prompt.validator`` returns ``None``) then
+   a ``PromptInput`` containing the original input string and its
    converted value is returned.
 
-5. If validation fails (the ``Prompt.validator(...)`` returns a string
+5. If validation fails (the ``Prompt.validator`` returns a ``string``
    error message) then the error message gets printed to stdout and the
    process is repeated.
 
@@ -193,6 +201,7 @@ generating API documentation.
 All repo tasks can be executed via the ``make`` targets listed below:
 
 -  ``setup`` - Installs all package dependencies and pre-commit hook(s).
+   This should be run right after cloning the repo.
 -  ``lint`` - This runs both the ``ruff`` checker and ``mypy`` static
    type checker.
 -  ``format`` - Formats source code with ``ruff``.
