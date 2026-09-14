@@ -147,7 +147,7 @@ When the method in the example above is called this will result in the following
 prompt in the terminal:
 
 ```text
-Input a positive even integer:    slither          # simulated user input
+Input a positive even integer:    sliTHer          # simulated user input
 Provided input is not an integer: "slither"        # formatted string input is used in this message
 Input a positive even integer: -34                 # simulated user input
 Integer isn't positive: -34
