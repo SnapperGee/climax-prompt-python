@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Literal, final, overload
+from typing import final
 
 from ._util import always_none_returning_function, string_identity_function
 from .string_prompt_input import StringPromptInput
@@ -61,16 +61,8 @@ class StringPrompt:
     def _ps1(self) -> str:
         return self.ps1 if self.ps1 is not None else ""
 
-    @overload
-    def exec_string_input_loop(self) -> str: ...
-    @overload
-    def exec_string_input_loop(self, include_original_input: Literal[False]) -> str: ...
-    @overload
-    def exec_string_input_loop(self, include_original_input: Literal[True]) -> StringPromptInput: ...
-    @overload
-    def exec_string_input_loop(self, include_original_input: bool) -> str | StringPromptInput: ...
     @final
-    def exec_string_input_loop(self, include_original_input: bool = False) -> str | StringPromptInput:
+    def exec_string_input_loop(self) -> StringPromptInput:
         r"""Execute a ``string`` input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
@@ -78,27 +70,22 @@ class StringPrompt:
         ``string`` or both the formatted and raw unformatted ``string``
         indicated by the ``include_original_input`` parameter.
 
-        Parameters
-        ----------
-        include_original_input : bool, optional
-            Flag indicating whether to include the raw unformatted original
-            ``string`` input in the return. Defaults to ``False``.
-
         Returns
         -------
-        str | StringInput
-            The validated formatted ``string`` input or both the validated
-            formatted and raw unformatted ``string`` input.
+        StringPromptInput
+            The formatted and original raw unformatted ``string`` input that passed validation.
 
         See Also
         --------
-        :obj:`StringInput`
+        :obj:`StringPromptInput`
         """
-        raw_string_input = input(self.message + self._ps1)
-        string_input = StringPromptInput(self._formatter(raw_string_input), raw_string_input)
+        raw_unformatted_string_input = input(self.message + self._ps1)
+        string_input = StringPromptInput(self._formatter(raw_unformatted_string_input), raw_unformatted_string_input)
 
         while (invalid_input_string_message := self._string_validator(string_input)) is not None:
-            raw_string_input = input(invalid_input_string_message + self.message + self._ps1)
-            string_input = StringPromptInput(self._formatter(raw_string_input), raw_string_input)
+            raw_unformatted_string_input = input(invalid_input_string_message + self.message + self._ps1)
+            string_input = StringPromptInput(
+                self._formatter(raw_unformatted_string_input), raw_unformatted_string_input
+            )
 
-        return string_input if include_original_input else string_input.formatted
+        return string_input

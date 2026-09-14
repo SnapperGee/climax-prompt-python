@@ -73,7 +73,7 @@ class Prompt[ValueType](StringPrompt):
             The value (resulting from the converted ``string`` input) or both
             the value and raw unformatted ``string`` input.
         """
-        formatted_string_input, original_string_input = super().exec_string_input_loop(True)
+        formatted_string_input, original_string_input = super().exec_string_input_loop()
 
         try:
             converted_input = self.converter(
@@ -86,7 +86,7 @@ class Prompt[ValueType](StringPrompt):
             if invalid_input_string_message:
                 print(invalid_input_string_message, end="")
 
-            formatted_string_input, original_string_input = super().exec_string_input_loop(True)
+            formatted_string_input, original_string_input = super().exec_string_input_loop()
 
             try:
                 converted_input = self.converter(
