@@ -48,6 +48,9 @@ class _PromptInput[ValueType]:
             )
 
     def __eq__(self, other: object) -> bool:
+        if self is other:
+            return True
+
         if not isinstance(other, _PromptInput):
             return NotImplemented
 
