@@ -68,7 +68,7 @@ following process:
 1. If validation passes (the `StringPrompt.string_validator` returns
    `None`) then both the formatted and original unformatted string input gets returned.
 
-1. If validation fails (the `StringPrompt.string_validator(str)` returns a
+1. If validation fails (the `StringPrompt.string_validator` returns a
    string error message) then the string error message gets printed to stdout
    and the process is repeated.
 
