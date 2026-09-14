@@ -22,7 +22,7 @@ lint:
 	poetry run ruff check ./src && poetry run mypy
 
 format:
-	poetry run ruff check --select I --fix ./src && poetry run ruff format ./src
+	poetry run ruff check --extend-select I --fix ./src && poetry run ruff format ./src
 
 test:
 	poetry run pytest
