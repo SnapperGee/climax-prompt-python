@@ -44,6 +44,7 @@ addopts = ["--import-mode=importlib"]
 
 [tool.coverage.run]
 source = ["src/main"]
+data_file = "build/test/coverage/.coverage"
 
 [tool.ruff]
 line-length = 120
