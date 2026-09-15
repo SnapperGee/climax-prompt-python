@@ -9,8 +9,8 @@ stages:
   - lint
   - test
   - secret-detection
-linter:
-  stage: lint
+
+.python_job_base:
   image: python:3.14.7-slim
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -26,14 +26,28 @@ linter:
     - apt update && apt install -y --no-install-recommends make
     - pip install poetry
     - poetry install
+
+linter:
+  extends: .python_job_base
+  stage: lint
   script:
     - make lint
+
+unit_tests:
+  extends: .python_job_base
+  stage: test
+  script:
+    - make test
+
 sast:
   stage: test
+
 include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
+
 variables:
   SECRET_DETECTION_ENABLED: "true"
+
 secret_detection:
   stage: secret-detection
