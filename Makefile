@@ -6,7 +6,7 @@ SOURCEDIR := source
 BUILDDIR := build
 DOCSDIR := $(BUILDDIR)/docs
 TESTDIR := $(BUILDDIR)/test
-TESTREPORTDIR := $(TESTDIR)/report
+TESTRESULTSDIR := $(TESTDIR)/results
 TESTCOVERAGEDIR := $(TESTDIR)/coverage
 
 .PHONY: help setup ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml serve-docs readme Makefile
@@ -40,16 +40,16 @@ test:
 test-html:
 	poetry run pytest --cov=src/main \
 		"--cov-report=html:$(TESTCOVERAGEDIR)/html" \
-		"--html=$(TESTREPORTDIR)/html/index.html"
+		"--html=$(TESTRESULTSDIR)/html/index.html"
 
 serve-tests: test-html
 	parallel --line-buffer --tag --halt now,done=1 ::: \
-		"python -u -m http.server -b 127.0.0.1 8000 --directory $(TESTREPORTDIR)/html" \
+		"python -u -m http.server -b 127.0.0.1 8000 --directory $(TESTRESULTSDIR)/html" \
 		"python -u -m http.server -b 127.0.0.1 8001 --directory $(TESTCOVERAGEDIR)/html"
 
 test-xml:
 	poetry run pytest --cov=src/main --cov-report=term \
-		"--junitxml=$(TESTREPORTDIR)/xml/report.xml" \
+		"--junitxml=$(TESTRESULTSDIR)/xml/report.xml" \
 		"--cov-report=xml:$(TESTCOVERAGEDIR)/xml/coverage.xml"
 
 serve-docs: html
