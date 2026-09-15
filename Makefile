@@ -7,8 +7,11 @@ SPHINXOPTS    ?=
 SPHINXBUILD   ?= poetry run sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build/docs
+TESTBUILDDIR  = build/test
+TESTREPORTBUILDDIR  = ${TESTBUILDDIR}/report
+TESTCOVERAGEBUILDDIR  = ${TESTBUILDDIR}/coverage
 
-.PHONY: help setup lint format test test-xml test-html serve readme Makefile
+.PHONY: help setup lint format test test-xml serve readme Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -25,13 +28,10 @@ format:
 	poetry run ruff check --extend-select I --fix ./src && poetry run ruff format ./src
 
 test:
-	poetry run pytest
+	poetry run pytest --cov=src/main --cov-report=term --cov-report=html:${TESTCOVERAGEBUILDDIR}/html --self-contained-html --html=${TESTREPORTBUILDDIR}/html/index.html
 
 test-xml:
-	poetry run pytest --junitxml=build/test/report/xml/report.xml --cov=src/main --cov-report=term --cov-report=xml:build/test/coverage/xml/coverage.xml
-
-test-html:
-	poetry run pytest --cov=src/main --cov-report=html:build/test/coverage/html
+	poetry run pytest --cov=src/main --junitxml=${TESTREPORTBUILDDIR}/xml/report.xml --cov-report=term --cov-report=xml:${TESTCOVERAGEBUILDDIR}/xml/coverage.xml
 
 serve:
 	@$(MAKE) html
