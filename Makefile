@@ -1,6 +1,3 @@
-# Minimal makefile for Sphinx documentation
-#
-
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 SPHINXOPTS ?=
@@ -9,10 +6,10 @@ SOURCEDIR := source
 BUILDDIR := build
 DOCSDIR := $(BUILDDIR)/docs
 TESTDIR := $(BUILDDIR)/test
-TESTREPORTDDIR := $(TESTDIR)/report
+TESTREPORTDIR := $(TESTDIR)/report
 TESTCOVERAGEDIR := $(TESTDIR)/coverage
 
-.PHONY: help setup lint format test test-html serve-tests test-xml serve-docs readme Makefile
+.PHONY: help setup ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml serve-docs readme Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -22,11 +19,20 @@ setup:
 	poetry install
 	poetry run pre-commit install
 
-lint:
-	poetry run ruff check --extend-select I ./src && poetry run ruff format --check ./src && poetry run mypy
+ruff-check:
+	poetry run ruff check --extend-select I ./src
+
+ruff-format-check:
+	poetry run ruff format --check ./src
+
+mypy:
+	poetry run mypy
+
+lint: ruff-check ruff-format-check mypy
 
 format:
-	poetry run ruff check --extend-select I --fix ./src && poetry run ruff format ./src
+	poetry run ruff check --extend-select I --fix ./src
+	poetry run ruff format ./src
 
 test:
 	poetry run pytest --cov=src/main --cov-report=term
@@ -34,21 +40,19 @@ test:
 test-html:
 	poetry run pytest --cov=src/main \
 		"--cov-report=html:$(TESTCOVERAGEDIR)/html" \
-		"--html=$(TESTREPORTDDIR)/html/index.html"
+		"--html=$(TESTREPORTDIR)/html/index.html"
 
-serve-tests:
-	@$(MAKE) test-html
+serve-tests: test-html
 	parallel --line-buffer --tag --halt now,done=1 ::: \
-		"python -u -m http.server -b 127.0.0.1 8000 --directory $(TESTREPORTDDIR)/html" \
+		"python -u -m http.server -b 127.0.0.1 8000 --directory $(TESTREPORTDIR)/html" \
 		"python -u -m http.server -b 127.0.0.1 8001 --directory $(TESTCOVERAGEDIR)/html"
 
 test-xml:
 	poetry run pytest --cov=src/main --cov-report=term \
-		"--junitxml=$(TESTREPORTDDIR)/xml/report.xml" \
+		"--junitxml=$(TESTREPORTDIR)/xml/report.xml" \
 		"--cov-report=xml:$(TESTCOVERAGEDIR)/xml/coverage.xml"
 
-serve-docs:
-	@$(MAKE) html
+serve-docs: html
 	python -m http.server --directory $(DOCSDIR)/html -b 127.0.0.1 8000
 
 readme:
