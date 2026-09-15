@@ -11,7 +11,7 @@ TESTBUILDDIR  = build/test
 TESTREPORTBUILDDIR  = ${TESTBUILDDIR}/report
 TESTCOVERAGEBUILDDIR  = ${TESTBUILDDIR}/coverage
 
-.PHONY: help setup lint format test test-xml serve readme Makefile
+.PHONY: help setup lint format test serve-tests test-xml serve-docs readme Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -28,14 +28,20 @@ format:
 	poetry run ruff check --extend-select I --fix ./src && poetry run ruff format ./src
 
 test:
-	poetry run pytest --cov=src/main --cov-report=term --cov-report=html:${TESTCOVERAGEBUILDDIR}/html --self-contained-html --html=${TESTREPORTBUILDDIR}/html/index.html
+	poetry run pytest --cov=src/main --cov-report=term
+
+serve-tests:
+	poetry run pytest --cov=src/main --cov-report=html:${TESTCOVERAGEBUILDDIR}/html --html=${TESTREPORTBUILDDIR}/html/index.html
+	parallel --line-buffer --tag --halt now,done=1 ::: \
+		"python -u -m http.server -b 127.0.0.1 8000 --directory ${TESTREPORTBUILDDIR}/html" \
+		"python -u -m http.server -b 127.0.0.1 8001 --directory ${TESTCOVERAGEBUILDDIR}/html"
 
 test-xml:
 	poetry run pytest --cov=src/main --junitxml=${TESTREPORTBUILDDIR}/xml/report.xml --cov-report=term --cov-report=xml:${TESTCOVERAGEBUILDDIR}/xml/coverage.xml
 
-serve:
+serve-docs:
 	@$(MAKE) html
-	python3 -m http.server --directory $(BUILDDIR)/html -b 127.0.0.1 8000
+	python -m http.server --directory $(BUILDDIR)/html -b 127.0.0.1 8000
 
 readme:
 	poetry run pandoc --from=markdown --to=rst --output=source/README.rst README.md
