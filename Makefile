@@ -31,7 +31,9 @@ test:
 	poetry run pytest --cov=src/main --cov-report=term
 
 test-html:
-	poetry run pytest --cov=src/main --cov-report=html:$(TESTCOVERAGEBUILDDIR)/html --html=$(TESTREPORTBUILDDIR)/html/index.html
+	poetry run pytest --cov=src/main \
+		"--cov-report=html:$(TESTCOVERAGEBUILDDIR)/html" \
+		"--html=$(TESTREPORTBUILDDIR)/html/index.html"
 
 serve-tests:
 	@$(MAKE) test-html
@@ -40,7 +42,9 @@ serve-tests:
 		"python -u -m http.server -b 127.0.0.1 8001 --directory $(TESTCOVERAGEBUILDDIR)/html"
 
 test-xml:
-	poetry run pytest --cov=src/main --junitxml=$(TESTREPORTBUILDDIR)/xml/report.xml --cov-report=term --cov-report=xml:$(TESTCOVERAGEBUILDDIR)/xml/coverage.xml
+	poetry run pytest --cov=src/main --cov-report=term \
+		"--junitxml=$(TESTREPORTBUILDDIR)/xml/report.xml" \
+		"--cov-report=xml:$(TESTCOVERAGEBUILDDIR)/xml/coverage.xml"
 
 serve-docs:
 	@$(MAKE) html
