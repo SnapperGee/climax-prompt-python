@@ -7,9 +7,9 @@ SPHINXOPTS ?=
 SPHINXBUILD ?= poetry run sphinx-build
 SOURCEDIR := source
 BUILDDIR := build/docs
-TESTBUILDDIR := build/test
-TESTREPORTBUILDDIR := $(TESTBUILDDIR)/report
-TESTCOVERAGEBUILDDIR := $(TESTBUILDDIR)/coverage
+TESTDIR := build/test
+TESTREPORTDDIR := $(TESTDIR)/report
+TESTCOVERAGEDIR := $(TESTDIR)/coverage
 
 .PHONY: help setup lint format test test-html serve-tests test-xml serve-docs readme Makefile
 
@@ -32,19 +32,19 @@ test:
 
 test-html:
 	poetry run pytest --cov=src/main \
-		"--cov-report=html:$(TESTCOVERAGEBUILDDIR)/html" \
-		"--html=$(TESTREPORTBUILDDIR)/html/index.html"
+		"--cov-report=html:$(TESTCOVERAGEDIR)/html" \
+		"--html=$(TESTREPORTDDIR)/html/index.html"
 
 serve-tests:
 	@$(MAKE) test-html
 	parallel --line-buffer --tag --halt now,done=1 ::: \
-		"python -u -m http.server -b 127.0.0.1 8000 --directory $(TESTREPORTBUILDDIR)/html" \
-		"python -u -m http.server -b 127.0.0.1 8001 --directory $(TESTCOVERAGEBUILDDIR)/html"
+		"python -u -m http.server -b 127.0.0.1 8000 --directory $(TESTREPORTDDIR)/html" \
+		"python -u -m http.server -b 127.0.0.1 8001 --directory $(TESTCOVERAGEDIR)/html"
 
 test-xml:
 	poetry run pytest --cov=src/main --cov-report=term \
-		"--junitxml=$(TESTREPORTBUILDDIR)/xml/report.xml" \
-		"--cov-report=xml:$(TESTCOVERAGEBUILDDIR)/xml/coverage.xml"
+		"--junitxml=$(TESTREPORTDDIR)/xml/report.xml" \
+		"--cov-report=xml:$(TESTCOVERAGEDIR)/xml/coverage.xml"
 
 serve-docs:
 	@$(MAKE) html
