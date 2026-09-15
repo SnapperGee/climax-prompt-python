@@ -196,8 +196,10 @@ All repo tasks can be executed via the `make` targets listed below:
   should be run right after cloning the repo.
 - `lint` - This runs both the `ruff` checker and `mypy` static type checker.
 - `format` - Formats source code with `ruff`.
-- `test` - Runs unit tests.
-- `serve` - Generates and serves html API docs on `127.0.0.1:8000`.
+- `test` - Runs unit tests and test coverage outputting results to stdout.
+- `serve-tests` - Generates and serves unit test results and coverage html reports on `127.0.0.1:8000` and `127.0.0.1:8001`.
+- `serve-docs` - Generates and serves html API docs on `127.0.0.1:8000`.
+- `test-xml` - Generates test coverage xml reports.
 - `readme` - Generate `source/README.rst` by using `pandoc` to convert the root `README.md` to rst.
 
 In addition to the `make` targets listed above, all sphinx `make` targets are
