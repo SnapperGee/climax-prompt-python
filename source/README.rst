@@ -3,8 +3,8 @@ Climax Prompt
 
 Python package for creating cli prompts.
 
-|python badge| |pytest badge| |ruff badge| |Sphinx| |poetry badge| |Git|
-|GitLab| |github badge| |MIT|
+|python badge| |pytest badge| |ruff badge| |Sphinx| |poetry badge|
+|PyPI| |Git| |GitLab| |github badge| |MIT|
 
 This package exports 2 classes that contain the majority of its primary
 functionality. The ``Prompt`` and ``StringPrompt`` classes. The main
@@ -247,6 +247,8 @@ This package is licensed under the MIT license and can be found in
    :target: https://www.sphinx-doc.org/
 .. |poetry badge| image:: https://img.shields.io/badge/Poetry-%233B82F6.svg?style=for-the-badge&logo=poetry&logoColor=0B3D8D
    :target: https://python-poetry.org/
+.. |PyPI| image:: https://img.shields.io/badge/pypi-%23ececec.svg?style=for-the-badge&logo=pypi&logoColor=1f73b7
+   :target: https://pypi.org/project/climax-prompt/
 .. |Git| image:: https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white
    :target: https://git-scm.com/
 .. |GitLab| image:: https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white
