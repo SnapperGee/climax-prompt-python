@@ -6,9 +6,9 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ci/variables/#cicd-variable-precedence
 stages:
+  - secret-detection
   - lint
   - test
-  - secret-detection
 
 .python_job_base:
   image: python:3.14.7-slim
@@ -26,6 +26,9 @@ stages:
     - apt update && apt install -y --no-install-recommends make
     - pip install poetry
     - poetry install
+
+secret_detection:
+  stage: secret-detection
 
 ruff_check:
   extends: .python_job_base
@@ -60,6 +63,3 @@ include:
 
 variables:
   SECRET_DETECTION_ENABLED: "true"
-
-secret_detection:
-  stage: secret-detection
