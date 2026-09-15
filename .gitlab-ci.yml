@@ -27,11 +27,23 @@ stages:
     - pip install poetry
     - poetry install
 
-linter:
+ruff_check:
   extends: .python_job_base
   stage: lint
   script:
-    - make lint
+    - make ruff-check
+
+ruff_format_check:
+  extends: .python_job_base
+  stage: lint
+  script:
+    - make ruff-format-check
+
+mypy:
+  extends: .python_job_base
+  stage: lint
+  script:
+    - make mypy
 
 unit_tests:
   extends: .python_job_base
