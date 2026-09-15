@@ -1,6 +1,6 @@
 # Climax Prompt
 
-Prompt for input via the CLI.
+Python package for creating cli prompts.
 
 [![python badge]][python website]
 [![pytest badge]][pytest website]
@@ -11,8 +11,6 @@ Prompt for input via the CLI.
 [![GitLab][gitlab badge]][gitlab repo]
 [![github badge]][github repo]
 [![MIT][mit shield]][mit license]
-
-## Synopsis
 
 This package exports 2 classes that contain the majority of its primary
 functionality. The `Prompt` and `StringPrompt` classes. The main difference
