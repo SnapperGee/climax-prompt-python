@@ -197,6 +197,7 @@ All repo tasks can be executed via the `make` targets listed below:
 - `lint` - This runs both the `ruff` checker and `mypy` static type checker.
 - `format` - Formats source code with `ruff`.
 - `test` - Runs unit tests and test coverage outputting results to stdout.
+- `test-html` - Generates unit test results and coverage html reports.
 - `serve-tests` - Generates and serves unit test results and coverage html
   reports on `127.0.0.1:8000` and `127.0.0.1:8001`. Depends on
   [GNU parallel](https://www.gnu.org/software/parallel/ "GNU Parallel").
