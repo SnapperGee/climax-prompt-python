@@ -202,8 +202,13 @@ All repo tasks can be executed via the ``make`` targets listed below:
 
 -  ``setup`` - Installs all package dependencies and pre-commit hook(s).
    This should be run right after cloning the repo.
--  ``lint`` - This runs both the ``ruff`` checker and ``mypy`` static
-   type checker.
+-  ``ruff-check`` - Runs the ruff checker extended with the isort I
+   config.
+-  ``ruff-format-check`` - Runs the ruff formatter with the ``--check``
+   option.
+-  ``mypy`` - Runs the mypy type checker.
+-  ``lint`` - Runs the ``ruff-check``, ``ruff-check-format`` and
+   ``mypy`` targets.
 -  ``format`` - Formats source code with ``ruff``.
 -  ``test`` - Runs unit tests and test coverage outputting results to
    stdout.
