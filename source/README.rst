@@ -185,6 +185,11 @@ via any of the standard methods:
 Repo
 ----
 
+The next sections cover details and info about this git repository. If
+you’re just importing this package as a dependency in a python project
+then it probably doesn’t apply to you. If you clone this repo,
+especially if you intend to make a pr, then they’re relevant.
+
 Tooling Tasks
 ~~~~~~~~~~~~~
 

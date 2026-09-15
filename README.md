@@ -182,6 +182,11 @@ pip install climax-prompt
 
 ## Repo
 
+The next sections cover details and info about this git repository. If you're
+just importing this package as a dependency in a python project then it probably
+doesn't apply to you. If you clone this repo, especially if you intend to make a
+pr, then they're relevant.
+
 ### Tooling Tasks
 
 The repo for this project uses [ruff][ruff website] and [mypy][mypy website] for
