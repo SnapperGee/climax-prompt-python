@@ -23,6 +23,7 @@ run_linter:
       - .cache/pip
       - .venv
   before_script:
+    - apt update && apt install -y --no-install-recommends make
     - pip install poetry
     - poetry install
   script:
