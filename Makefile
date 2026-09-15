@@ -31,7 +31,7 @@ test-xml:
 	poetry run pytest --junitxml=report.xml --cov=src/main --cov-report=term --cov-report=xml:coverage.xml
 
 test-html:
-	poetry run pytest --junitxml=report.xml --cov=src/main --cov-report=term --cov-report=html
+	poetry run pytest --cov=src/main --cov-report=html
 
 serve:
 	@$(MAKE) html
