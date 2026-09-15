@@ -167,8 +167,9 @@ following prompt in the terminal:
 Installing Package
 ------------------
 
-This package is available on pypi and can be installed via any of the
-standard methods:
+This package is `available on
+pypi <https://pypi.org/project/climax-prompt/>`__ and can be installed
+via any of the standard methods:
 
 .. code:: sh
 

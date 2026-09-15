@@ -166,7 +166,7 @@ You inputted the positive even integer: 22
 
 ## Installing Package
 
-This package is available on pypi and can be installed via any of the standard
+This package is [available on pypi][pypi website] and can be installed via any of the standard
 methods:
 
 ```sh
