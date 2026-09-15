@@ -5,7 +5,8 @@ repos:
       - id: mypy
         args: [--strict]
         files: ^src/
-        additional_dependencies: [pytest>=9.1.1]
+        additional_dependencies:
+          - pytest>=9.1.1
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.7
     hooks:
