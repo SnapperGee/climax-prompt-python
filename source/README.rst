@@ -1,13 +1,10 @@
 Climax Prompt
 =============
 
-Prompt for input via the CLI.
+Python package for creating cli prompts.
 
 |python badge| |pytest badge| |ruff badge| |Sphinx| |poetry badge| |Git|
 |GitLab| |github badge| |MIT|
-
-Synopsis
---------
 
 This package exports 2 classes that contain the majority of its primary
 functionality. The ``Prompt`` and ``StringPrompt`` classes. The main
