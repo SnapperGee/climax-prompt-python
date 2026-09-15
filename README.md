@@ -199,7 +199,7 @@ All repo tasks can be executed via the `make` targets listed below:
 - `test` - Runs unit tests and test coverage outputting results to stdout.
 - `serve-tests` - Generates and serves unit test results and coverage html
   reports on `127.0.0.1:8000` and `127.0.0.1:8001`. Depends on
-  [`GNU parallel`](https://www.gnu.org/software/parallel/ "GUN Parallel").
+  [GNU parallel](https://www.gnu.org/software/parallel/ "GUN Parallel").
 - `serve-docs` - Generates and serves html API docs on `127.0.0.1:8000`.
 - `test-xml` - Generates test coverage xml reports.
 - `readme` - Generate `source/README.rst` by using `pandoc` to convert the root `README.md` to rst.
