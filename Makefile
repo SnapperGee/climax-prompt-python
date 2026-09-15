@@ -8,7 +8,7 @@ SPHINXBUILD   ?= poetry run sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build/docs
 
-.PHONY: help setup lint format test serve readme Makefile
+.PHONY: help setup lint format test test-xml test-html serve readme Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -26,6 +26,12 @@ format:
 
 test:
 	poetry run pytest
+
+test-xml:
+	poetry run pytest --junitxml=report.xml --cov=src/main --cov-report=term --cov-report=xml:coverage.xml
+
+test-html:
+	poetry run pytest --junitxml=report.xml --cov=src/main --cov-report=term --cov-report=html
 
 serve:
 	@$(MAKE) html
