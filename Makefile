@@ -3,13 +3,13 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXOPTS    ?=
-SPHINXBUILD   ?= poetry run sphinx-build
-SOURCEDIR     = source
-BUILDDIR      = build/docs
-TESTBUILDDIR  = build/test
-TESTREPORTBUILDDIR  = $(TESTBUILDDIR)/report
-TESTCOVERAGEBUILDDIR  = $(TESTBUILDDIR)/coverage
+SPHINXOPTS ?=
+SPHINXBUILD ?= poetry run sphinx-build
+SOURCEDIR := source
+BUILDDIR := build/docs
+TESTBUILDDIR := build/test
+TESTREPORTBUILDDIR := $(TESTBUILDDIR)/report
+TESTCOVERAGEBUILDDIR := $(TESTBUILDDIR)/coverage
 
 .PHONY: help setup lint format test test-html serve-tests test-xml serve-docs readme Makefile
 
