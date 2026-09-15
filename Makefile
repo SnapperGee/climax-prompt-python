@@ -28,10 +28,10 @@ test:
 	poetry run pytest
 
 test-xml:
-	poetry run pytest --junitxml=report.xml --cov=src/main --cov-report=term --cov-report=xml:coverage.xml
+	poetry run pytest --junitxml=build/test/report/xml/report.xml --cov=src/main --cov-report=term --cov-report=xml:build/test/coverage/xml/coverage.xml
 
 test-html:
-	poetry run pytest --cov=src/main --cov-report=html
+	poetry run pytest --cov=src/main --cov-report=html:build/test/coverage/html
 
 serve:
 	@$(MAKE) html
