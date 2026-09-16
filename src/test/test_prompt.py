@@ -10,7 +10,11 @@ from climax.prompt import (
     Validator,
 )
 from climax.prompt.input_string_conversion_error import InputStringConversionError
-from climax.prompt.prompt_input import PromptInputFailedConversion, PromptInputSuccessfulConversion
+from climax.prompt.prompt_input import (
+    PromptInputFailedConversion,
+    PromptInputSuccessfulConversion,
+    is_successful_conversion,
+)
 from pytest import mark, raises
 
 from .util import MESSAGE, PS1, string_is_digit
@@ -138,6 +142,7 @@ def test_Prompt_execInputLoop_with_valid_input(
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = prompt.exec_input_loop()
 
+    assert is_successful_conversion(result)
     assert result == expected
     mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
 
@@ -235,5 +240,6 @@ def test_Prompt_execInputLoop_with_conversion_error(
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = prompt.exec_input_loop()
 
+    assert not is_successful_conversion(result)
     assert result == expected
     mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
