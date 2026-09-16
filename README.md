@@ -92,7 +92,7 @@ You inputted the palindrome: "level"          # formatted input used for validat
 ### `Prompt` Usage Example
 
 ```python
-from climax.prompt import Prompt, PromptInput, StringPromptInput, is_successful_conversion
+from climax.prompt import Prompt, StringPromptInput, is_successful_conversion
 
 
 # string validator gets passed a tuple containing the formatted and original
