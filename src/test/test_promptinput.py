@@ -14,11 +14,11 @@ from pytest import mark, raises
         ("", None, InputStringConversionError(Exception("An exception"))),
     ),
 )
-def test_PromptResult_equality(string: str, value: object | None, exception: InputStringConversionError | None) -> None:
+def test_PromptInput_equality(string: str, value: object | None, exception: InputStringConversionError | None) -> None:
 
-    a_prompt_result: Final = PromptInput(string, value, exception)
-    another_prompt_result: Final = PromptInput(string, value, exception)
-    assert a_prompt_result == another_prompt_result
+    prompt_input: Final = PromptInput(string, value, exception)
+    other_prompt_input: Final = PromptInput(string, value, exception)
+    assert prompt_input == other_prompt_input
 
 
 @mark.parametrize(
@@ -30,11 +30,11 @@ def test_PromptResult_equality(string: str, value: object | None, exception: Inp
         ("", None, InputStringConversionError(Exception("An exception"))),
     ),
 )
-def test_PromptResult_hash(string: str, value: object | None, exception: InputStringConversionError | None) -> None:
+def test_PromptInput_hash(string: str, value: object | None, exception: InputStringConversionError | None) -> None:
 
-    a_prompt_result: Final = PromptInput(string, value, exception)
-    another_prompt_result: Final = PromptInput(string, value, exception)
-    assert hash(a_prompt_result) == hash(another_prompt_result)
+    prompt_input: Final = PromptInput(string, value, exception)
+    other_prompt_input: Final = PromptInput(string, value, exception)
+    assert hash(prompt_input) == hash(other_prompt_input)
 
 
 @mark.parametrize(
@@ -44,7 +44,7 @@ def test_PromptResult_hash(string: str, value: object | None, exception: InputSt
         ("", False, InputStringConversionError(Exception("An exception"))),
     ),
 )
-def test_PromptResult_non_none_value_filed_with_truthy_exception_conversion_field_raises_ValueError(
+def test_PromptInput_non_none_value_filed_with_truthy_exception_conversion_field_raises_ValueError(
     string: str, value: object, exception: InputStringConversionError
 ) -> None:
     with raises(ValueError):

@@ -26,7 +26,7 @@ def _string_is_palindrome(strings: tuple[str, str]) -> str | None:
     return None if strings[0] == strings[0][::-1] else f'String is not a palindrome: "{strings[1]}".\n'
 
 
-def test_stringprompt_fields() -> None:
+def test_StringPrompt_fields() -> None:
 
     string_prompt: Final = StringPrompt(
         MESSAGE,
@@ -41,7 +41,7 @@ def test_stringprompt_fields() -> None:
     assert string_prompt.ps1 is PS1
 
 
-def test_stringprompt_default_field_values() -> None:
+def test_StringPrompt_default_field_values() -> None:
     string_prompt: Final = StringPrompt(
         MESSAGE,
         None,
@@ -70,7 +70,7 @@ def test_stringprompt_default_field_values() -> None:
         (_string_is_palindrome, str.strip, PS1, "level         "),
     ),
 )
-def test_stringprompt_execStringInputLoop_with_valid_input(
+def test_StringPrompt_execStringInputLoop_with_valid_input(
     validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
@@ -101,7 +101,7 @@ def test_stringprompt_execStringInputLoop_with_valid_input(
         (_string_is_palindrome, str.strip, PS1, "Knights who say ni"),
     ),
 )
-def test_stringprompt_execStringInputLoop_with_invalid_input(
+def test_StringPrompt_execStringInputLoop_with_invalid_input(
     validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)

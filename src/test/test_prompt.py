@@ -108,7 +108,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
         ),
     ),
 )
-def test_prompt_execInputLoop_with_valid_input(
+def test_Prompt_execInputLoop_with_valid_input(
     string_validator: StringValidator,
     _type: type,
     validator: Validator[int | float],
@@ -149,7 +149,7 @@ def test_prompt_execInputLoop_with_valid_input(
         (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, PS1, "     26.0000     "),
     ),
 )
-def test_prompt_execInputLoop_with_invalid_input(
+def test_Prompt_execInputLoop_with_invalid_input(
     string_validator: StringValidator,
     _type: type,
     validator: Validator[int | float],
@@ -206,7 +206,7 @@ def test_prompt_execInputLoop_with_invalid_input(
         ),
     ),
 )
-def test_prompt_execInputLoop_with_conversion_error(
+def test_Prompt_execInputLoop_with_conversion_error(
     _type: type,
     validator: Validator[int | float],
     formatter: Callable[[str], str] | None,
