@@ -39,7 +39,7 @@ from climax.prompt import StringPrompt, StringPromptInput
 def is_palindrome(string: StringPromptInput) -> str | None:
     return (
         f'Provided input is not a palindrome: "{string.original}"\n'
-        if len(string.formatted) == 0 and string.formatted != string.formatted[::-1]
+        if len(string.formatted) == 0 or string.formatted != string.formatted[::-1]
         else None
     )
 
