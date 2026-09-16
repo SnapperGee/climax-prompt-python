@@ -66,7 +66,7 @@ class PromptInput[ValueType]:
 
 
 @final
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=False)
 class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
     original_input_string: str
     value: ValueType
@@ -74,7 +74,7 @@ class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
 
 
 @final
-@dataclass(frozen=True)
+@dataclass(frozen=True, eq=False)
 class PromptInputFailedConversion(PromptInput[None]):
     original_input_string: str
     value: None
