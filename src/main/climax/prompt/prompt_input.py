@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Self, final
+from typing import final
 
 from .input_string_conversion_error import InputStringConversionError
 
@@ -63,14 +63,6 @@ class PromptInput[ValueType]:
 
     def __hash__(self) -> int:
         return hash((self.original_input_string, self.value, _exception_key(self.conversion_exception)))
-
-    @classmethod
-    def create(cls, original_input_string: str, value_or_exception: ValueType | Exception) -> Self:
-        return (
-            cls(original_input_string, None, InputStringConversionError(value_or_exception))
-            if isinstance(value_or_exception, Exception)
-            else cls(original_input_string, value_or_exception, None)
-        )
 
 
 @final
