@@ -232,7 +232,7 @@ is also mirrored to [codeberg][codeberg repo] and [github][github repo].
 This package is licensed under the MIT license and can be found in
 [LICENSE.txt][mit license].
 
-[python badge]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54 "Python"
+[python badge]: https://img.shields.io/badge/python-%3E%3D3.13-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54&labelColor=3670A0&color=939393 "Python"
 [python website]: https://www.python.org/ "Python"
 [pytest badge]: https://img.shields.io/badge/pytest-%23ffffff.svg?style=for-the-badge&logo=pytest&logoColor=2f9fe3 "PyTest"
 [pytest website]: https://docs.pytest.org/en/stable/ "PyTest"
