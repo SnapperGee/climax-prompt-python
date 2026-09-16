@@ -4,7 +4,7 @@ Climax Prompt
 Python package for creating cli prompts.
 
 |python badge| |pytest badge| |ruff badge| |Sphinx| |poetry badge|
-|PyPI| |Git| |GitLab| |github badge| |MIT|
+|PyPI| |Git| |GitLab| |github badge| |MIT| |pipeline status|
 
 This package exports 2 classes that contain the majority of its primary
 functionality. The ``Prompt`` and ``StringPrompt`` classes. The main
@@ -263,3 +263,5 @@ This package is licensed under the MIT license and can be found in
    :target: https://github.com/SnapperGee/climax-prompt-python
 .. |MIT| image:: https://img.shields.io/badge/license-MIT-green?style=for-the-badge
    :target: https://gitlab.com/snap-climax/python-prompt/-/blob/dev/LICENSE.txt
+.. |pipeline status| image:: https://img.shields.io/gitlab/pipeline-status/snap-climax/python-prompt?branch=dev&style=for-the-badge
+   :target: https://gitlab.com/snap-climax/python-prompt/-/pipelines/dev/latest
