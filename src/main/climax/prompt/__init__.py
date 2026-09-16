@@ -11,9 +11,17 @@ and processing any arbitrary types, not just ``string``.
 """
 
 from .prompt import Prompt
-from .prompt_input import PromptInput
+from .prompt_input import PromptInput, is_successful_conversion
 from .string_prompt import StringPrompt
 from .string_prompt_input import StringPromptInput
 from .validator import StringValidator, Validator
 
-__all__ = ("Prompt", "PromptInput", "StringPrompt", "StringPromptInput", "StringValidator", "Validator")
+__all__ = (
+    "Prompt",
+    "PromptInput",
+    "StringPrompt",
+    "StringPromptInput",
+    "StringValidator",
+    "Validator",
+    "is_successful_conversion",
+)
