@@ -52,7 +52,7 @@ class Prompt[ValueType](StringPrompt):
         return self.validator or _always_none_returning_function
 
     @final
-    def exec_input_loop(self) -> PromptInputSuccessfulConversion[ValueType] | PromptInputFailedConversion:
+    def exec_input_loop(self) -> PromptInputSuccessfulConversion[ValueType] | PromptInputFailedConversion[ValueType]:
         r"""Execute an input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
@@ -76,7 +76,9 @@ class Prompt[ValueType](StringPrompt):
                 formatted_string_input if isinstance(formatted_string_input, str) else formatted_string_input.formatted
             )
         except Exception as exception:  # noqa: BLE001
-            return PromptInputFailedConversion(original_string_input, None, InputStringConversionError(exception))
+            return PromptInputFailedConversion[ValueType](
+                original_string_input, None, InputStringConversionError(exception)
+            )
 
         while (invalid_input_string_message := self._validator(converted_input)) is not None:
             if invalid_input_string_message:
@@ -87,6 +89,8 @@ class Prompt[ValueType](StringPrompt):
             try:
                 converted_input = self.converter(formatted_string_input)
             except Exception as exception:  # noqa: BLE001
-                return PromptInputFailedConversion(original_string_input, None, InputStringConversionError(exception))
+                return PromptInputFailedConversion[ValueType](
+                    original_string_input, None, InputStringConversionError(exception)
+                )
 
         return PromptInputSuccessfulConversion[ValueType](original_string_input, converted_input, None)

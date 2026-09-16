@@ -118,7 +118,7 @@ positive_even_integer_prompt = Prompt[int](
     formatter=str.strip,
 )
 
-positive_even_integer_prompt_result: PromptResult = positive_even_integer_prompt.exec_input_loop()
+positive_even_integer_prompt_result = positive_even_integer_prompt.exec_input_loop()
 
 if positive_even_integer_prompt_result.conversion_exception:
     print("Error converting input to an int:", positive_even_integer_prompt_result.original_input_string)
