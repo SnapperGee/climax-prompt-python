@@ -84,4 +84,22 @@ class PromptInputFailedConversion(PromptInput[None]):
 def is_successful_conversion[ValueType](
     prompt_input: PromptInput[ValueType],
 ) -> TypeIs[PromptInputSuccessfulConversion[ValueType]]:
+    r"""Determine whether a prompt input represents a successful conversion.
+
+    Parameters
+    ----------
+    prompt_input : PromptInput
+        The prompt input to check.
+
+    Returns
+    -------
+    bool
+        ``True`` if ``prompt_input`` is a
+        :class:`PromptInputSuccessfulConversion`; otherwise, ``False``.
+
+    Notes
+    -----
+    When this function returns ``True``, type checkers can narrow
+    ``prompt_input`` to :class:`PromptInputSuccessfulConversion`.
+    """
     return isinstance(prompt_input, PromptInputSuccessfulConversion)
