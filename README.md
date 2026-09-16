@@ -31,15 +31,15 @@ string is converted to a non string value).
 ### `StringPrompt` Usage Example
 
 ```python
-from climax.prompt import PromptStringInput, StringPrompt
+from climax.prompt import StringPrompt, StringPromptInput
 
 
 # string validator gets passed a tuple containing the formatted and original
 # unformatted string input
-def is_palindrome(string: PromptStringInput) -> str | None:
+def is_palindrome(string: StringPromptInput) -> str | None:
     return (
         f'Provided input is not a palindrome: "{string.original}"\n'
-        if string.formatted != string.formatted[::-1]
+        if len(string.formatted) == 0 and string.formatted != string.formatted[::-1]
         else None
     )
 
@@ -92,7 +92,7 @@ You inputted the palindrome: "level"          # formatted input used for validat
 ### `Prompt` Usage Example
 
 ```python
-from climax.prompt import Prompt, PromptInput, PromptStringInput, is_successful_conversion
+from climax.prompt import Prompt, PromptInput, StringPromptInput, is_successful_conversion
 
 
 # string validator gets passed a tuple containing the formatted and original
