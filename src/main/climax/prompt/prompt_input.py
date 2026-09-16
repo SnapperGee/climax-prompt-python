@@ -19,7 +19,7 @@ class PromptInput[ValueType]:
 
     If a :attr:`~PromptInput.value` is set to a non-``None`` value and a
     :attr:`~PromptInput.conversion_exception` is also set (to any truthy value)
-    at the same time then a ``ValueError`` is thrown.
+    at the same time then a ``ValueError`` is raised.
     """
 
     original_input_string: str
