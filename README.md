@@ -97,7 +97,7 @@ from climax.prompt import Prompt, PromptInput, StringPromptInput, is_successful_
 
 # string validator gets passed a tuple containing the formatted and original
 # unformatted string input
-def string_is_integer(string: PromptStringInput) -> str | None:
+def string_is_integer(string: StringPromptInput) -> str | None:
     return None if string.formatted.isdecimal() else f'Provided input is not an integer: "{string.formatted}"\n'
 
 
