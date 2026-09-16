@@ -90,7 +90,7 @@ You inputted the palindrome: "level"          # formatted input used for validat
 ### `Prompt` Usage Example
 
 ```python
-from climax.prompt import Prompt, PromptInput, PromptStringInput
+from climax.prompt import Prompt, PromptInput, PromptStringInput, is_successful_conversion
 
 
 # string validator gets passed a tuple containing the formatted and original
@@ -120,8 +120,11 @@ positive_even_integer_prompt = Prompt[int](
 
 positive_even_integer_prompt_result = positive_even_integer_prompt.exec_input_loop()
 
-if positive_even_integer_prompt_result.conversion_exception:
-    print("Error converting input to an int:", positive_even_integer_prompt_result.original_input_string)
+if not is_successful_conversion(positive_even_integer_prompt_result):
+    print(
+        f'Error converting input to an int: "{positive_even_integer_prompt_result.original_input_string}"\n\n'
+        + repr(positive_even_integer_prompt_result.conversion_exception)
+    )
 else:
     # prompt result value can safely be used in a type safe way after checking there's no
     # conversion exception
