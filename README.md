@@ -19,7 +19,7 @@ functionality. The `Prompt` and `StringPrompt` classes. The main difference
 between the 2 is that `StringPrompt`s only processes strings while `Prompt`s
 can process any arbitrary type.
 
-The `Prompt.exec_input_loop` and `StringPrompt.exec_string_input_loop` methods
+The `StringPrompt.exec_string_input_loop` and `Prompt.exec_input_loop` methods
 of each class create a loop that prompts a user for input and will reprompt
 until valid input is inputted and return the inputted string or value (if the
 string is converted to a non string value).
