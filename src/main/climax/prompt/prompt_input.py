@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import final
+from typing import TypeIs, final
 
 from .input_string_conversion_error import InputStringConversionError
 
@@ -79,3 +79,9 @@ class PromptInputFailedConversion(PromptInput[None]):
     original_input_string: str
     value: None
     conversion_exception: InputStringConversionError
+
+
+def is_successful_conversion[ValueType](
+    prompt_input: PromptInput[ValueType],
+) -> TypeIs[PromptInputSuccessfulConversion[ValueType]]:
+    return isinstance(prompt_input, PromptInputSuccessfulConversion)
