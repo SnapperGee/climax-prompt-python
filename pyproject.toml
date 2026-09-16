@@ -27,9 +27,10 @@ dev = [
 ]
 
 [project.urls]
+documentation = "https://snap-climax.gitlab.io/python-prompt/"
 homepage = "https://gitlab.com/snap-climax/python-prompt"
-repository = "https://gitlab.com/snap-climax/python-prompt"
 issues = "https://gitlab.com/snap-climax/python-prompt/-/issues"
+repository = "https://gitlab.com/snap-climax/python-prompt"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
