@@ -35,6 +35,23 @@ variables:
     - pip install poetry
     - poetry install
 
+.tox_job_base:
+  image: ghcr.io/astral-sh/uv:debian-slim
+  variables:
+    UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
+    UV_PYTHON_INSTALL_DIR: "$CI_PROJECT_DIR/.cache/uv-python"
+  cache:
+    key:
+      files:
+        - poetry.lock
+    paths:
+      - .cache/uv
+      - .cache/uv-python
+      - .tox
+  before_script:
+    - apt update && apt install -y --no-install-recommends make
+    - uv tool install tox --with tox-uv
+
 secret_detection:
   stage: secret-detection
 
@@ -51,22 +68,27 @@ ruff_format_check:
     - make ruff-format-check
 
 mypy:
-  extends: .python_job_base
+  extends: .tox_job_base
   stage: lint
   script:
-    - make mypy
+    - tox run -e mypy-py313,mypy-py314
 
 unit_tests:
-  extends: .python_job_base
+  extends: .tox_job_base
   stage: test
   script:
-    - make test-xml
+    - tox run -e py313,py314
   coverage: '/TOTAL.*? (100(?:\.0+)?%|[1-9]?\d(?:\.\d+)?%)$/'
   artifacts:
     when: always
     expire_in: 1 week
+    # paths:
+    #   - build/test/results/
+    #   - build/test/coverage/
     reports:
-      junit: build/test/results/xml/report.xml
+      junit:
+        - build/test/results/xml/report.xml
+        - build/test/results/py313/xml/report.xml
       coverage_report:
         coverage_format: cobertura
         path: build/test/coverage/xml/coverage.xml

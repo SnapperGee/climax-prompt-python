@@ -49,6 +49,44 @@ strict = true
 mypy_path = ["src/main"]
 explicit_package_bases = true
 
+[tool.tox]
+requires = ["tox>=4.61", "tox-uv>=1.36"]
+env_list = [
+    { prefix = "py3", start = 13, stop = 14 },
+    { prefix = "mypy-py3", start = 13, stop = 14 }
+]
+
+[tool.tox.env_run_base]
+package = "skip"
+set_env = { POETRY_VIRTUALENVS_CREATE = "false" }
+allowlist_externals = ["make"]
+deps = ["poetry"]
+commands_pre = [["poetry", "install"]]
+
+[tool.tox.env.py314]
+base_python = ["3.14"]
+commands = [["make", "test-xml"]]
+
+[tool.tox.env.py313]
+base_python = ["3.13"]
+commands = [
+    [
+        "make",
+        "test-xml",
+        "TESTRESULTSDIR=build/test/results/py313",
+        "TESTCOVERAGEDIR=build/test/coverage/py313",
+    ],
+]
+
+[tool.tox.env.mypy-py314]
+base_python = ["3.14"]
+commands = [["make", "mypy"]]
+
+[tool.tox.env.mypy-py313]
+base_python = ["3.13"]
+commands = [["make", "mypy"]]
+
+
 [tool.coverage.run]
 source = ["src/main"]
 data_file = "build/test/coverage/.coverage"
