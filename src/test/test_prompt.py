@@ -10,7 +10,7 @@ from climax.prompt import (
     Validator,
 )
 from climax.prompt.input_string_conversion_error import InputStringConversionError
-from climax.prompt.prompt_input import _PromptInput
+from climax.prompt.prompt_input import PromptInput
 from pytest import mark, raises
 
 from .util import MESSAGE, PS1, string_is_digit
@@ -50,7 +50,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
 @mark.parametrize(
     "string_validator,_type,validator,formatter,ps1,user_input,expected",
     (
-        (string_is_digit, int, _is_even_positive_integer, None, None, "124", _PromptInput("124", 124, None)),
+        (string_is_digit, int, _is_even_positive_integer, None, None, "124", PromptInput("124", 124, None)),
         (
             string_is_digit,
             int,
@@ -58,9 +58,9 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             None,
             "     2     ",
-            _PromptInput("     2     ", 2, None),
+            PromptInput("     2     ", 2, None),
         ),
-        (string_is_digit, int, _is_even_positive_integer, None, PS1, "253242", _PromptInput("253242", 253242, None)),
+        (string_is_digit, int, _is_even_positive_integer, None, PS1, "253242", PromptInput("253242", 253242, None)),
         (
             string_is_digit,
             int,
@@ -68,7 +68,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             PS1,
             "     26     ",
-            _PromptInput("     26     ", 26, None),
+            PromptInput("     26     ", 26, None),
         ),
         (
             _string_is_float,
@@ -77,7 +77,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             None,
             "124.1",
-            _PromptInput("124.1", 124.1, None),
+            PromptInput("124.1", 124.1, None),
         ),
         (
             _string_is_float,
@@ -86,7 +86,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             None,
             "     1.04     ",
-            _PromptInput("     1.04     ", 1.04, None),
+            PromptInput("     1.04     ", 1.04, None),
         ),
         (
             _string_is_float,
@@ -95,7 +95,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             PS1,
             "253242.252523",
-            _PromptInput("253242.252523", 253242.252523, None),
+            PromptInput("253242.252523", 253242.252523, None),
         ),
         (
             _string_is_float,
@@ -104,7 +104,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             PS1,
             "     26.1111     ",
-            _PromptInput("     26.1111     ", 26.1111, None),
+            PromptInput("     26.1111     ", 26.1111, None),
         ),
     ),
 )
@@ -115,7 +115,7 @@ def test_prompt_execInputLoop_with_valid_input(
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
-    expected: _PromptInput[int | float],
+    expected: PromptInput[int | float],
 ) -> None:
     prompt: Final = Prompt(MESSAGE, string_validator, _type, validator, formatter=formatter, ps1=ps1)
 
@@ -190,7 +190,7 @@ def test_prompt_execInputLoop_with_invalid_input(
             str.strip,
             None,
             "abc",
-            _PromptInput(
+            PromptInput(
                 "abc", None, InputStringConversionError(ValueError("invalid literal for int() with base 10: 'abc'"))
             ),
         ),
@@ -200,7 +200,7 @@ def test_prompt_execInputLoop_with_invalid_input(
             str.strip,
             PS1,
             "XXX",
-            _PromptInput(
+            PromptInput(
                 "XXX", None, InputStringConversionError(ValueError("could not convert string to float: 'XXX'"))
             ),
         ),
@@ -212,7 +212,7 @@ def test_prompt_execInputLoop_with_conversion_error(
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
-    expected: _PromptInput[int | float],
+    expected: PromptInput[int | float],
 ) -> None:
     prompt: Final = Prompt(MESSAGE, _always_none_returning_function, _type, validator, formatter=formatter, ps1=ps1)
 

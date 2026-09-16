@@ -12,7 +12,7 @@ def _exception_key(exception: Exception | None) -> tuple[type[Exception], tuple[
 
 
 @dataclass(frozen=True)
-class _PromptInput[ValueType]:
+class PromptInput[ValueType]:
     r"""Container for a string and either a value or exception.
 
     Intended for use as the return type of the :meth:`climax.prompt.Prompt.exec_input_loop`.
@@ -53,7 +53,7 @@ class _PromptInput[ValueType]:
         if self is other:
             return True
 
-        if not isinstance(other, _PromptInput):
+        if not isinstance(other, PromptInput):
             return NotImplemented
 
         if self.original_input_string != other.original_input_string or self.value != other.value:
@@ -73,12 +73,9 @@ class _PromptInput[ValueType]:
         )
 
 
-type PromptInput[ValueType] = _PromptInput[ValueType]
-
-
 @final
 @dataclass(frozen=True)
-class PromptInputSuccessfulConversion[ValueType](_PromptInput[ValueType]):
+class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
     original_input_string: str
     value: ValueType
     conversion_exception: None
@@ -86,7 +83,7 @@ class PromptInputSuccessfulConversion[ValueType](_PromptInput[ValueType]):
 
 @final
 @dataclass(frozen=True)
-class PromptInputFailedConversion(_PromptInput[None]):
+class PromptInputFailedConversion(PromptInput[None]):
     original_input_string: str
     value: None
     conversion_exception: InputStringConversionError
