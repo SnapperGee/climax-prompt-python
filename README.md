@@ -51,7 +51,7 @@ palindrome_prompt = StringPrompt(
 
 # once validation passes the formatted and original unformatted string input
 # gets returned
-formatted_palindrome_string_input, original_palindrome_string_input: PromptStringInput = palindrome_prompt.exec_string_input_loop()
+formatted_palindrome_string_input, original_palindrome_string_input = palindrome_prompt.exec_string_input_loop()
 
 print(f'You inputted the palindrome: "{formatted_palindrome_string_input}"')
 ```
