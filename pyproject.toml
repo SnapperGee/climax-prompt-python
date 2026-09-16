@@ -8,7 +8,7 @@ authors = [
 license = "MIT"
 license-files = ["LICENSE.txt"]
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
 ]
 
@@ -43,6 +43,12 @@ packages = [{include = "climax/prompt", from = "src/main"}]
 testpaths = ["src/test"]
 addopts = ["--import-mode=importlib"]
 
+[tool.mypy]
+files = ["src"]
+strict = true
+mypy_path = ["src/main"]
+explicit_package_bases = true
+
 [tool.coverage.run]
 source = ["src/main"]
 data_file = "build/test/coverage/.coverage"
@@ -52,9 +58,3 @@ line-length = 120
 
 [tool.ruff.lint]
 extend-select = ["I"]
-
-[tool.mypy]
-files = ["src"]
-strict = true
-mypy_path = ["src/main"]
-explicit_package_bases = true
