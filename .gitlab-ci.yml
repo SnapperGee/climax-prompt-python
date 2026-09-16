@@ -61,7 +61,7 @@ unit_tests:
   stage: test
   script:
     - make test-xml
-  # coverage: '/TOTAL.*? (100(?:\.0+)?%|[1-9]?\d(?:\.\d+)?%)$/'
+  coverage: '/TOTAL.*? (100(?:\.0+)?%|[1-9]?\d(?:\.\d+)?%)$/'
   artifacts:
     when: always
     expire_in: 1 week
