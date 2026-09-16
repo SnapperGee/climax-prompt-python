@@ -9,6 +9,14 @@ stages:
   - secret-detection
   - lint
   - test
+  - pages
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+variables:
+  SECRET_DETECTION_ENABLED: "true"
 
 .python_job_base:
   image: python:3.14.7-slim
@@ -66,9 +74,16 @@ unit_tests:
 sast:
   stage: test
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
-  - template: Security/Secret-Detection.gitlab-ci.yml
-
-variables:
-  SECRET_DETECTION_ENABLED: "true"
+pages:
+  extends: .python_job_base
+  stage: pages
+  before_script:
+    - !reference [.python_job_base, before_script]
+    - apt install -y --no-install-recommends pandoc
+  script:
+    - make readme
+    - make html
+  pages:
+    publish: build/docs/html
+  rules:
+    - if: "$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH"
