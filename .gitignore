@@ -1,7 +1,6 @@
 source/*
 !source/conf.py
 !source/index.rst
-!source/README.rst
 .vscode/
 .idea/
 .DS_Store
