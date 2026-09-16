@@ -84,7 +84,7 @@ Input a palindrome...
 Provided input is not a palindrome: "slITher" # original unformatted string used in error message
 Input a palindrome...
 >>> levEl                                     # simulated user input
-You inputted the palindrome: "level"          # formatted input used for validation and used in this print statement
+You inputted the palindrome: "level"          # formatted input used for validation and in this message
 ```
 
 ### `Prompt` Usage Example
