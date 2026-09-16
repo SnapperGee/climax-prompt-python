@@ -5,13 +5,14 @@ Python package for creating cli prompts.
 [![python badge]][python website]
 [![pytest badge]][pytest website]
 [![ruff badge]][ruff website]
-[![Sphinx][sphinx badge]][sphinx website]
+[![sphinx badge]][sphinx website]
 [![poetry badge]][poetry website]
-[![PyPI][pypi badge]][pypi website]
-[![Git][git badge]][git website]
-[![GitLab][gitlab badge]][gitlab repo]
+[![pypi badge]][pypi website]
+[![git badge]][git website]
+[![gitlab badge]][gitlab repo]
+[![codeberg badge]][codeberg repo]
 [![github badge]][github repo]
-[![MIT][mit shield]][mit license]
+[![mit shield]][mit license]
 [![pipeline status][pipeline status shield]][pipeline url]
 [![pipeline coverage][pipeline coverage shield]][pipeline url]
 
@@ -223,7 +224,7 @@ available and valid as well.
 ### Remotes
 
 The primary remote repo for this package is hosted on [gitlab][gitlab repo], but
-is also mirrored to [github][github repo].
+is also mirrored to [codeberg][codeberg repo] and [github][github repo].
 
 ## MIT License
 
@@ -248,6 +249,8 @@ This package is licensed under the MIT license and can be found in
 [git website]: https://git-scm.com/ "git"
 [gitlab badge]: https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white "GitLab"
 [gitlab repo]: https://gitlab.com/SnapperGee/climax-prompt-python "GitLab repo"
+[codeberg badge]: https://img.shields.io/badge/Codeberg-%232185D0.svg?style=for-the-badge&logo=Codeberg&logoColor=white "Codeberg"
+[codeberg repo]: https://codeberg.org/SnapperGee/climax-prompt-python "Codeberg repo"
 [github badge]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "GitHub repo"
 [github repo]: https://github.com/SnapperGee/climax-prompt-python "GitHub repo"
 [mit shield]: https://img.shields.io/badge/license-MIT-green?style=for-the-badge "MIT"
