@@ -211,7 +211,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
             str.strip,
             None,
             "abc",
-            PromptInputFailedConversion(
+            PromptInputFailedConversion[int](
                 "abc", None, InputStringConversionError(ValueError("invalid literal for int() with base 10: 'abc'"))
             ),
         ),
@@ -221,7 +221,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
             str.strip,
             PS1,
             "XXX",
-            PromptInputFailedConversion(
+            PromptInputFailedConversion[float](
                 "XXX", None, InputStringConversionError(ValueError("could not convert string to float: 'XXX'"))
             ),
         ),
@@ -233,7 +233,7 @@ def test_Prompt_execInputLoop_with_conversion_error(
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
-    expected: PromptInputFailedConversion,
+    expected: PromptInputFailedConversion[int | float],
 ) -> None:
     prompt: Final = Prompt(MESSAGE, _always_none_returning_function, _type, validator, formatter=formatter, ps1=ps1)
 
