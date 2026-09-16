@@ -216,7 +216,8 @@ All repo tasks can be executed via the `make` targets listed below:
   [GNU parallel](https://www.gnu.org/software/parallel/ "GNU Parallel").
 - `serve-docs` - Generates and serves html API docs on `127.0.0.1:8000`.
 - `test-xml` - Generates test coverage xml reports.
-- `readme` - Generate `source/README.rst` by using `pandoc` to convert the root `README.md` to rst.
+- `readme` - Generate `source/README.rst` by using
+  [pandoc](https://pandoc.org/ "Pandoc") to convert the root `README.md` to rst.
 
 In addition to the `make` targets listed above, all sphinx `make` targets are
 available and valid as well.
