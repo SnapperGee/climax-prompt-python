@@ -86,7 +86,6 @@ commands = [["make", "mypy"]]
 base_python = ["3.13"]
 commands = [["make", "mypy"]]
 
-
 [tool.coverage.run]
 source = ["src/main"]
 data_file = "build/test/coverage/.coverage"
