@@ -18,6 +18,12 @@ include:
 variables:
   SECRET_DETECTION_ENABLED: "true"
 
+.skip_on_tag_rule:
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: on_success
+
 .python_job_base:
   image: python:3.14.7-slim
   variables:
@@ -58,24 +64,28 @@ secret_detection:
 ruff_check:
   extends: .python_job_base
   stage: lint
+  rules: !reference [.skip_on_tag_rule, rules]
   script:
     - make ruff-check
 
 ruff_format_check:
   extends: .python_job_base
   stage: lint
+  rules: !reference [.skip_on_tag_rule, rules]
   script:
     - make ruff-format-check
 
 mypy:
   extends: .tox_job_base
   stage: lint
+  rules: !reference [.skip_on_tag_rule, rules]
   script:
     - tox run -e mypy-py313,mypy-py314
 
 unit_tests:
   extends: .tox_job_base
   stage: test
+  rules: !reference [.skip_on_tag_rule, rules]
   script:
     - tox run -e py313,py314
   coverage: '/TOTAL.*? (100(?:\.0+)?%|[1-9]?\d(?:\.\d+)?%)$/'
@@ -92,9 +102,6 @@ unit_tests:
       coverage_report:
         coverage_format: cobertura
         path: build/test/coverage/xml/coverage.xml
-
-sast:
-  stage: test
 
 pages:
   extends: .python_job_base
