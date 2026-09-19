@@ -249,7 +249,7 @@ This package is licensed under the MIT license and can be found in
 [git badge]: https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white "git"
 [git website]: https://git-scm.com/ "git"
 [gitlab badge]: https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white "GitLab"
-[gitlab repo]: https://gitlab.com/SnapperGee/climax-prompt-python "GitLab repo"
+[gitlab repo]: https://gitlab.com/snap-climax/python-prompt "GitLab repo"
 [codeberg badge]: https://img.shields.io/badge/Codeberg-%232185D0.svg?style=for-the-badge&logo=Codeberg&logoColor=white "Codeberg"
 [codeberg repo]: https://codeberg.org/SnapperGee/climax-prompt-python "Codeberg repo"
 [github badge]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "GitHub repo"
