@@ -58,7 +58,7 @@ env_list = [
 
 [tool.tox.env_run_base]
 package = "skip"
-set_env = { POETRY_VIRTUALENVS_CREATE = "false" }
+set_env = { POETRY_VIRTUALENVS_CREATE = "false", PYTEST_ADDOPTS = "--junit-prefix={env_name}" }
 allowlist_externals = ["make"]
 deps = ["poetry"]
 commands_pre = [["poetry", "install"]]
