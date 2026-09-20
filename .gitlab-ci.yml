@@ -46,7 +46,7 @@ variables:
 .make_job_base:
   extends: .python_job_base
   before_script:
-    - !reference[.python_job_base, before_script]
+    - !reference [.python_job_base, before_script]
     - apt update && apt install -y --no-install-recommends make
 
 .tox_job_base:
