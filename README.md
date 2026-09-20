@@ -14,7 +14,6 @@ Python package for creating cli prompts.
 [![github badge]][github repo]
 [![mit shield]][mit license]
 [![pipeline status][pipeline status shield]][pipeline url]
-[![pipeline coverage][pipeline coverage shield]][pipeline url]
 
 This package exports 2 classes that contain the majority of its primary
 functionality. The `Prompt` and `StringPrompt` classes. The main difference
@@ -257,5 +256,4 @@ This package is licensed under the MIT license and can be found in
 [mit shield]: https://img.shields.io/badge/license-MIT-green?style=for-the-badge "MIT"
 [mit license]: https://gitlab.com/snap-climax/python-prompt/-/blob/main/LICENSE.txt "MIT"
 [pipeline status shield]: https://img.shields.io/gitlab/pipeline-status/snap-climax/python-prompt?branch=main&style=for-the-badge "Pipeline status"
-[pipeline coverage shield]: https://img.shields.io/gitlab/pipeline-coverage/snap-climax/python-prompt?branch=main&style=for-the-badge "Pipeline coverage"
 [pipeline url]: https://gitlab.com/snap-climax/python-prompt/-/pipelines/main/latest "Pipeline"
