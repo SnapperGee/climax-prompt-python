@@ -126,7 +126,7 @@ package_build:
   script:
     - poetry check --strict
     - poetry build
-    - twine check dist/*.tar.gz dist/*.whl
+    - twine check --strict dist/*.tar.gz dist/*.whl
   artifacts:
     paths:
       - dist/
