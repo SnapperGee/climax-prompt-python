@@ -40,9 +40,14 @@ variables:
       - .cache/pip
       - .venv
   before_script:
-    - apt update && apt install -y --no-install-recommends make
     - pip install poetry
     - poetry install
+
+.make_job_base:
+  extends: .python_job_base
+  before_script:
+    - !reference[.python_job_base, before_script]
+    - - apt update && apt install -y --no-install-recommends make
 
 .tox_job_base:
   image: ghcr.io/astral-sh/uv:debian-slim
@@ -65,14 +70,14 @@ secret_detection:
   stage: secret-detection
 
 ruff_check:
-  extends: .python_job_base
+  extends: .make_job_base
   stage: lint
   rules: !reference [.lint_rules, rules]
   script:
     - make ruff-check
 
 ruff_format_check:
-  extends: .python_job_base
+  extends: .make_job_base
   stage: lint
   rules: !reference [.lint_rules, rules]
   script:
@@ -113,10 +118,10 @@ unit_tests:
         path: build/test/coverage/xml/coverage.xml
 
 pages:
-  extends: .python_job_base
+  extends: .make_job_base
   stage: pages
   before_script:
-    - !reference [.python_job_base, before_script]
+    - !reference [.make_job_base, before_script]
     - apt install -y --no-install-recommends pandoc
   script:
     - make readme
