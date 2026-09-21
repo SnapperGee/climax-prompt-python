@@ -139,7 +139,7 @@ publish_to_test_pypi:
       artifacts: true
   environment:
     name: test-pypi
-    url: https://test.pypi.org/project/climax-prompt/
+    url: https://test.pypi.org/project/climax-prompt/$CI_COMMIT_TAG
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
   script:
@@ -155,7 +155,7 @@ publish_to_pypi:
       artifacts: true
   environment:
     name: pypi
-    url: https://pypi.org/project/climax-prompt/
+    url: https://pypi.org/project/climax-prompt/$CI_COMMIT_TAG
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
       when: manual
