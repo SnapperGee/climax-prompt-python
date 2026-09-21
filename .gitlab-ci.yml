@@ -167,6 +167,7 @@ publish_to_pypi:
       when: manual
   before_script:
     - pip install poetry
+    - apt update && apt install -y --no-install-recommends glab
   script:
     - poetry config pypi-token.pypi "$PYPI_PUBLISH_API_TOKEN"
     - poetry publish
