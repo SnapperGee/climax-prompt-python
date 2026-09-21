@@ -141,12 +141,13 @@ publish_to_test_pypi:
     url: https://test.pypi.org/project/climax-prompt/$CI_COMMIT_TAG
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+  id_tokens:
+    TEST_PYPI_ID_TOKEN:
+      aud: pypi
   before_script:
-    - pip install poetry
+    - pip install twine
   script:
-    - poetry config repositories.testpypi https://test.pypi.org/legacy/
-    - poetry config pypi-token.testpypi "$TEST_PYPI_PUBLISH_API_TOKEN"
-    - poetry publish --repository testpypi
+    - twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 publish_to_pypi:
   stage: publish
