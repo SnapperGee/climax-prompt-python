@@ -156,6 +156,9 @@ publish_to_pypi:
   environment:
     name: pypi
     url: https://pypi.org/project/climax-prompt/$CI_COMMIT_TAG
+  artifacts:
+    paths:
+      - dist/
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
       when: manual
@@ -164,6 +167,23 @@ publish_to_pypi:
   script:
     - poetry config pypi-token.pypi "$PYPI_PUBLISH_API_TOKEN"
     - poetry publish
+
+create_release:
+  stage: publish
+  image: "registry.gitlab.com/gitlab-org/cli:latest"
+  needs:
+    - job: publish_to_pypi
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+  variables:
+    GLAB_ENABLE_CI_AUTOLOGIN: "true"
+  script:
+    - |
+      glab release create "$CI_COMMIT_TAG" \
+        --name "Release $CI_COMMIT_TAG" \
+        --notes "PyPI release $CI_COMMIT_TAG" \
+        dist/*.tar.gz \
+        dist/*.whl
 
 pages:
   extends: .make_job_base
