@@ -155,7 +155,7 @@ publish_to_test_pypi:
 
 publish_to_pypi:
   stage: publish
-  image: python:3.14.7-slim
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
   needs:
     - job: package_build
       artifacts: true
@@ -166,8 +166,8 @@ publish_to_pypi:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
       when: manual
   before_script:
+    - apt update && apt install -y --no-install-recommends python3
     - pip install poetry
-    - apt update && apt install -y --no-install-recommends glab
   script:
     - poetry config pypi-token.pypi "$PYPI_PUBLISH_API_TOKEN"
     - poetry publish
