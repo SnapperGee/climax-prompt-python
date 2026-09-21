@@ -93,11 +93,7 @@ mypy:
 unit_tests:
   extends: .tox_job_base
   stage: test
-  rules:
-    - changes:
-      - src/**/*
-      - poetry.lock
-      - pyproject.toml
+  rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
   script:
     - tox run -e py313,py314
   coverage: '/TOTAL.*? (100(?:\.0+)?%|[1-9]?\d(?:\.\d+)?%)$/'
