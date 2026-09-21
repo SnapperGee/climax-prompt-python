@@ -20,7 +20,7 @@ include:
 variables:
   SECRET_DETECTION_ENABLED: "true"
 
-.lint_rules:
+.src_poetry_lock_pyproject_changes_rule:
   rules:
     - changes:
       - src/**/*
@@ -72,21 +72,21 @@ secret_detection:
 ruff_check:
   extends: .make_job_base
   stage: lint
-  rules: !reference [.lint_rules, rules]
+  rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
   script:
     - make ruff-check
 
 ruff_format_check:
   extends: .make_job_base
   stage: lint
-  rules: !reference [.lint_rules, rules]
+  rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
   script:
     - make ruff-format-check
 
 mypy:
   extends: .tox_job_base
   stage: lint
-  rules: !reference [.lint_rules, rules]
+  rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
   script:
     - tox run -e mypy-py313,mypy-py314
 
