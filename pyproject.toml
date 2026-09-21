@@ -1,6 +1,6 @@
 [project]
 name = "climax-prompt"
-version = "0.3.7"
+version = "0.3.8"
 description = "Prompt for input via the CLI."
 authors = [
     {name = "Snap",email = "XxSnapperGeexX@gmail.com"}
