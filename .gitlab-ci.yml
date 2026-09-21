@@ -10,6 +10,7 @@ stages:
   - lint
   - test
   - build
+  - publish
   - pages
 
 include:
@@ -133,6 +134,22 @@ package_build:
     expire_in: 1 week
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+
+publish_to_test_pypi:
+  stage: publish
+  image: python:3.14.7-slim
+  needs:
+    - job: package_build
+      artifacts: true
+  environment:
+    name: test-pypi
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+  script:
+    - pip install poetry
+    - poetry config repositories.testpypi https://test.pypi.org/legacy/
+    - poetry config pypi-token.testpypi "$TEST_PYPI_PUBLISH_API_TOKEN"
+    - poetry publish --repository testpypi
 
 pages:
   extends: .make_job_base
