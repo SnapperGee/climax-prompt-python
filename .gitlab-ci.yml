@@ -124,9 +124,13 @@ package_build:
     - poetry check --strict
     - poetry build
     - twine check --strict dist/*.tar.gz dist/*.whl
+    - echo "WHEEL_FILE=$(basename dist/*.whl)" >> release.env
+    - echo "SDIST_FILE=$(basename dist/*.tar.gz)" >> release.env
   artifacts:
     paths:
       - dist/
+    reports:
+      dotenv: "release.env"
     expire_in: 1 week
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
@@ -166,6 +170,18 @@ publish_to_pypi:
   script:
     - poetry config pypi-token.pypi "$PYPI_PUBLISH_API_TOKEN"
     - poetry publish
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: "Release $CI_COMMIT_TAG"
+    description: "Published to PyPI as $CI_COMMIT_TAG"
+    assets:
+      links:
+        - name: $WHEEL_FILE
+          url: "$CI_PROJECT_URL/-/jobs/artifacts/$CI_COMMIT_TAG/raw/dist/$WHEEL_FILE?job=package_build"
+          link_type: package
+        - name: $SDIST_FILE
+          url: "$CI_PROJECT_URL/-/jobs/artifacts/$CI_COMMIT_TAG/raw/dist/$SDIST_FILE?job=package_build"
+          link_type: package
 
 pages:
   extends: .make_job_base
