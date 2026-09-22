@@ -55,11 +55,11 @@ test-xml:
 		"--junitxml=$(TESTRESULTSDIR)/xml/report.xml" \
 		"--cov-report=xml:$(TESTCOVERAGEDIR)/xml/coverage.xml"
 
-serve-docs: html
+serve-docs: readme html
 	python -m http.server --directory $(DOCSDIR)/html -b 127.0.0.1 8000
 
 readme:
-	poetry run pandoc --from=markdown --to=rst --output=source/README.rst README.md
+	pandoc --from=markdown --to=rst --output=source/README.rst README.md
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
