@@ -204,22 +204,21 @@ generating API documentation.
 
 All repo tasks can be executed via the `make` targets listed below:
 
-- `setup` - Installs all package dependencies and pre-commit hook(s). This
-  should be run right after cloning the repo.
-- `ruff-check` - Runs the ruff checker extended with the isort I config.
-- `ruff-format-check` - Runs the ruff formatter with the `--check` option.
+- `format` - Formats source code.
+- `lint` - Runs all lint targets.
 - `mypy` - Runs the mypy type checker.
-- `lint` - Runs the `ruff-check`, `ruff-check-format` and `mypy` targets.
-- `format` - Formats source code with `ruff`.
+- `readme` - Generate `source/README.rst` by using [pandoc] to convert the root
+  `README.md` to rst.
+- `ruff-check` - Runs the ruff checker.
+- `ruff-format-check` - Runs the ruff formatter with the `--check` option.
+- `serve-docs` - Generates and serves html API docs on `127.0.0.1:8000`.
+- `serve-tests` - Generates and serves unit test results and coverage html
+  reports on `127.0.0.1:8000` and `127.0.0.1:8001`. Depends on [parallel].
+- `setup` - Installs all package dependencies and pre-commit hooks. This should
+  be run right after cloning the repo.
 - `test` - Runs unit tests and test coverage outputting results to stdout.
 - `test-html` - Generates unit test results and coverage html reports.
-- `serve-tests` - Generates and serves unit test results and coverage html
-  reports on `127.0.0.1:8000` and `127.0.0.1:8001`. Depends on
-  [GNU parallel](https://www.gnu.org/software/parallel/ "GNU Parallel").
-- `serve-docs` - Generates and serves html API docs on `127.0.0.1:8000`.
-- `test-xml` - Generates test coverage xml reports.
-- `readme` - Generate `source/README.rst` by using
-  [pandoc](https://pandoc.org/ "Pandoc") to convert the root `README.md` to rst.
+- `test-xml` - Generates test result and coverage xml reports.
 
 In addition to the `make` targets listed above, all sphinx `make` targets are
 available and valid as well.
@@ -234,6 +233,8 @@ is also mirrored to [codeberg][codeberg repo] and [github][github repo].
 This package is licensed under the MIT license and can be found in
 [LICENSE.txt][mit license].
 
+[pandoc]: https://pandoc.org/ "pandoc"
+[parallel]: https://www.gnu.org/software/parallel/ "GNU Parallel"
 [python badge]: https://img.shields.io/badge/python-%3E%3D3.13-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54&labelColor=3670A0&color=939393 "Python"
 [python website]: https://www.python.org/ "Python"
 [pytest badge]: https://img.shields.io/badge/pytest-%23ffffff.svg?style=for-the-badge&logo=pytest&logoColor=2f9fe3 "PyTest"
