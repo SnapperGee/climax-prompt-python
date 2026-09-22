@@ -4,11 +4,11 @@ from typing import TypeIs, final
 from .input_string_conversion_error import InputStringConversionError
 
 
-def _exception_key(exception: Exception | None) -> tuple[type[Exception], tuple[object, ...]] | None:
+def _exception_key(exception: InputStringConversionError | None) -> tuple[type[Exception], tuple[object, ...]] | None:
     if exception is None:
         return None
 
-    return (type(exception), exception.args)
+    return (type(exception.cause), exception.cause.args)
 
 
 @dataclass(frozen=True)
