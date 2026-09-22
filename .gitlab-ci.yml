@@ -20,6 +20,9 @@ include:
 variables:
   SECRET_DETECTION_ENABLED: "true"
 
+.format_check:
+  version_commit_tag_format_check: &version_commit_tag_format_check '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+
 .src_poetry_lock_pyproject_changes_rule:
   rules:
     - changes:
@@ -135,7 +138,7 @@ package_build:
       - dist/
     expire_in: 1 week
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+    - if: *version_commit_tag_format_check
 
 publish_to_test_pypi:
   stage: publish
@@ -146,7 +149,7 @@ publish_to_test_pypi:
     name: test-pypi
     url: https://test.pypi.org/project/climax-prompt/$CI_COMMIT_TAG
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+    - if: *version_commit_tag_format_check
   id_tokens:
     TESTPYPI_ID_TOKEN:
       aud: testpypi
@@ -167,7 +170,7 @@ publish_to_pypi:
     paths:
       - dist/
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+    - if: *version_commit_tag_format_check
       when: manual
   id_tokens:
     PYPI_ID_TOKEN:
@@ -183,7 +186,7 @@ create_release:
   needs:
     - job: publish_to_pypi
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+    - if: *version_commit_tag_format_check
   variables:
     GLAB_ENABLE_CI_AUTOLOGIN: "true"
   script:
