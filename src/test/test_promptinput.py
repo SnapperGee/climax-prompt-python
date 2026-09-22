@@ -1,3 +1,4 @@
+from re import escape
 from typing import Final
 
 import pytest
@@ -47,8 +48,14 @@ def test_PromptInput_hash(string: str, value: object | None, exception: InputStr
 def test_PromptInput_non_none_value_filed_with_truthy_exception_conversion_field_raises_ValueError(
     string: str, value: object, exception: InputStringConversionError
 ) -> None:
+    error_message = escape(f"""\
+PromptInput: truthy `conversion_exception` with non-None `value`:
+self.value={value}
+
+InputStringConversionError('Input string conversion failed: An exception')\
+""")
     with pytest.raises(
         ValueError,
-        match=r"ValueError: PromptInput: truthy `conversion_exception` with non-None `value`: self.value=False",
+        match=error_message,
     ):
         PromptInput(string, value, exception)
