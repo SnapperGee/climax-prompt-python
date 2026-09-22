@@ -127,7 +127,7 @@ package_build:
   before_script:
     - pip install poetry twine
   script:
-    - poetry check --strict
+    - poetry check --strict --lock
     - poetry build
     - twine check --strict dist/*.tar.gz dist/*.whl
   artifacts:
