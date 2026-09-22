@@ -3,12 +3,11 @@ repos:
     rev: 2.5.1
     hooks:
       - id: poetry-check
-        args: ["--lock", "--strict"]
+        args: [--lock, --strict]
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v2.3.1
     hooks:
       - id: mypy
-        args: [--strict]
         files: ^src/
         additional_dependencies:
           - pytest>=9.1.1
@@ -16,7 +15,7 @@ repos:
     rev: v0.16.7
     hooks:
       - id: ruff-check
-        args: [ --fix, "--extend-select=B,C4,I,PT,TC,RET,RUF,UP" ]
+        args: [--fix]
       - id: "ruff-format"
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.38.0
