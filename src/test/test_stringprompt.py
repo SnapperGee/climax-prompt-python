@@ -14,16 +14,16 @@ from climax.prompt._util import always_none_returning_function, string_identity_
 from .util import MESSAGE, PS1, string_is_digit
 
 
-def _string_is_empty(strings: tuple[str, str]) -> str | None:
-    return None if len(strings[0]) == 0 else f'String is not empty: "{strings[1]}".\n'
+def _string_is_empty(strings: StringPromptInput) -> str | None:
+    return None if len(strings.formatted) == 0 else f'String is not empty: "{strings[1]}".\n'
 
 
-def _string_is_not_empty(strings: tuple[str, str]) -> str | None:
-    return None if len(strings[0]) != 0 else "String is empty.\n"
+def _string_is_not_empty(strings: StringPromptInput) -> str | None:
+    return None if len(strings.formatted) != 0 else "String is empty.\n"
 
 
-def _string_is_palindrome(strings: tuple[str, str]) -> str | None:
-    return None if strings[0] == strings[0][::-1] else f'String is not a palindrome: "{strings[1]}".\n'
+def _string_is_palindrome(strings: StringPromptInput) -> str | None:
+    return None if strings.formatted == strings.formatted[::-1] else f'String is not a palindrome: "{strings[1]}".\n'
 
 
 def test_StringPrompt_fields() -> None:

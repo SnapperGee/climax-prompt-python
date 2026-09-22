@@ -34,11 +34,13 @@ def _is_even_positive_integer(integer: int) -> str | None:
     return None
 
 
-def _string_is_float(strings: tuple[str, str]) -> str | None:
+def _string_is_float(strings: StringPromptInput) -> str | None:
     return (
         None
         if (
-            split_string := strings[0].split(".", 2) if not strings[0].startswith("-") else strings[0][1:].split(".", 2)
+            split_string := strings.formatted.split(".", 2)
+            if not strings.formatted.startswith("-")
+            else strings.formatted[1:].split(".", 2)
         )
         and len(split_string) == 2
         and split_string[0].isdecimal()
