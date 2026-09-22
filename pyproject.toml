@@ -93,4 +93,4 @@ data_file = "build/test/coverage/.coverage"
 line-length = 120
 
 [tool.ruff.lint]
-extend-select = ["B", "C4", "I", "PT", "TCH", "RET", "RUF", "UP"]
+extend-select = ["B", "C4", "I", "PT", "TC", "RET", "RUF", "UP"]
