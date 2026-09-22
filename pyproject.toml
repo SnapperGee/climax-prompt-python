@@ -47,6 +47,7 @@ files = ["src"]
 strict = true
 mypy_path = ["src/main"]
 explicit_package_bases = true
+enable_error_code = ["redundant-expr"]
 
 [tool.tox]
 requires = ["tox>=4.61", "tox-uv>=1.36"]
@@ -92,4 +93,4 @@ data_file = "build/test/coverage/.coverage"
 line-length = 120
 
 [tool.ruff.lint]
-extend-select = ["I"]
+extend-select = ["B", "C4", "I", "PT", "TCH", "RET", "RUF", "UP"]

@@ -20,7 +20,7 @@ setup:
 	poetry run pre-commit install
 
 ruff-check:
-	poetry run ruff check --extend-select I ./src
+	poetry run ruff check ./src
 
 ruff-format-check:
 	poetry run ruff format --check ./src
@@ -31,7 +31,7 @@ mypy:
 lint: ruff-check ruff-format-check mypy
 
 format:
-	poetry run ruff check --extend-select I --fix ./src
+	poetry run ruff check --fix ./src
 	poetry run ruff format ./src
 
 test:
