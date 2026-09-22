@@ -212,7 +212,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
             None,
             "abc",
             PromptInputFailedConversion[int](
-                "abc", None, InputStringConversionError(ValueError("invalid literal for int() with base 10: 'abc'"))
+                "abc", InputStringConversionError(ValueError("invalid literal for int() with base 10: 'abc'"))
             ),
         ),
         (
@@ -222,7 +222,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
             PS1,
             "XXX",
             PromptInputFailedConversion[float](
-                "XXX", None, InputStringConversionError(ValueError("could not convert string to float: 'XXX'"))
+                "XXX", InputStringConversionError(ValueError("could not convert string to float: 'XXX'"))
             ),
         ),
     ],

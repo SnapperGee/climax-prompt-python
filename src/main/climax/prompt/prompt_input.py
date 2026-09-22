@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TypeIs, final
 
 from .input_string_conversion_error import InputStringConversionError
@@ -77,7 +77,7 @@ class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
 @dataclass(frozen=True, eq=False)
 class PromptInputFailedConversion[ValueType](PromptInput[ValueType]):
     original_input_string: str
-    value: None
+    value: None = field(default=None, init=False)
     conversion_exception: InputStringConversionError
 
 

@@ -70,9 +70,7 @@ class Prompt[ValueType](StringPrompt):
         try:
             converted_input = self.converter(formatted_string_input)
         except Exception as exception:  # noqa: BLE001
-            return PromptInputFailedConversion[ValueType](
-                original_string_input, None, InputStringConversionError(exception)
-            )
+            return PromptInputFailedConversion[ValueType](original_string_input, InputStringConversionError(exception))
 
         while (invalid_input_string_message := self._validator(converted_input)) is not None:
             if invalid_input_string_message:
@@ -84,7 +82,7 @@ class Prompt[ValueType](StringPrompt):
                 converted_input = self.converter(formatted_string_input)
             except Exception as exception:  # noqa: BLE001
                 return PromptInputFailedConversion[ValueType](
-                    original_string_input, None, InputStringConversionError(exception)
+                    original_string_input, InputStringConversionError(exception)
                 )
 
         return PromptInputSuccessfulConversion[ValueType](original_string_input, converted_input, None)
