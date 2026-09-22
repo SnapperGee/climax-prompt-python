@@ -72,9 +72,7 @@ class Prompt[ValueType](StringPrompt):
         formatted_string_input, original_string_input = super().exec_string_input_loop()
 
         try:
-            converted_input = self.converter(
-                formatted_string_input if isinstance(formatted_string_input, str) else formatted_string_input.formatted
-            )
+            converted_input = self.converter(formatted_string_input)
         except Exception as exception:  # noqa: BLE001
             return PromptInputFailedConversion[ValueType](
                 original_string_input, None, InputStringConversionError(exception)
