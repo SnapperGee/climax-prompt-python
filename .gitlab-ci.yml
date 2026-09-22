@@ -203,8 +203,8 @@ create_release:
         --name "Release $CI_COMMIT_TAG" \
         --notes "PyPI release $CI_COMMIT_TAG" \
         --use-package-registry \
-        dist/*.tar.gz \
-        dist/*.whl
+        "$(ls dist/*.tar.gz)#Source distribution#package" \
+        "$(ls dist/*.whl)#Wheel#package"
 
 pages:
   extends: .make_job_base
