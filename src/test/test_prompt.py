@@ -3,6 +3,7 @@ from collections.abc import Callable
 from typing import Final
 from unittest.mock import call, patch
 
+import pytest
 from climax.prompt import (
     Prompt,
     StringPromptInput,
@@ -15,7 +16,6 @@ from climax.prompt.prompt_input import (
     PromptInputSuccessfulConversion,
     is_successful_conversion,
 )
-from pytest import mark, raises
 
 from .util import MESSAGE, PS1, string_is_digit
 
@@ -51,9 +51,9 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
     return None if a_float != int(a_float) else f"Float contains no non zero decimals: {a_float}\n"
 
 
-@mark.parametrize(
-    "string_validator,_type,validator,formatter,ps1,user_input,expected",
-    (
+@pytest.mark.parametrize(
+    ("string_validator", "_type", "validator", "formatter", "ps1", "user_input", "expected"),
+    [
         (
             string_is_digit,
             int,
@@ -126,7 +126,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             "     26.1111     ",
             PromptInputSuccessfulConversion("     26.1111     ", 26.1111, None),
         ),
-    ),
+    ],
 )
 def test_Prompt_execInputLoop_with_valid_input(
     string_validator: StringValidator,
@@ -147,9 +147,9 @@ def test_Prompt_execInputLoop_with_valid_input(
     mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
 
 
-@mark.parametrize(
-    "string_validator,_type,validator,formatter,ps1,user_input",
-    (
+@pytest.mark.parametrize(
+    ("string_validator", "_type", "validator", "formatter", "ps1", "user_input"),
+    [
         (string_is_digit, int, _is_even_positive_integer, None, None, "124XXX"),
         (string_is_digit, int, _is_even_positive_integer, None, None, "111"),
         (string_is_digit, int, _is_even_positive_integer, None, None, "-999"),
@@ -168,7 +168,7 @@ def test_Prompt_execInputLoop_with_valid_input(
         (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, None, "     1.00     "),
         (_string_is_float, float, _float_contains_non_zero_decimals, None, PS1, "253242.000000"),
         (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, PS1, "     26.0000     "),
-    ),
+    ],
 )
 def test_Prompt_execInputLoop_with_invalid_input(
     string_validator: StringValidator,
@@ -183,7 +183,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
     with (
         patch.object(builtins, "print") as mock_print,
         patch.object(builtins, "input", side_effect=(user_input,)) as mock_input,
-        raises(StopIteration),
+        pytest.raises(StopIteration),
     ):
         prompt.exec_input_loop()
 
@@ -202,9 +202,9 @@ def test_Prompt_execInputLoop_with_invalid_input(
         mock_print.assert_called_once_with(error_message, end="")
 
 
-@mark.parametrize(
-    "_type,validator,formatter,ps1,user_input,expected",
-    (
+@pytest.mark.parametrize(
+    ("_type", "validator", "formatter", "ps1", "user_input", "expected"),
+    [
         (
             int,
             _is_even_positive_integer,
@@ -225,7 +225,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
                 "XXX", None, InputStringConversionError(ValueError("could not convert string to float: 'XXX'"))
             ),
         ),
-    ),
+    ],
 )
 def test_Prompt_execInputLoop_with_conversion_error(
     _type: type,

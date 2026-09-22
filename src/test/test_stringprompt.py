@@ -3,13 +3,13 @@ from collections.abc import Callable
 from typing import Final
 from unittest.mock import call, patch
 
+import pytest
 from climax.prompt import (
     StringPrompt,
     StringPromptInput,
     StringValidator,
 )
 from climax.prompt._util import always_none_returning_function, string_identity_function
-from pytest import mark, raises
 
 from .util import MESSAGE, PS1, string_is_digit
 
@@ -53,9 +53,9 @@ def test_StringPrompt_default_field_values() -> None:
     assert string_prompt.ps1 is None
 
 
-@mark.parametrize(
-    "validator,formatter,ps1,user_input",
-    (
+@pytest.mark.parametrize(
+    ("validator", "formatter", "ps1", "user_input"),
+    [
         (_string_is_empty, None, None, ""),
         (string_is_digit, None, None, "123"),
         (_string_is_palindrome, None, None, "level"),
@@ -68,7 +68,7 @@ def test_StringPrompt_default_field_values() -> None:
         (_string_is_empty, str.strip, PS1, "         "),
         (string_is_digit, str.strip, PS1, "     123     "),
         (_string_is_palindrome, str.strip, PS1, "level         "),
-    ),
+    ],
 )
 def test_StringPrompt_execStringInputLoop_with_valid_input(
     validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
@@ -84,9 +84,9 @@ def test_StringPrompt_execStringInputLoop_with_valid_input(
     assert result == StringPromptInput(formatter(user_input) if formatter else user_input, user_input)
 
 
-@mark.parametrize(
-    "validator,formatter,ps1,user_input",
-    (
+@pytest.mark.parametrize(
+    ("validator", "formatter", "ps1", "user_input"),
+    [
         (_string_is_not_empty, None, None, ""),
         (string_is_digit, None, None, "A123"),
         (_string_is_palindrome, None, None, "Knights who say ni"),
@@ -99,14 +99,14 @@ def test_StringPrompt_execStringInputLoop_with_valid_input(
         (_string_is_not_empty, str.strip, PS1, "         "),
         (string_is_digit, str.strip, PS1, "  A   123     "),
         (_string_is_palindrome, str.strip, PS1, "Knights who say ni"),
-    ),
+    ],
 )
 def test_StringPrompt_execStringInputLoop_with_invalid_input(
     validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
 
-    with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input, raises(StopIteration):
+    with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input, pytest.raises(StopIteration):
         string_prompt.exec_string_input_loop()
 
     message_with_ps1: Final = MESSAGE + (ps1 or "")
