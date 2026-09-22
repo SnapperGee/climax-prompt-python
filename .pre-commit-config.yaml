@@ -1,4 +1,13 @@
 repos:
+  - repo: local
+    hooks:
+      - id: "check-version-tag"
+        name: "check version tag"
+        entry: "python scripts/check_version_commit_tag.py"
+        language: "system"
+        stages: ["pre-push"]
+        always_run: true
+        pass_filenames: false
   - repo: https://github.com/python-poetry/poetry
     rev: 2.5.1
     hooks:
