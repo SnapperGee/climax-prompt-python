@@ -69,6 +69,16 @@ variables:
 secret_detection:
   stage: secret-detection
 
+poetry_check:
+  extends: .make_job_base
+  stage: lint
+  rules:
+    - changes:
+      - poetry.lock
+      - pyproject.toml
+  script:
+    - make poetry-check
+
 ruff_check:
   extends: .make_job_base
   stage: lint
