@@ -1,4 +1,4 @@
-r"""This package makes it possible to easily get validated command line prompt input from a user.
+r"""Get validated command line prompt input from a user.
 
 The :class:`~prompt.Prompt` and :class:`~string_prompt.StringPrompt` classes are
 the 2 core abstractions exported by this package and will most likely be the
@@ -11,7 +11,12 @@ and processing any arbitrary types, not just ``string``.
 """
 
 from .prompt import Prompt
-from .prompt_input import PromptInput, is_successful_conversion
+from .prompt_input import (
+    PromptInput,
+    PromptInputFailedConversion,
+    PromptInputSuccessfulConversion,
+    is_successful_conversion,
+)
 from .string_prompt import StringPrompt
 from .string_prompt_input import StringPromptInput
 from .validator import StringValidator, Validator
@@ -19,6 +24,8 @@ from .validator import StringValidator, Validator
 __all__ = (
     "Prompt",
     "PromptInput",
+    "PromptInputFailedConversion",
+    "PromptInputSuccessfulConversion",
     "StringPrompt",
     "StringPromptInput",
     "StringValidator",
