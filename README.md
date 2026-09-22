@@ -207,6 +207,7 @@ All repo tasks can be executed via the `make` targets listed below:
 - `format` - Formats source code.
 - `lint` - Runs all lint targets.
 - `mypy` - Runs the mypy type checker.
+- `poetry-check` - Validates content of `pyproject.toml` and `poetry.lock`.
 - `readme` - Generate `source/README.rst` by using [pandoc] to convert the root
   `README.md` to rst.
 - `ruff-check` - Runs the ruff checker.
