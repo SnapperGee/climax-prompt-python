@@ -1,6 +1,8 @@
 source/*
 !source/conf.py
 !source/index.rst
+!source/static/
+!source/templates/
 .vscode/
 .idea/
 .DS_Store
