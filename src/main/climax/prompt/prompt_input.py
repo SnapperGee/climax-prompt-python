@@ -70,7 +70,7 @@ class PromptInput[ValueType]:
 class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
     original_input_string: str
     value: ValueType
-    conversion_exception: None
+    conversion_exception: None = field(default=None, init=False)
 
 
 @final

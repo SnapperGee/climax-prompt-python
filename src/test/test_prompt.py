@@ -61,7 +61,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             None,
             "124",
-            PromptInputSuccessfulConversion("124", 124, None),
+            PromptInputSuccessfulConversion("124", 124),
         ),
         (
             string_is_digit,
@@ -70,7 +70,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             None,
             "     2     ",
-            PromptInputSuccessfulConversion("     2     ", 2, None),
+            PromptInputSuccessfulConversion("     2     ", 2),
         ),
         (
             string_is_digit,
@@ -79,7 +79,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             PS1,
             "253242",
-            PromptInputSuccessfulConversion("253242", 253242, None),
+            PromptInputSuccessfulConversion("253242", 253242),
         ),
         (
             string_is_digit,
@@ -88,7 +88,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             PS1,
             "     26     ",
-            PromptInputSuccessfulConversion("     26     ", 26, None),
+            PromptInputSuccessfulConversion("     26     ", 26),
         ),
         (
             _string_is_float,
@@ -97,7 +97,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             None,
             "124.1",
-            PromptInputSuccessfulConversion("124.1", 124.1, None),
+            PromptInputSuccessfulConversion("124.1", 124.1),
         ),
         (
             _string_is_float,
@@ -106,7 +106,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             None,
             "     1.04     ",
-            PromptInputSuccessfulConversion("     1.04     ", 1.04, None),
+            PromptInputSuccessfulConversion("     1.04     ", 1.04),
         ),
         (
             _string_is_float,
@@ -115,7 +115,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             PS1,
             "253242.252523",
-            PromptInputSuccessfulConversion("253242.252523", 253242.252523, None),
+            PromptInputSuccessfulConversion("253242.252523", 253242.252523),
         ),
         (
             _string_is_float,
@@ -124,7 +124,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             PS1,
             "     26.1111     ",
-            PromptInputSuccessfulConversion("     26.1111     ", 26.1111, None),
+            PromptInputSuccessfulConversion("     26.1111     ", 26.1111),
         ),
     ],
 )

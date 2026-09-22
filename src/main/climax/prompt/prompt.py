@@ -85,4 +85,4 @@ class Prompt[ValueType](StringPrompt):
                     original_string_input, InputStringConversionError(exception)
                 )
 
-        return PromptInputSuccessfulConversion[ValueType](original_string_input, converted_input, None)
+        return PromptInputSuccessfulConversion[ValueType](original_string_input, converted_input)
