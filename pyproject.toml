@@ -15,7 +15,7 @@ keywords = [
     "command-line",
     "command-line-interface",
     "user-input",
-    "terminal"
+    "terminal",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
