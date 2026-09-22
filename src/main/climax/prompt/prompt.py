@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from functools import cached_property
+from sys import stderr
 from typing import final
 
 from ._util import always_none_returning_function
@@ -71,7 +72,7 @@ class Prompt[ValueType](StringPrompt):
 
         while (invalid_input_string_message := self._validator(converted_input)) is not None:
             if invalid_input_string_message:
-                print(invalid_input_string_message, end="")
+                print(invalid_input_string_message, end="", file=stderr)
 
             formatted_string_input, original_string_input = super().exec_string_input_loop()
 

@@ -1,5 +1,6 @@
 import builtins
 from collections.abc import Callable
+from sys import stderr
 from typing import Final
 from unittest.mock import call, patch
 
@@ -183,8 +184,8 @@ def test_Prompt_execInputLoop_with_invalid_input(
     prompt: Final = Prompt(MESSAGE, string_validator, _type, validator, formatter=formatter, ps1=ps1)
 
     with (
-        patch.object(builtins, "print") as mock_print,
         patch.object(builtins, "input", side_effect=(user_input,)) as mock_input,
+        patch.object(builtins, "print") as mock_print,
         pytest.raises(StopIteration),
     ):
         prompt.exec_input_loop()
@@ -194,14 +195,16 @@ def test_Prompt_execInputLoop_with_invalid_input(
 
     string_error_message: Final = string_validator(StringPromptInput(formatted_user_input, user_input))
 
-    assert mock_input.call_count == 2
-    assert mock_input.call_args_list[0] == call(message_with_ps1)
+    assert mock_input.call_args_list == [
+        call(message_with_ps1),
+        call(message_with_ps1),
+    ]
 
-    if string_error_message is not None:
-        assert mock_input.call_args_list[1] == call(string_error_message + message_with_ps1)
+    if string_error_message:
+        mock_print.assert_called_once_with(string_error_message, end="", file=stderr)
     else:
-        error_message: Final = validator(_type(formatted_user_input)) or ""
-        mock_print.assert_called_once_with(error_message, end="")
+        error_message: Final = validator(_type(formatted_user_input))
+        mock_print.assert_called_once_with(error_message, end="", file=stderr)
 
 
 @pytest.mark.parametrize(

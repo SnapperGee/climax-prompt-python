@@ -1,5 +1,6 @@
 import builtins
 from collections.abc import Callable
+from sys import stderr
 from typing import Final
 from unittest.mock import call, patch
 
@@ -106,15 +107,21 @@ def test_StringPrompt_execStringInputLoop_with_invalid_input(
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
 
-    with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input, pytest.raises(StopIteration):
+    with (
+        patch.object(builtins, "input", side_effect=(user_input,)) as mock_input,
+        patch.object(builtins, "print") as mock_print,
+        pytest.raises(StopIteration),
+    ):
         string_prompt.exec_string_input_loop()
 
     message_with_ps1: Final = MESSAGE + (ps1 or "")
+    invalid_message: Final = (
+        validator(StringPromptInput(formatter(user_input) if formatter else user_input, user_input)) or ""
+    )
 
     assert mock_input.call_args_list == [
         call(message_with_ps1),
-        call(
-            (validator(StringPromptInput(formatter(user_input) if formatter else user_input, user_input)) or "")
-            + message_with_ps1
-        ),
+        call(message_with_ps1),
     ]
+
+    mock_print.assert_called_once_with(invalid_message, end="", file=stderr)
