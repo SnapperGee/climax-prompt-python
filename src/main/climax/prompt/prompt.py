@@ -47,23 +47,20 @@ class Prompt[ValueType](StringPrompt):
     def _validator(self) -> Callable[[ValueType], str | None]:
         return self.validator or always_none_returning_function
 
-    @final
     def exec_input_loop(self) -> PromptInputSuccessfulConversion[ValueType] | PromptInputFailedConversion[ValueType]:
         r"""Execute an input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
         :attr:`string_validator`, gets converted via the :attr:`converter`, and
-        then validated with the :attr:`validator`, and will return either the
-        value (resulting from the converted ``string`` input) or both the value
-        and raw unformatted ``string`` input indicated by the
-        ``include_original_input`` parameter.
+        then validated with the :attr:`validator`, and will return the value
+        (resulting from the converted ``string`` input) and original raw
+        unformatted input ``string``.
 
         Returns
         -------
-        PromptInput
-            The original raw unformatted ``string`` input and either the
-            converted value of the formatted ``string`` input or the raised
-            exception if one is raised during conversion.
+        PromptInputSuccessfulConversion[ValueType] | PromptInputFailedConversion[ValueType]
+            The value of the converted formatted ``string`` input and the
+            original unformatted input ``string``.
         """
         formatted_string_input, original_string_input = super().exec_string_input_loop()
 
