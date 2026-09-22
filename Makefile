@@ -9,7 +9,7 @@ TESTDIR := $(BUILDDIR)/test
 TESTRESULTSDIR := $(TESTDIR)/results
 TESTCOVERAGEDIR := $(TESTDIR)/coverage
 
-.PHONY: help setup ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml serve-docs readme Makefile
+.PHONY: help setup poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml serve-docs readme Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -18,6 +18,9 @@ help:
 setup:
 	poetry install
 	poetry run pre-commit install
+
+poetry-check:
+	poetry check --strict --lock
 
 ruff-check:
 	poetry run ruff check ./src
@@ -28,8 +31,7 @@ ruff-format-check:
 mypy:
 	poetry run mypy
 
-lint: ruff-check ruff-format-check mypy
-	poetry check --strict --lock
+lint: poetry-check ruff-check ruff-format-check mypy
 
 format:
 	poetry run ruff check --fix ./src
