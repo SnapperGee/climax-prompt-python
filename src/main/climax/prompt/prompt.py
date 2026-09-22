@@ -3,15 +3,11 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import final
 
+from ._util import always_none_returning_function
 from .input_string_conversion_error import InputStringConversionError
 from .prompt_input import PromptInputFailedConversion, PromptInputSuccessfulConversion
 from .string_prompt import StringPrompt
 from .validator import Validator
-
-
-def _always_none_returning_function(_: object) -> None:
-    r"""A function that consumes an ``object`` and returns ``None``."""
-    return
 
 
 @final
@@ -49,7 +45,7 @@ class Prompt[ValueType](StringPrompt):
 
     @cached_property
     def _validator(self) -> Callable[[ValueType], str | None]:
-        return self.validator or _always_none_returning_function
+        return self.validator or always_none_returning_function
 
     @final
     def exec_input_loop(self) -> PromptInputSuccessfulConversion[ValueType] | PromptInputFailedConversion[ValueType]:
