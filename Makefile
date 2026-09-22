@@ -29,7 +29,7 @@ mypy:
 	poetry run mypy
 
 lint: ruff-check ruff-format-check mypy
-	poetry check --strict
+	poetry check --strict --lock
 
 format:
 	poetry run ruff check --fix ./src
