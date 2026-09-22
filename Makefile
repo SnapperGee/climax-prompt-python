@@ -29,6 +29,7 @@ mypy:
 	poetry run mypy
 
 lint: ruff-check ruff-format-check mypy
+	poetry check --strict
 
 format:
 	poetry run ruff check --fix ./src
