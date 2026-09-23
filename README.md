@@ -97,10 +97,13 @@ from climax.prompt import Prompt, StringPromptInput, is_successful_conversion
 # string validator gets passed a tuple containing the formatted and original
 # unformatted string input
 def string_is_integer(string: StringPromptInput) -> str | None:
-    if string.formatted.startswith("-") or string.formatted.startswith("+"):
-        return None if string.formatted[1:].isdecimal() else f'Provided input is not an integer: "{string.formatted}"\n'
+    start_index = 1 if string.formatted.startswith("-") or string.formatted.startswith("+") else 0
 
-    return None if string.formatted.isdecimal() else f'Provided input is not an integer: "{string.formatted}"\n'
+    return (
+        None
+        if string.formatted[start_index:].isdecimal()
+        else f'Provided input is not an integer: "{string.formatted}"\n'
+    )
 
 
 # validator gets passed whatever the string input gets converted to
@@ -111,7 +114,7 @@ def is_positive_even_integer(integer: int) -> str | None:
     if integer % 2 != 0:
         return f"Integer isn't even: {integer}\n"
 
-    return None
+    return
 
 
 positive_even_integer_prompt = Prompt[int](
