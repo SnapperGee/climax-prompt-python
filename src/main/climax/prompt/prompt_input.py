@@ -38,7 +38,7 @@ class PromptInput[ValueType]:
         if self.conversion_exception and self.value is not None:
             raise ValueError(
                 f"{type(self).__name__}: truthy `conversion_exception` with "
-                f"non-None `value`:\n{self.value=}\n\n{self.conversion_exception!r}"
+                f"non-None `value`:\n{self.value}\n\n{self.conversion_exception!r}"
             )
 
     def __eq__(self, other: object) -> bool:

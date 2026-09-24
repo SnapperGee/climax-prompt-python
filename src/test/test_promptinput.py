@@ -1,3 +1,4 @@
+from re import escape
 from typing import Final
 
 import pytest
@@ -49,7 +50,9 @@ def test_PromptInput_non_none_value_filed_with_truthy_exception_conversion_field
     string: str, value: object, exception: Exception
 ) -> None:
     with pytest.raises(
-        type(exception),
-        match=str(exception),
+        ValueError,
+        match=escape(
+            f"{PromptInput.__name__}: truthy `conversion_exception` with non-None `value`:\n{value}\n\n{exception!r}"
+        ),
     ):
         PromptInput(string, value, exception)
