@@ -1,14 +1,6 @@
 from dataclasses import dataclass, field
+from functools import cached_property
 from typing import TypeIs, final
-
-from .input_string_conversion_error import InputStringConversionError
-
-
-def _exception_key(exception: InputStringConversionError | None) -> tuple[type[Exception], tuple[object, ...]] | None:
-    if exception is None:
-        return None
-
-    return (type(exception.cause), exception.cause.args)
 
 
 @dataclass(frozen=True)
@@ -35,7 +27,7 @@ class PromptInput[ValueType]:
     set to a truthy value otherwise a ``ValueError`` is raised.
     """
 
-    conversion_exception: InputStringConversionError | None
+    conversion_exception: Exception | None
     r"""The exception thrown during conversion if one is thrown.
 
     If this field is set to a truthy value, then :attr:`value` must be set to
@@ -59,10 +51,14 @@ class PromptInput[ValueType]:
         if self.original_input_string != other.original_input_string or self.value != other.value:
             return False
 
-        return _exception_key(self.conversion_exception) == _exception_key(other.conversion_exception)
+        return self._conversion_exception_tuple == other._conversion_exception_tuple
 
     def __hash__(self) -> int:
-        return hash((self.original_input_string, self.value, _exception_key(self.conversion_exception)))
+        return hash((self.original_input_string, self.value, self._conversion_exception_tuple))
+
+    @cached_property
+    def _conversion_exception_tuple(self) -> tuple[type[Exception], tuple[object, ...]] | None:
+        return (type(self.conversion_exception), self.conversion_exception.args) if self.conversion_exception else None
 
 
 @final
@@ -78,7 +74,7 @@ class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
 class PromptInputFailedConversion[ValueType](PromptInput[ValueType]):
     original_input_string: str
     value: None = field(default=None, init=False)
-    conversion_exception: InputStringConversionError
+    conversion_exception: Exception
 
 
 def is_successful_conversion[ValueType](

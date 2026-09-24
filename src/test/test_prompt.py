@@ -11,7 +11,6 @@ from climax.prompt import (
     StringValidator,
     Validator,
 )
-from climax.prompt.input_string_conversion_error import InputStringConversionError
 from climax.prompt.prompt_input import (
     PromptInputFailedConversion,
     PromptInputSuccessfulConversion,
@@ -216,9 +215,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
             str.strip,
             None,
             "abc",
-            PromptInputFailedConversion[int](
-                "abc", InputStringConversionError(ValueError("invalid literal for int() with base 10: 'abc'"))
-            ),
+            PromptInputFailedConversion[int]("abc", ValueError("invalid literal for int() with base 10: 'abc'")),
         ),
         (
             float,
@@ -226,9 +223,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
             str.strip,
             PS1,
             "XXX",
-            PromptInputFailedConversion[float](
-                "XXX", InputStringConversionError(ValueError("could not convert string to float: 'XXX'"))
-            ),
+            PromptInputFailedConversion[float]("XXX", ValueError("could not convert string to float: 'XXX'")),
         ),
     ],
 )
