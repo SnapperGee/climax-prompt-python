@@ -58,7 +58,7 @@ class Prompt[ValueType](StringPrompt):
 
         Returns
         -------
-        PromptInputSuccessfulConversion[ValueType] | PromptInputFailedConversion[ValueType]
+        PromptResultSuccess[ValueType] | PromptResultFailure
             The value of the converted formatted ``string`` input and the
             original unformatted input ``string``.
         """

@@ -95,8 +95,8 @@ from typing import assert_never
 
 from climax.prompt import (
     Prompt,
-    PromptInputFailedConversion,
-    PromptInputSuccessfulConversion,
+    PromptResultFailure,
+    PromptResultSuccess,
     StringPromptInput,
 )
 
@@ -138,12 +138,12 @@ positive_even_integer_prompt_result = positive_even_integer_prompt.exec_input_lo
 # each case, so `value` is only available on the successful conversion and
 # `conversion_exception` is only available on the failed conversion.
 match positive_even_integer_prompt_result:
-    case PromptInputFailedConversion(
+    case PromptResultFailure(
         original_input_string=original_input_string,
         conversion_exception=conversion_exception,
     ):
         print(f'Error converting input to an int: "{original_input_string}"\n\n' + repr(conversion_exception))
-    case PromptInputSuccessfulConversion(value=value):
+    case PromptResultSuccess(value=value):
         print("You inputted the positive even integer:", value)
     case _:
         # Type checkers report an error here if a new class is added to the
@@ -160,14 +160,14 @@ converted string input as outlined below ***if*** string input validation passes
 1. The *formatted* validated string input is passed to the
    `Prompt.converter(str)`.
 
-1. If an exception occurs during conversion, then a `PromptInputFailedConversion`
+1. If an exception occurs during conversion, then a `PromptResultFailure`
    is returned with the original input string and the `Exception` that was raised.
 
 1. If conversion succeeds without raising an exception, the string input is
    then passed to the `Prompt.validator`.
 
 1. If validation passes (the `Prompt.validator` returns `None`) then a
-   `PromptInputSuccessfulConversion` containing the original input string and
+   `PromptResultSuccess` containing the original input string and
    its converted value is returned.
 
 1. If validation fails (the `Prompt.validator` returns a `string` error

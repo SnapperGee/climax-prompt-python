@@ -65,8 +65,8 @@ class PromptResultFailure:
 type PromptResult[ValueType] = PromptResultSuccess[ValueType] | PromptResultFailure
 r"""Result of converting an input string.
 
-Either a :class:`PromptInputSuccessfulConversion`, which holds the converted
-value, or a :class:`PromptInputFailedConversion`, which holds the exception.
+Either a :class:`PromptResultSuccess`, which holds the converted value, or a
+:class:`PromptResultFailure`, which holds the exception.
 
 Intended for use as the return type of
 :meth:`climax.prompt.Prompt.exec_input_loop`.
