@@ -2,7 +2,7 @@ from re import escape
 from typing import Final
 
 import pytest
-from climax.prompt.prompt_input import PromptInput
+from climax.prompt.prompt_input import NO_VALUE, NoValue, PromptInput
 
 _EXCEPTION: Final = Exception("An exception")
 
@@ -12,11 +12,11 @@ _EXCEPTION: Final = Exception("An exception")
     [
         ("Snake", True, None),
         ("1", 1, None),
-        ("1", None, _EXCEPTION),
-        ("", None, _EXCEPTION),
+        ("1", NO_VALUE, _EXCEPTION),
+        ("", NO_VALUE, _EXCEPTION),
     ],
 )
-def test_PromptInput_equality(string: str, value: object | None, exception: Exception | None) -> None:
+def test_PromptInput_equality(string: str, value: object | NoValue, exception: Exception | None) -> None:
 
     prompt_input: Final = PromptInput(string, value, exception)
     other_prompt_input: Final = PromptInput(string, value, exception)
@@ -28,11 +28,11 @@ def test_PromptInput_equality(string: str, value: object | None, exception: Exce
     [
         ("Snake", True, None),
         ("1", 1, None),
-        ("1", None, _EXCEPTION),
-        ("", None, _EXCEPTION),
+        ("1", NO_VALUE, _EXCEPTION),
+        ("", NO_VALUE, _EXCEPTION),
     ],
 )
-def test_PromptInput_hash(string: str, value: object | None, exception: Exception | None) -> None:
+def test_PromptInput_hash(string: str, value: object | NoValue, exception: Exception | None) -> None:
 
     prompt_input: Final = PromptInput(string, value, exception)
     other_prompt_input: Final = PromptInput(string, value, exception)
@@ -51,8 +51,6 @@ def test_PromptInput_non_none_value_filed_with_truthy_exception_conversion_field
 ) -> None:
     with pytest.raises(
         ValueError,
-        match=escape(
-            f"{PromptInput.__name__}: truthy `conversion_exception` with non-None `value`:\n{value}\n\n{exception!r}"
-        ),
+        match=escape(f"{PromptInput.__name__}: truthy `conversion_exception` with `value`:\n{value}\n\n{exception!r}"),
     ):
         PromptInput(string, value, exception)

@@ -1,6 +1,18 @@
 from dataclasses import dataclass, field
+from enum import Enum, unique
 from functools import cached_property
-from typing import TypeIs, final
+from typing import Final, Literal, TypeIs, final
+
+
+@unique
+class _NoValueType(Enum):
+    NO_VALUE = "NO_VALUE"
+
+
+NO_VALUE: Final = _NoValueType.NO_VALUE
+r"""Sentinel value that represents no value."""
+
+type NoValue = Literal[_NoValueType.NO_VALUE]
 
 
 @dataclass(frozen=True)
@@ -17,11 +29,11 @@ class PromptInput[ValueType]:
     original_input_string: str
     r"""The raw unformatted original ``string``."""
 
-    value: ValueType | None
+    value: ValueType | NoValue
     r"""The value of the converted formatted input string.
 
     If an exception is raised during conversion then this value should be set to
-    ``None``.
+    :obj:`NO_VALUE`.
 
     If this field is set to ``None`` then :attr:`conversion_exception` muse be
     set to a truthy value otherwise a ``ValueError`` is raised.
@@ -35,10 +47,10 @@ class PromptInput[ValueType]:
     """
 
     def __post_init__(self) -> None:
-        if self.conversion_exception and self.value is not None:
+        if self.conversion_exception and self.value is not NO_VALUE:
             raise ValueError(
                 f"{type(self).__name__}: truthy `conversion_exception` with "
-                f"non-None `value`:\n{self.value}\n\n{self.conversion_exception!r}"
+                f"`value`:\n{self.value}\n\n{self.conversion_exception!r}"
             )
 
     def __eq__(self, other: object) -> bool:
@@ -71,9 +83,9 @@ class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
 
 @final
 @dataclass(frozen=True, eq=False)
-class PromptInputFailedConversion(PromptInput[None]):
+class PromptInputFailedConversion(PromptInput[NoValue]):
     original_input_string: str
-    value: None = field(default=None, init=False)
+    value: NoValue = field(default=_NoValueType.NO_VALUE, init=False)
     conversion_exception: Exception
 
 
