@@ -221,4 +221,5 @@ pages:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
         - src/main/**/*
+        - source/**/*
         - README.md
