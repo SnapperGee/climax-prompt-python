@@ -1,10 +1,3 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/user/application_security/sast/#available-cicd-variables
-# Secret Detection customization: https://docs.gitlab.com/user/application_security/secret_detection/pipeline/configure/
-# Dependency Scanning customization: https://docs.gitlab.com/user/application_security/dependency_scanning/dependency_scanning_sbom/#customizing-analyzer-behavior
-# Container Scanning customization: https://docs.gitlab.com/user/application_security/container_scanning/#customizing-analyzer-behavior
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ci/variables/#cicd-variable-precedence
 stages:
   - secret-detection
   - lint
@@ -18,10 +11,12 @@ include:
   - template: Security/Secret-Detection.gitlab-ci.yml
 
 variables:
+  PYTHON_SLIM_IMAGE: python:3.14.7-slim
   SECRET_DETECTION_ENABLED: "true"
 
 .format_check:
   version_commit_tag: &version_commit_tag '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+  version_like_commit_tag: &version_like_commit_tag '$CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+$/'
 
 .src_poetry_lock_pyproject_changes_rule:
   rules:
@@ -31,7 +26,7 @@ variables:
       - pyproject.toml
 
 .python_job_base:
-  image: python:3.14.7-slim
+  image: $PYTHON_SLIM_IMAGE
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
     POETRY_VIRTUALENVS_IN_PROJECT: "true"
@@ -73,12 +68,19 @@ secret_detection:
   stage: secret-detection
 
 version_tag_matches_project_version:
-  extends: .python_job_base
+  image: $PYTHON_SLIM_IMAGE
   stage: lint
   rules:
-    - if: *version_commit_tag
+    - if: *version_like_commit_tag
+  before_script:
+    - pip install poetry
   script:
-    - test "$CI_COMMIT_TAG" = "v$(poetry version -s)"
+    - |
+      expected_tag="v$(poetry version -s)"
+      if test "$CI_COMMIT_TAG" != "$expected_tag"; then
+        printf 'Tag "%s" does not match expected tag "%s".\n' "$CI_COMMIT_TAG" "$expected_tag" >&2
+        exit 1
+      fi
 
 poetry_check:
   extends: .make_job_base
@@ -133,7 +135,7 @@ unit_tests:
         path: build/test/coverage/xml/coverage.xml
 
 package_build:
-  image: python:3.14.7-slim
+  image: $PYTHON_SLIM_IMAGE
   stage: build
   before_script:
     - pip install poetry twine
@@ -150,7 +152,7 @@ package_build:
 
 publish_to_test_pypi:
   stage: publish
-  image: python:3.14.7-slim
+  image: $PYTHON_SLIM_IMAGE
   needs:
     - job: package_build
   environment:
@@ -168,7 +170,7 @@ publish_to_test_pypi:
 
 publish_to_pypi:
   stage: publish
-  image: python:3.14.7-slim
+  image: $PYTHON_SLIM_IMAGE
   needs:
     - job: package_build
   environment:
