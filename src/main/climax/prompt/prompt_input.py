@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum, unique
 from functools import cached_property
-from typing import Final, Literal, TypeIs, final
+from typing import Final, Literal, Never, TypeIs, final
 
 
 @unique
@@ -35,7 +35,7 @@ class PromptInput[ValueType]:
     If an exception is raised during conversion then this value should be set to
     :obj:`NO_VALUE`.
 
-    If this field is set to ``None`` then :attr:`conversion_exception` muse be
+    If this field is set to :obj:`NO_VALUE` then :attr:`conversion_exception` must be
     set to a truthy value otherwise a ``ValueError`` is raised.
     """
 
@@ -47,7 +47,7 @@ class PromptInput[ValueType]:
     """
 
     def __post_init__(self) -> None:
-        if self.conversion_exception and self.value is not NO_VALUE:
+        if self.conversion_exception is not None and self.value is not NO_VALUE:
             raise ValueError(
                 f"{type(self).__name__}: truthy `conversion_exception` with "
                 f"`value`:\n{self.value}\n\n{self.conversion_exception!r}"
@@ -83,9 +83,9 @@ class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
 
 @final
 @dataclass(frozen=True, eq=False)
-class PromptInputFailedConversion(PromptInput[NoValue]):
+class PromptInputFailedConversion(PromptInput[Never]):
     original_input_string: str
-    value: NoValue = field(default=_NoValueType.NO_VALUE, init=False)
+    value: NoValue = field(default=NO_VALUE, init=False)
     conversion_exception: Exception
 
 
