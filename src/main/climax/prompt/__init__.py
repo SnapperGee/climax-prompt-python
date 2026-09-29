@@ -15,7 +15,6 @@ from .prompt_input import (
     PromptInput,
     PromptInputFailedConversion,
     PromptInputSuccessfulConversion,
-    is_successful_conversion,
 )
 from .string_prompt import StringPrompt
 from .string_prompt_input import StringPromptInput

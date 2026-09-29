@@ -1,113 +1,73 @@
-from dataclasses import dataclass, field
-from enum import Enum, unique
-from functools import cached_property
-from typing import Final, Literal, Never, TypeIs, final
+from dataclasses import dataclass
+from typing import final
 
 
-@unique
-class _NoValueType(Enum):
-    NO_VALUE = "NO_VALUE"
-
-
-NO_VALUE: Final = _NoValueType.NO_VALUE
-r"""Sentinel value that represents no value."""
-
-type NoValue = Literal[_NoValueType.NO_VALUE]
-
-
+@final
 @dataclass(frozen=True)
-class PromptInput[ValueType]:
-    r"""Container for a string and either a value or exception.
+class PromptInputSuccessfulConversion[ValueType]:
+    r"""Result of an input string that converted successfully.
 
-    Intended for use as the return type of the :meth:`climax.prompt.Prompt.exec_input_loop`.
-
-    If a :attr:`~PromptInput.value` is set to a non-``None`` value and a
-    :attr:`~PromptInput.conversion_exception` is also set (to any truthy value)
-    at the same time then a ``ValueError`` is raised.
+    Intended for use as part of the return type of
+    :meth:`climax.prompt.Prompt.exec_input_loop`. See :data:`PromptInput`.
     """
 
     original_input_string: str
     r"""The raw unformatted original ``string``."""
 
-    value: ValueType | NoValue
-    r"""The value of the converted formatted input string.
+    value: ValueType
+    r"""The value of the converted formatted input string."""
 
-    If an exception is raised during conversion then this value should be set to
-    :obj:`NO_VALUE`.
 
-    If this field is set to :obj:`NO_VALUE` then :attr:`conversion_exception` must be
-    set to a truthy value otherwise a ``ValueError`` is raised.
+@final
+@dataclass(frozen=True, eq=False)
+class PromptInputFailedConversion:
+    r"""Result of an input string that failed to convert.
+
+    Intended for use as part of the return type of
+    :meth:`climax.prompt.Prompt.exec_input_loop`. See :data:`PromptInput`.
+
+    Exceptions compare by identity. To make equality useful, two instances of
+    this class are equal if they have the same :attr:`original_input_string`
+    and their :attr:`conversion_exception` values have the same type and the
+    same ``args``.
+
+    The hash uses only :attr:`original_input_string` and the type of
+    :attr:`conversion_exception`. Equal instances always have equal hashes, as
+    Python requires. Instances that differ only in the exception ``args`` have
+    the same hash but are not equal. This choice also means that the hash does
+    not raise ``TypeError`` when the exception ``args`` contain unhashable
+    objects.
     """
 
-    conversion_exception: Exception | None
-    r"""The exception thrown during conversion if one is thrown.
+    original_input_string: str
+    r"""The raw unformatted original ``string``."""
 
-    If this field is set to a truthy value, then :attr:`value` must be set to
-    ``None`` otherwise a ``ValueError`` is raised.
-    """
-
-    def __post_init__(self) -> None:
-        if self.conversion_exception is not None and self.value is not NO_VALUE:
-            raise ValueError(
-                f"{type(self).__name__}: truthy `conversion_exception` with "
-                f"`value`:\n{self.value}\n\n{self.conversion_exception!r}"
-            )
+    conversion_exception: Exception
+    r"""The exception thrown during conversion."""
 
     def __eq__(self, other: object) -> bool:
         if self is other:
             return True
 
-        if not isinstance(other, PromptInput):
+        if not isinstance(other, PromptInputFailedConversion):
             return NotImplemented
 
-        if self.original_input_string != other.original_input_string or self.value != other.value:
-            return False
-
-        return self._conversion_exception_tuple == other._conversion_exception_tuple
+        return (
+            self.original_input_string == other.original_input_string
+            and type(self.conversion_exception) is type(other.conversion_exception)
+            and self.conversion_exception.args == other.conversion_exception.args
+        )
 
     def __hash__(self) -> int:
-        return hash((self.original_input_string, self.value, self._conversion_exception_tuple))
-
-    @cached_property
-    def _conversion_exception_tuple(self) -> tuple[type[Exception], tuple[object, ...]] | None:
-        return (type(self.conversion_exception), self.conversion_exception.args) if self.conversion_exception else None
+        return hash((self.original_input_string, type(self.conversion_exception)))
 
 
-@final
-@dataclass(frozen=True, eq=False)
-class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
-    original_input_string: str
-    value: ValueType
-    conversion_exception: None = field(default=None, init=False)
+type PromptInput[ValueType] = PromptInputSuccessfulConversion[ValueType] | PromptInputFailedConversion
+r"""Result of converting an input string.
 
+Either a :class:`PromptInputSuccessfulConversion`, which holds the converted
+value, or a :class:`PromptInputFailedConversion`, which holds the exception.
 
-@final
-@dataclass(frozen=True, eq=False)
-class PromptInputFailedConversion(PromptInput[Never]):
-    original_input_string: str
-    value: NoValue = field(default=NO_VALUE, init=False)
-    conversion_exception: Exception
-
-
-def is_successful_conversion[ValueType](
-    prompt_input: PromptInput[ValueType],
-) -> TypeIs[PromptInputSuccessfulConversion[ValueType]]:
-    r"""Determine whether a prompt input represents a successful conversion.
-
-    Parameters
-    ----------
-    prompt_input : PromptInput
-        The prompt input to check.
-
-    Returns
-    -------
-    bool
-        ``True`` if ``prompt_input`` is a
-        :class:`PromptInputSuccessfulConversion`; otherwise, ``False``.
-
-    Notes
-    -----
-    When this function returns ``True``, type checkers can narrow
-    ``prompt_input`` to :class:`PromptInputSuccessfulConversion`.
-    """
-    return isinstance(prompt_input, PromptInputSuccessfulConversion)
+Intended for use as the return type of
+:meth:`climax.prompt.Prompt.exec_input_loop`.
+"""

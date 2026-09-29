@@ -5,7 +5,7 @@ from sys import stderr
 from typing import final
 
 from ._util import always_none_returning_function
-from .prompt_input import PromptInputFailedConversion, PromptInputSuccessfulConversion
+from .prompt_input import PromptInput, PromptInputFailedConversion, PromptInputSuccessfulConversion
 from .string_prompt import StringPrompt
 from .validator import Validator
 
@@ -47,7 +47,7 @@ class Prompt[ValueType](StringPrompt):
     def _validator(self) -> Callable[[ValueType], str | None]:
         return self.validator or always_none_returning_function
 
-    def exec_input_loop(self) -> PromptInputSuccessfulConversion[ValueType] | PromptInputFailedConversion:
+    def exec_input_loop(self) -> PromptInput[ValueType]:
         r"""Execute an input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
