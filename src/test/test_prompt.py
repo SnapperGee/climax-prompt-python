@@ -11,10 +11,9 @@ from climax.prompt import (
     StringValidator,
     Validator,
 )
-from climax.prompt.prompt_input import (
-    PromptInputFailedConversion,
-    PromptInputSuccessfulConversion,
-    is_successful_conversion,
+from climax.prompt.prompt_result import (
+    PromptResultFailure,
+    PromptResultSuccess,
 )
 
 from .util import MESSAGE, PS1, string_is_digit
@@ -63,7 +62,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             None,
             "124",
-            PromptInputSuccessfulConversion("124", 124),
+            PromptResultSuccess("124", 124),
         ),
         (
             string_is_digit,
@@ -72,7 +71,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             None,
             "     2     ",
-            PromptInputSuccessfulConversion("     2     ", 2),
+            PromptResultSuccess("     2     ", 2),
         ),
         (
             string_is_digit,
@@ -81,7 +80,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             PS1,
             "253242",
-            PromptInputSuccessfulConversion("253242", 253242),
+            PromptResultSuccess("253242", 253242),
         ),
         (
             string_is_digit,
@@ -90,7 +89,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             PS1,
             "     26     ",
-            PromptInputSuccessfulConversion("     26     ", 26),
+            PromptResultSuccess("     26     ", 26),
         ),
         (
             _string_is_float,
@@ -99,7 +98,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             None,
             "124.1",
-            PromptInputSuccessfulConversion("124.1", 124.1),
+            PromptResultSuccess("124.1", 124.1),
         ),
         (
             _string_is_float,
@@ -108,7 +107,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             None,
             "     1.04     ",
-            PromptInputSuccessfulConversion("     1.04     ", 1.04),
+            PromptResultSuccess("     1.04     ", 1.04),
         ),
         (
             _string_is_float,
@@ -117,7 +116,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             None,
             PS1,
             "253242.252523",
-            PromptInputSuccessfulConversion("253242.252523", 253242.252523),
+            PromptResultSuccess("253242.252523", 253242.252523),
         ),
         (
             _string_is_float,
@@ -126,7 +125,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
             str.strip,
             PS1,
             "     26.1111     ",
-            PromptInputSuccessfulConversion("     26.1111     ", 26.1111),
+            PromptResultSuccess("     26.1111     ", 26.1111),
         ),
     ],
 )
@@ -137,14 +136,13 @@ def test_Prompt_execInputLoop_with_valid_input(
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
-    expected: PromptInputSuccessfulConversion[int | float],
+    expected: PromptResultSuccess[int | float],
 ) -> None:
     prompt: Final = Prompt(MESSAGE, string_validator, _type, validator, formatter=formatter, ps1=ps1)
 
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = prompt.exec_input_loop()
 
-    assert is_successful_conversion(result)
     assert result == expected
     mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
 
@@ -215,7 +213,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
             str.strip,
             None,
             "abc",
-            PromptInputFailedConversion("abc", ValueError("invalid literal for int() with base 10: 'abc'")),
+            PromptResultFailure("abc", ValueError("invalid literal for int() with base 10: 'abc'")),
         ),
         (
             float,
@@ -223,7 +221,7 @@ def test_Prompt_execInputLoop_with_invalid_input(
             str.strip,
             PS1,
             "XXX",
-            PromptInputFailedConversion("XXX", ValueError("could not convert string to float: 'XXX'")),
+            PromptResultFailure("XXX", ValueError("could not convert string to float: 'XXX'")),
         ),
     ],
 )
@@ -233,13 +231,12 @@ def test_Prompt_execInputLoop_with_conversion_error(
     formatter: Callable[[str], str] | None,
     ps1: str | None,
     user_input: str,
-    expected: PromptInputFailedConversion,
+    expected: PromptResultFailure,
 ) -> None:
     prompt: Final = Prompt(MESSAGE, _always_none_returning_function, _type, validator, formatter=formatter, ps1=ps1)
 
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = prompt.exec_input_loop()
 
-    assert not is_successful_conversion(result)
     assert result == expected
     mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))

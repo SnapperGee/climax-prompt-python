@@ -11,10 +11,10 @@ and processing any arbitrary types, not just ``string``.
 """
 
 from .prompt import Prompt
-from .prompt_input import (
-    PromptInput,
-    PromptInputFailedConversion,
-    PromptInputSuccessfulConversion,
+from .prompt_result import (
+    PromptResult,
+    PromptResultFailure,
+    PromptResultSuccess,
 )
 from .string_prompt import StringPrompt
 from .string_prompt_input import StringPromptInput
@@ -22,12 +22,11 @@ from .validator import StringValidator, Validator
 
 __all__ = (
     "Prompt",
-    "PromptInput",
-    "PromptInputFailedConversion",
-    "PromptInputSuccessfulConversion",
+    "PromptResult",
+    "PromptResultFailure",
+    "PromptResultSuccess",
     "StringPrompt",
     "StringPromptInput",
     "StringValidator",
     "Validator",
-    "is_successful_conversion",
 )

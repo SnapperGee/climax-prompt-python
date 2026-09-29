@@ -5,7 +5,7 @@ from sys import stderr
 from typing import final
 
 from ._util import always_none_returning_function
-from .prompt_input import PromptInput, PromptInputFailedConversion, PromptInputSuccessfulConversion
+from .prompt_result import PromptResult, PromptResultFailure, PromptResultSuccess
 from .string_prompt import StringPrompt
 from .validator import Validator
 
@@ -47,7 +47,7 @@ class Prompt[ValueType](StringPrompt):
     def _validator(self) -> Callable[[ValueType], str | None]:
         return self.validator or always_none_returning_function
 
-    def exec_input_loop(self) -> PromptInput[ValueType]:
+    def exec_input_loop(self) -> PromptResult[ValueType]:
         r"""Execute an input prompt loop.
 
         The loop will require a user to input a ``string`` that passes the
@@ -67,7 +67,7 @@ class Prompt[ValueType](StringPrompt):
         try:
             converted_input = self.converter(formatted_string_input)
         except Exception as exception:  # noqa: BLE001
-            return PromptInputFailedConversion(original_string_input, exception)
+            return PromptResultFailure(original_string_input, exception)
 
         while (invalid_input_string_message := self._validator(converted_input)) is not None:
             if invalid_input_string_message:
@@ -78,6 +78,6 @@ class Prompt[ValueType](StringPrompt):
             try:
                 converted_input = self.converter(formatted_string_input)
             except Exception as exception:  # noqa: BLE001
-                return PromptInputFailedConversion(original_string_input, exception)
+                return PromptResultFailure(original_string_input, exception)
 
-        return PromptInputSuccessfulConversion[ValueType](original_string_input, converted_input)
+        return PromptResultSuccess[ValueType](original_string_input, converted_input)

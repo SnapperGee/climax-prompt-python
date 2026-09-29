@@ -4,7 +4,7 @@ from typing import final
 
 @final
 @dataclass(frozen=True)
-class PromptInputSuccessfulConversion[ValueType]:
+class PromptResultSuccess[ValueType]:
     r"""Result of an input string that converted successfully.
 
     Intended for use as part of the return type of
@@ -20,7 +20,7 @@ class PromptInputSuccessfulConversion[ValueType]:
 
 @final
 @dataclass(frozen=True, eq=False)
-class PromptInputFailedConversion:
+class PromptResultFailure:
     r"""Result of an input string that failed to convert.
 
     Intended for use as part of the return type of
@@ -49,7 +49,7 @@ class PromptInputFailedConversion:
         if self is other:
             return True
 
-        if not isinstance(other, PromptInputFailedConversion):
+        if not isinstance(other, PromptResultFailure):
             return NotImplemented
 
         return (
@@ -62,7 +62,7 @@ class PromptInputFailedConversion:
         return hash((self.original_input_string, type(self.conversion_exception)))
 
 
-type PromptInput[ValueType] = PromptInputSuccessfulConversion[ValueType] | PromptInputFailedConversion
+type PromptResult[ValueType] = PromptResultSuccess[ValueType] | PromptResultFailure
 r"""Result of converting an input string.
 
 Either a :class:`PromptInputSuccessfulConversion`, which holds the converted
