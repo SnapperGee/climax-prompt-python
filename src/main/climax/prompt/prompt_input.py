@@ -71,7 +71,7 @@ class PromptInputSuccessfulConversion[ValueType](PromptInput[ValueType]):
 
 @final
 @dataclass(frozen=True, eq=False)
-class PromptInputFailedConversion[ValueType](PromptInput[ValueType]):
+class PromptInputFailedConversion(PromptInput[None]):
     original_input_string: str
     value: None = field(default=None, init=False)
     conversion_exception: Exception
