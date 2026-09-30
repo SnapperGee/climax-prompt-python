@@ -10,7 +10,7 @@ TESTDIR := $(BUILDDIR)/test
 TESTRESULTSDIR := $(TESTDIR)/results
 TESTCOVERAGEDIR := $(TESTDIR)/coverage
 
-.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml serve-docs readme Makefile
+.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml readme html serve-docs Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -68,11 +68,14 @@ test-xml:
 		"--junitxml=$(TESTRESULTSDIR)/xml/report.xml" \
 		"--cov-report=xml:$(TESTCOVERAGEDIR)/xml/coverage.xml"
 
-serve-docs: readme html
-	python -m http.server --directory $(DOCSDIR)/html -b 127.0.0.1 8000
-
 readme:
 	pandoc --from=markdown --to=rst --output=source/README.rst README.md
+
+html: readme
+	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(DOCSDIR)" $(SPHINXOPTS) $(O)
+
+serve-docs: html
+	python -m http.server --directory $(DOCSDIR)/html -b 127.0.0.1 8000
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
