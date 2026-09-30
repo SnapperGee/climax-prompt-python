@@ -5,6 +5,7 @@
 
    climax.prompt
    climax.prompt.Prompt
+   climax.prompt.PromptResult
    climax.prompt.PromptResultFailure
    climax.prompt.PromptResultSuccess
    climax.prompt.StringPrompt
