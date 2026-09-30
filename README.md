@@ -46,7 +46,7 @@ def is_palindrome(string: StringPromptInput) -> str | None:
 
 palindrome_prompt = StringPrompt(
     "Input a palindrome...\n",
-    is_palindrome,
+    string_validator=is_palindrome,
     formatter=lambda a_string: a_string.strip().lower(),
     ps1=">>> ",
 )
@@ -122,14 +122,14 @@ def is_positive_even_integer(integer: int) -> str | None:
     if integer % 2 != 0:
         return f"Integer isn't even: {integer}\n"
 
-    return
+    return None
 
 
-positive_even_integer_prompt = Prompt[int](
+positive_even_integer_prompt = Prompt[int].create(
     "Input a positive even integer: ",
-    string_is_integer,
     int,  # can pass any function/lambda that consumes a string and outputs the specified type
-    is_positive_even_integer,
+    validator=is_positive_even_integer,
+    string_validator=string_is_integer,
     formatter=str.strip,
 )
 

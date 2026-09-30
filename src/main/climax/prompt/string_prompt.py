@@ -1,14 +1,14 @@
 import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from functools import cached_property
 from typing import final
 
-from ._util import always_none_returning_function, string_identity_function
+from ._util import always_none_returning_function, identity
 from .string_prompt_input import StringPromptInput
 from .validator import StringValidator
 
 
+@final
 @dataclass(frozen=True)
 class StringPrompt:
     r"""Create a loop prompting a user for ``string`` input until valid input is given.
@@ -17,50 +17,30 @@ class StringPrompt:
 
     See Also
     --------
-    :class:`Prompt` : A class derived from this one that can process inputs of
+    :class:`Prompt` : A class wrapped around this one that can process inputs of
         arbitrary types (not just ``str``).
     """
 
     message: str
     r"""A ``string`` message presented to the user."""
 
-    string_validator: StringValidator | None
+    string_validator: StringValidator = field(kw_only=True, default=always_none_returning_function)
     r"""Validates ``string`` input.
 
     If validation fails it returns a ``string`` message explaining why
     validation failed that gets displayed to the user. It has access to both the
     formatted and raw unformatted original ``string`` input.
 
-    If field is set to ``None``, then all ``string`` input is considered valid.
-
     See Also
     --------
-    :obj:`StringValidator` : The type of function used for :class:`StringPromptInput` validation.
+    :class:`StringValidator` : The type of function used for :class:`StringPromptInput` validation.
     """
 
-    formatter: Callable[[str], str] | None = field(kw_only=True, default=None)
-    r"""Formats ``string`` input.
+    formatter: Callable[[str], str] = field(kw_only=True, default=identity)
+    r"""Formats ``string`` input."""
 
-    If field is set to ``None`` then no formatting is performed.
-    """
-
-    ps1: str | None = field(kw_only=True, default=None)
-    r"""Optional ``string`` appended to the :attr:`message` ``string`` indicating where input will be entered."""
-
-    @final
-    @cached_property
-    def _string_validator(self) -> StringValidator:
-        return self.string_validator or always_none_returning_function
-
-    @final
-    @cached_property
-    def _formatter(self) -> Callable[[str], str]:
-        return self.formatter or string_identity_function
-
-    @final
-    @cached_property
-    def _ps1(self) -> str:
-        return self.ps1 if self.ps1 is not None else ""
+    ps1: str = field(kw_only=True, default="")
+    r"""``string`` appended to the :attr:`message` ``string`` visually indicating where input will be entered."""
 
     @final
     def exec_string_input_loop(self) -> StringPromptInput:
@@ -77,17 +57,15 @@ class StringPrompt:
 
         See Also
         --------
-        :obj:`StringPromptInput`
+        :class:`StringPromptInput`
         """
-        raw_unformatted_string_input = input(self.message + self._ps1)
-        string_input = StringPromptInput(self._formatter(raw_unformatted_string_input), raw_unformatted_string_input)
+        raw_unformatted_string_input = input(self.message + self.ps1)
+        string_input = StringPromptInput(self.formatter(raw_unformatted_string_input), raw_unformatted_string_input)
 
-        while (invalid_input_string_message := self._string_validator(string_input)) is not None:
+        while (invalid_input_string_message := self.string_validator(string_input)) is not None:
             if invalid_input_string_message:
                 print(invalid_input_string_message, end="", file=sys.stderr)
-            raw_unformatted_string_input = input(self.message + self._ps1)
-            string_input = StringPromptInput(
-                self._formatter(raw_unformatted_string_input), raw_unformatted_string_input
-            )
+            raw_unformatted_string_input = input(self.message + self.ps1)
+            string_input = StringPromptInput(self.formatter(raw_unformatted_string_input), raw_unformatted_string_input)
 
         return string_input

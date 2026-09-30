@@ -8,7 +8,11 @@ class PromptResultSuccess[ValueType]:
     r"""Result of an input string that converted successfully.
 
     Intended for use as part of the return type of
-    :meth:`climax.prompt.Prompt.exec_input_loop`. See :data:`PromptResult`.
+    :meth:`climax.prompt.Prompt.exec_input_loop`.
+
+    See Also
+    --------
+    :class:`PromptResult`
     """
 
     original_input_string: str
@@ -24,7 +28,7 @@ class PromptResultFailure:
     r"""Result of an input string that failed to convert.
 
     Intended for use as part of the return type of
-    :meth:`climax.prompt.Prompt.exec_input_loop`. See :data:`PromptResult`.
+    :meth:`climax.prompt.Prompt.exec_input_loop`.
 
     Exceptions compare by identity. To make equality useful, two instances of
     this class are equal if they have the same :attr:`original_input_string`
@@ -37,6 +41,10 @@ class PromptResultFailure:
     the same hash but are not equal. This choice also means that the hash does
     not raise ``TypeError`` when the exception ``args`` contain unhashable
     objects.
+
+    See Also
+    --------
+    :class:`PromptResult`
     """
 
     original_input_string: str

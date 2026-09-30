@@ -10,7 +10,7 @@ from climax.prompt import (
     StringPromptInput,
     StringValidator,
 )
-from climax.prompt._util import always_none_returning_function, string_identity_function
+from climax.prompt._util import always_none_returning_function, identity
 
 from .util import MESSAGE, PS1, string_is_digit
 
@@ -31,7 +31,7 @@ def test_StringPrompt_fields() -> None:
 
     string_prompt: Final = StringPrompt(
         MESSAGE,
-        _string_is_empty,
+        string_validator=_string_is_empty,
         formatter=str.strip,
         ps1=PS1,
     )
@@ -43,38 +43,29 @@ def test_StringPrompt_fields() -> None:
 
 
 def test_StringPrompt_default_field_values() -> None:
-    string_prompt: Final = StringPrompt(
-        MESSAGE,
-        None,
-    )
+    string_prompt: Final = StringPrompt(MESSAGE)
 
-    assert string_prompt._formatter is string_identity_function
-    assert string_prompt._string_validator is always_none_returning_function
-    assert string_prompt.formatter is None
-    assert string_prompt.ps1 is None
+    assert string_prompt.formatter is identity
+    assert string_prompt.string_validator is always_none_returning_function
+    assert string_prompt.formatter is identity
+    assert string_prompt.ps1 == ""
 
 
 @pytest.mark.parametrize(
     ("validator", "formatter", "ps1", "user_input"),
     [
-        (_string_is_empty, None, None, ""),
-        (string_is_digit, None, None, "123"),
-        (_string_is_palindrome, None, None, "level"),
-        (_string_is_empty, str.strip, None, "         "),
-        (string_is_digit, str.strip, None, "     123     "),
-        (_string_is_palindrome, str.strip, None, "level         "),
-        (_string_is_empty, None, PS1, ""),
-        (string_is_digit, None, PS1, "123"),
-        (_string_is_palindrome, None, PS1, "level"),
+        (_string_is_empty, identity, PS1, ""),
+        (string_is_digit, identity, PS1, "123"),
+        (_string_is_palindrome, identity, PS1, "level"),
         (_string_is_empty, str.strip, PS1, "         "),
         (string_is_digit, str.strip, PS1, "     123     "),
         (_string_is_palindrome, str.strip, PS1, "level         "),
     ],
 )
 def test_StringPrompt_execStringInputLoop_with_valid_input(
-    validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
+    validator: StringValidator, formatter: Callable[[str], str], ps1: str, user_input: str
 ) -> None:
-    string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
+    string_prompt: Final = StringPrompt(MESSAGE, string_validator=validator, formatter=formatter, ps1=ps1)
 
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = string_prompt.exec_string_input_loop()
@@ -82,30 +73,24 @@ def test_StringPrompt_execStringInputLoop_with_valid_input(
     mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
 
     assert isinstance(result, StringPromptInput)
-    assert result == StringPromptInput(formatter(user_input) if formatter else user_input, user_input)
+    assert result == StringPromptInput(formatter(user_input), user_input)
 
 
 @pytest.mark.parametrize(
     ("validator", "formatter", "ps1", "user_input"),
     [
-        (_string_is_not_empty, None, None, ""),
-        (string_is_digit, None, None, "A123"),
-        (_string_is_palindrome, None, None, "Knights who say ni"),
-        (_string_is_not_empty, str.strip, None, "         "),
-        (string_is_digit, str.strip, None, "  A   123     "),
-        (_string_is_palindrome, str.strip, None, "Knights who say ni"),
-        (_string_is_not_empty, None, PS1, ""),
-        (string_is_digit, None, PS1, "A123"),
-        (_string_is_palindrome, None, PS1, "Knights who say ni"),
+        (_string_is_not_empty, identity, PS1, ""),
+        (string_is_digit, identity, PS1, "A123"),
+        (_string_is_palindrome, identity, PS1, "Knights who say ni"),
         (_string_is_not_empty, str.strip, PS1, "         "),
         (string_is_digit, str.strip, PS1, "  A   123     "),
         (_string_is_palindrome, str.strip, PS1, "Knights who say ni"),
     ],
 )
 def test_StringPrompt_execStringInputLoop_with_invalid_input(
-    validator: StringValidator, formatter: Callable[[str], str] | None, ps1: str | None, user_input: str
+    validator: StringValidator, formatter: Callable[[str], str], ps1: str, user_input: str
 ) -> None:
-    string_prompt: Final = StringPrompt(MESSAGE, validator, formatter=formatter, ps1=ps1)
+    string_prompt: Final = StringPrompt(MESSAGE, string_validator=validator, formatter=formatter, ps1=ps1)
 
     with (
         patch.object(builtins, "input", side_effect=(user_input,)) as mock_input,
@@ -115,9 +100,7 @@ def test_StringPrompt_execStringInputLoop_with_invalid_input(
         string_prompt.exec_string_input_loop()
 
     message_with_ps1: Final = MESSAGE + (ps1 or "")
-    invalid_message: Final = (
-        validator(StringPromptInput(formatter(user_input) if formatter else user_input, user_input)) or ""
-    )
+    invalid_message: Final = validator(StringPromptInput(formatter(user_input), user_input)) or ""
 
     assert mock_input.call_args_list == [
         call(message_with_ps1),

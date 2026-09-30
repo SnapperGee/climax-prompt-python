@@ -138,7 +138,9 @@ def test_Prompt_execInputLoop_with_valid_input(
     user_input: str,
     expected: PromptResultSuccess[int | float],
 ) -> None:
-    prompt: Final = Prompt(MESSAGE, string_validator, _type, validator, formatter=formatter, ps1=ps1)
+    prompt: Final = Prompt.create(
+        MESSAGE, _type, validator=validator, string_validator=string_validator, formatter=formatter, ps1=ps1
+    )
 
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = prompt.exec_input_loop()
@@ -178,7 +180,9 @@ def test_Prompt_execInputLoop_with_invalid_input(
     ps1: str | None,
     user_input: str,
 ) -> None:
-    prompt: Final = Prompt(MESSAGE, string_validator, _type, validator, formatter=formatter, ps1=ps1)
+    prompt: Final = Prompt.create(
+        MESSAGE, _type, validator=validator, string_validator=string_validator, formatter=formatter, ps1=ps1
+    )
 
     with (
         patch.object(builtins, "input", side_effect=(user_input,)) as mock_input,
@@ -233,7 +237,14 @@ def test_Prompt_execInputLoop_with_conversion_error(
     user_input: str,
     expected: PromptResultFailure,
 ) -> None:
-    prompt: Final = Prompt(MESSAGE, _always_none_returning_function, _type, validator, formatter=formatter, ps1=ps1)
+    prompt: Final = Prompt.create(
+        MESSAGE,
+        _type,
+        validator=validator,
+        string_validator=_always_none_returning_function,
+        formatter=formatter,
+        ps1=ps1,
+    )
 
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = prompt.exec_input_loop()

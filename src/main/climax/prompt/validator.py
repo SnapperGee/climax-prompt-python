@@ -17,5 +17,5 @@ returned, otherwise ``None`` should be returned.
 
 See Also
 --------
-:obj:`Validator` : The type this type is based on.
+:class:`Validator` : The type this type is based on.
 """
