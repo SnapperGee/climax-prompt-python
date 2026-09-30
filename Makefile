@@ -16,66 +16,65 @@ TESTCOVERAGEDIR := $(TESTDIR)/coverage
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(DOCSDIR)" $(SPHINXOPTS) $(O)
 
-setup:
+setup: ## Install dependencies and pre-commit hooks
 	poetry install
 	poetry run pre-commit install
 
-clean:
-	rm -rf $(BUILDDIR) dist "$(SOURCEDIR)/api"
+clean: ## Remove build output and generated docs files
+	rm -rf "$(BUILDDIR)" dist "$(SOURCEDIR)/api"
 	rm -f "$(SOURCEDIR)/README.rst"
 
-clean-cache:
+clean-cache: ## Remove tool caches and __pycache__ directories
 	rm -rf $(CACHE_DIRS)
-	rm -f .coverage .coverage.*
 	find . \( -name .venv -o -name .git \) -prune -o \
 		-type d -name __pycache__ -exec rm -rf {} +
 
-clean-all: clean clean-cache
+clean-all: clean clean-cache ## Run clean and clean-cache
 
-poetry-check:
+poetry-check: ## Validate pyproject.toml and the lock file
 	poetry check --strict --lock
 
-ruff-check:
+ruff-check: ## Lint with ruff
 	poetry run ruff check ./src
 
-ruff-format-check:
+ruff-format-check: ## Check formatting with ruff
 	poetry run ruff format --check ./src
 
-mypy:
+mypy: ## Type check with mypy
 	poetry run mypy
 
-lint: poetry-check ruff-check ruff-format-check mypy
+lint: poetry-check ruff-check ruff-format-check mypy ## Run all lint and type checks
 
-format:
+format: ## Fix lint issues and format code with ruff
 	poetry run ruff check --fix ./src
 	poetry run ruff format ./src
 
-test:
+test: ## Run tests with terminal coverage report
 	poetry run pytest --cov=src/main --cov-report=term
 
-test-html:
+test-html: ## Run tests with HTML test and coverage reports
 	poetry run pytest --cov=src/main \
 		"--cov-report=html:$(TESTCOVERAGEDIR)/html" \
 		"--html=$(TESTRESULTSDIR)/html/index.html"
 
-serve-tests: test-html
+serve-tests: test-html ## Serve HTML test and coverage reports on ports 8000 and 8001 respectively
 	parallel --line-buffer --tag --halt now,done=1 ::: \
-		"python -u -m http.server -b 127.0.0.1 8000 --directory $(TESTRESULTSDIR)/html" \
-		"python -u -m http.server -b 127.0.0.1 8001 --directory $(TESTCOVERAGEDIR)/html"
+		"python3 -u -m http.server -b 127.0.0.1 8000 --directory $(TESTRESULTSDIR)/html" \
+		"python3 -u -m http.server -b 127.0.0.1 8001 --directory $(TESTCOVERAGEDIR)/html"
 
-test-xml:
+test-xml: ## Run tests with JUnit XML and XML coverage reports
 	poetry run pytest --cov=src/main --cov-report=term \
 		"--junitxml=$(TESTRESULTSDIR)/xml/report.xml" \
 		"--cov-report=xml:$(TESTCOVERAGEDIR)/xml/coverage.xml"
 
-readme:
-	pandoc --from=markdown --to=rst --output=source/README.rst README.md
+readme: ## Convert README.md to RST for Sphinx
+	pandoc --from=markdown --to=rst "--output=$(SOURCEDIR)/README.rst" README.md
 
-html: readme
+html: readme ## Build HTML API docs
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(DOCSDIR)" $(SPHINXOPTS) $(O)
 
-serve-docs: html
-	python -m http.server --directory $(DOCSDIR)/html -b 127.0.0.1 8000
+serve-docs: html ## Build and serve HTML API docs on port 8000
+	python3 -m http.server --directory "$(DOCSDIR)/html" -b 127.0.0.1 8000
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
