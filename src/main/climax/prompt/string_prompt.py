@@ -35,7 +35,7 @@ class StringPrompt:
 
     See Also
     --------
-    :obj:`StringValidator` : The type of function used for :class:`StringInput` validation.
+    :obj:`StringValidator` : The type of function used for :class:`StringPromptInput` validation.
     """
 
     formatter: Callable[[str], str] | None = field(kw_only=True, default=None)

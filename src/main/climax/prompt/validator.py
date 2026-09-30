@@ -10,7 +10,7 @@ returned, otherwise ``None`` should be returned.
 """
 
 type StringValidator = Validator[StringPromptInput]
-r"""A function that validates a :class:`StringInput`.
+r"""A function that validates a :class:`StringPromptInput`.
 
 If validation fails then a ``string`` explaining why it failed should be
 returned, otherwise ``None`` should be returned.
