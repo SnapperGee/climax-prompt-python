@@ -220,22 +220,22 @@ generating API documentation.
 
 All repo tasks can be executed via the `make` targets listed below:
 
-- `format` - Formats source code.
-- `lint` - Runs all lint targets.
-- `mypy` - Runs the mypy type checker.
+- `format` - Fix lint issues and format code with ruff.
+- `lint` - Run all lint and type checks.
+- `mypy` - Type check with mypy.
 - `poetry-check` - Validates content of `pyproject.toml` and `poetry.lock`.
 - `readme` - Generate `source/README.rst` by using [pandoc] to convert the root
   `README.md` to rst.
-- `ruff-check` - Runs the ruff checker.
-- `ruff-format-check` - Runs the ruff formatter with the `--check` option.
-- `serve-docs` - Generates and serves html API docs on `127.0.0.1:8000`.
-- `serve-tests` - Generates and serves unit test results and coverage html
-  reports on `127.0.0.1:8000` and `127.0.0.1:8001`. Depends on [parallel].
-- `setup` - Installs all package dependencies and pre-commit hooks. This should
-  be run right after cloning the repo.
-- `test` - Runs unit tests and test coverage outputting results to stdout.
-- `test-html` - Generates unit test results and coverage html reports.
-- `test-xml` - Generates test result and coverage xml reports.
+- `ruff-check` - Lint with ruff.
+- `ruff-format-check` - Check formatting with ruff.
+- `serve-docs` - Build and serve html API docs on `127.0.0.1:8000`.
+- `serve-tests` - Build and serve html test results and coverage reports on
+  `127.0.0.1:8000` and `127.0.0.1:8001`. Depends on [parallel].
+- `setup` - Install dependencies and pre-commit hooks. This should be run right
+  after cloning the repo.
+- `test` - Run tests with terminal results and coverage report.
+- `test-html` - Run tests with html results and coverage reports.
+- `test-xml` - Run test with xml results and coverage reports.
 
 In addition to the `make` targets listed above, all sphinx `make` targets are
 available and valid as well.
