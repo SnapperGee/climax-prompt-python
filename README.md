@@ -163,8 +163,8 @@ converted string input as outlined below ***if*** string input validation passes
 1. If an exception occurs during conversion, then a `PromptResultFailure`
    is returned with the original input string and the `Exception` that was raised.
 
-1. If conversion succeeds without raising an exception, the string input is
-   then passed to the `Prompt.validator`.
+1. If conversion succeeds, the *converted* string input value is then passed to
+   the `Prompt.validator`.
 
 1. If validation passes (the `Prompt.validator` returns `None`) then a
    `PromptResultSuccess` containing the original input string and
