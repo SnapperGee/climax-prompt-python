@@ -74,7 +74,7 @@ following process:
 
 1. If validation fails (the `StringPrompt.string_validator` returns a
    `string` error message) then the `string` error message gets printed to
-   stdout and the process is repeated.
+   stderr and the process is repeated.
 
 When the method in the example above is called this will result in the following
 prompt in the terminal:
@@ -169,7 +169,7 @@ converted string input as outlined below ***if*** string input validation passes
    its converted value is returned.
 
 1. If validation fails (the `Prompt.validator` returns a `string` error
-   message) then the error message gets printed to stdout and the process is
+   message) then the error message gets printed to stderr and the process is
    repeated.
 
 When the method in the example above is called this will result in the following
