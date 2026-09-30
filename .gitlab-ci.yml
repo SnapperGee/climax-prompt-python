@@ -111,14 +111,14 @@ mypy:
   stage: lint
   rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
   script:
-    - tox run -e mypy-py312,mypy-py313,mypy-py314
+    - tox run -e mypy-py313,mypy-py314
 
 unit_tests:
   extends: .tox_job_base
   stage: test
   rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
   script:
-    - tox run -e py312,py313,py314
+    - tox run -e py313,py314
   coverage: '/TOTAL.*? (100(?:\.0+)?%|[1-9]?\d(?:\.\d+)?%)$/'
   artifacts:
     when: always
@@ -130,7 +130,6 @@ unit_tests:
       junit:
         - build/test/results/py314/xml/report.xml
         - build/test/results/py313/xml/report.xml
-        - build/test/results/py312/xml/report.xml
       coverage_report:
         coverage_format: cobertura
         path: build/test/coverage/xml/coverage.xml

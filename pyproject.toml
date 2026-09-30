@@ -64,8 +64,8 @@ enable_error_code = ["redundant-expr"]
 [tool.tox]
 requires = ["tox>=4.61", "tox-uv>=1.36"]
 env_list = [
-    { prefix = "py3", start = 12, stop = 14 },
-    { prefix = "mypy-py3", start = 12, stop = 14 }
+    { prefix = "py3", start = 13, stop = 14 },
+    { prefix = "mypy-py3", start = 13, stop = 14 }
 ]
 
 [tool.tox.env_run_base]
@@ -95,26 +95,12 @@ commands = [
     ],
 ]
 
-[tool.tox.env.py312]
-base_python = ["3.12"]
-commands = [
-    [
-        "make",
-        "test-xml",
-        "TESTRESULTSDIR=build/test/results/py312",
-    ],
-]
-
 [tool.tox.env.mypy-py314]
 base_python = ["3.14"]
 commands = [["make", "mypy"]]
 
 [tool.tox.env.mypy-py313]
 base_python = ["3.13"]
-commands = [["make", "mypy"]]
-
-[tool.tox.env.mypy-py312]
-base_python = ["3.12"]
 commands = [["make", "mypy"]]
 
 [tool.coverage.run]
