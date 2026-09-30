@@ -13,7 +13,7 @@ Python package for creating cli prompts.
 [![codeberg badge]][codeberg repo]
 [![github badge]][github repo]
 [![mit shield]][mit license]
-[![pipeline status][pipeline status shield]][pipeline url]
+[![pipeline status shield]][pipeline url]
 
 This package exports 2 classes that contain the majority of its primary
 functionality. The `Prompt` and `StringPrompt` classes. The main difference
@@ -255,7 +255,7 @@ This package is licensed under the MIT license and can be found in
 
 [pandoc]: https://pandoc.org/ "pandoc"
 [parallel]: https://www.gnu.org/software/parallel/ "GNU Parallel"
-[python badge]: https://img.shields.io/badge/python-%3E%3D3.13-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54&labelColor=3670A0&color=939393 "Python"
+[python badge]: https://img.shields.io/badge/python-%3E%3D3.12-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54&labelColor=3670A0&color=939393 "Python"
 [python website]: https://www.python.org/ "Python"
 [pytest badge]: https://img.shields.io/badge/pytest-%23ffffff.svg?style=for-the-badge&logo=pytest&logoColor=2f9fe3 "PyTest"
 [pytest website]: https://docs.pytest.org/en/stable/ "PyTest"
