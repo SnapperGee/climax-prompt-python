@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "src/main/**"
+      - "source/**"
       - "README.md"
   workflow_dispatch:
 
@@ -51,7 +52,7 @@ jobs:
         run: poetry install
 
       - name: Build the README and the HTML documentation
-        run: make readme && make html
+        run: make html
 
       - name: Upload the Pages artifact
         uses: actions/upload-pages-artifact@v3
