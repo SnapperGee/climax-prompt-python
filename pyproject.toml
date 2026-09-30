@@ -77,7 +77,13 @@ commands_pre = [["poetry", "install"]]
 
 [tool.tox.env.py314]
 base_python = ["3.14"]
-commands = [["make", "test-xml"]]
+commands = [
+    [
+        "make",
+        "test-xml",
+        "TESTRESULTSDIR=build/test/results/py314",
+    ]
+]
 
 [tool.tox.env.py313]
 base_python = ["3.13"]
