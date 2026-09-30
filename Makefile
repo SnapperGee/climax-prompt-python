@@ -10,7 +10,7 @@ TESTDIR := $(BUILDDIR)/test
 TESTRESULTSDIR := $(TESTDIR)/results
 TESTCOVERAGEDIR := $(TESTDIR)/coverage
 
-.PHONY: help setup clean poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml serve-docs readme Makefile
+.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml serve-docs readme Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -23,6 +23,14 @@ setup:
 clean:
 	rm -rf $(BUILDDIR) dist "$(SOURCEDIR)/api"
 	rm -f "$(SOURCEDIR)/README.rst"
+
+clean-cache:
+	rm -rf $(CACHE_DIRS)
+	rm -f .coverage .coverage.*
+	find . \( -name .venv -o -name .git \) -prune -o \
+		-type d -name __pycache__ -exec rm -rf {} +
+
+clean-all: clean clean-cache
 
 poetry-check:
 	poetry check --strict --lock
