@@ -1,3 +1,11 @@
+r"""Provides classes that create prompts capable of processing inputs of arbitrary types.
+
+See Also
+--------
+:mod:`climax.prompt.string_prompt` : Module that provides the object class the
+    class this module exports wraps.
+"""
+
 import sys
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -77,6 +85,9 @@ class Prompt[ValueType]:
             Function that formats/transforms the string input before validating
             it. Defaults to a function that returns the argument passed to it
             (performs no formatting).
+        ps1 : str | None, optional
+            ``string`` appended to the ``message`` visually indicating where
+            input is entered. Defaults to an empty string.
 
         Returns
         -------
