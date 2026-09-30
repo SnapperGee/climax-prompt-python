@@ -220,6 +220,8 @@ generating API documentation.
 
 All repo tasks can be executed via the `make` phony targets listed below:
 
+- `all` - Run build.
+- `build` - Build distributable artifacts.
 - `clean` - Remove build output and generated docs files.
 - `clean-all` - Run clean and clean-cache.
 - `clean-cache` - Remove tool caches and `__pycache__` directories.

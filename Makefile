@@ -10,7 +10,9 @@ TESTDIR := $(BUILDDIR)/test
 TESTRESULTSDIR := $(TESTDIR)/results
 TESTCOVERAGEDIR := $(TESTDIR)/coverage
 
-.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml readme html serve-docs Makefile
+.DEFAULT_GOAL := help
+
+.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml readme html serve-docs Makefile build all
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -75,6 +77,11 @@ html: readme ## Build HTML API docs
 
 serve-docs: html ## Build and serve HTML API docs on port 8000
 	python3 -m http.server --directory "$(DOCSDIR)/html" -b 127.0.0.1 8000
+
+build: ## Build distributable artifacts
+	poetry build
+
+all: build ## Run build
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).

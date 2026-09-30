@@ -25,3 +25,7 @@ repos:
     rev: v8.30.1
     hooks:
       - id: gitleaks
+  - repo: https://github.com/checkmake/checkmake.git
+    rev: v0.3.2
+    hooks:
+      - id: checkmake
