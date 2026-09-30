@@ -3,13 +3,14 @@
 SPHINXOPTS ?=
 SPHINXBUILD ?= poetry run sphinx-build
 SOURCEDIR := source
+CACHE_DIRS := .mypy_cache .pytest_cache .ruff_cache
 BUILDDIR := build
 DOCSDIR := $(BUILDDIR)/docs
 TESTDIR := $(BUILDDIR)/test
 TESTRESULTSDIR := $(TESTDIR)/results
 TESTCOVERAGEDIR := $(TESTDIR)/coverage
 
-.PHONY: help setup poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml serve-docs readme Makefile
+.PHONY: help setup clean poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml serve-docs readme Makefile
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -18,6 +19,10 @@ help:
 setup:
 	poetry install
 	poetry run pre-commit install
+
+clean:
+	rm -rf $(BUILDDIR) dist "$(SOURCEDIR)/api"
+	rm -f "$(SOURCEDIR)/README.rst"
 
 poetry-check:
 	poetry check --strict --lock
