@@ -40,7 +40,7 @@ class StringPrompt:
     r"""Formats ``string`` input."""
 
     ps1: str = field(kw_only=True, default="")
-    r"""``string`` appended to the :attr:`message` ``string`` visually indicating where input will be entered."""
+    r"""``string`` appended to the :attr:`message` ``string`` visually indicating where input is entered."""
 
     @final
     def exec_string_input_loop(self) -> StringPromptInput:
