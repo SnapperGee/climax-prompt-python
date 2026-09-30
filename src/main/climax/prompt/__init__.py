@@ -2,7 +2,7 @@ r"""Get validated command line prompt input from a user.
 
 The :class:`~prompt.Prompt` and :class:`~string_prompt.StringPrompt` classes are
 the 2 core abstractions exported by this package and will most likely be the
-primary way users interface with this API.
+primary way users interface with this package's API.
 
 The main difference between these 2 classes is that the
 :class:`~string_prompt.StringPrompt` class only works with and processes
