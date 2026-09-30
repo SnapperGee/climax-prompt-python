@@ -49,7 +49,7 @@ format: ## Fix lint issues and format code with ruff
 	poetry run ruff check --fix ./src
 	poetry run ruff format ./src
 
-test: ## Run tests with terminal coverage report
+test: ## Run tests with terminal results and coverage report
 	poetry run pytest --cov=src/main --cov-report=term
 
 test-html: ## Run tests with HTML test and coverage reports
@@ -57,7 +57,7 @@ test-html: ## Run tests with HTML test and coverage reports
 		"--cov-report=html:$(TESTCOVERAGEDIR)/html" \
 		"--html=$(TESTRESULTSDIR)/html/index.html"
 
-serve-tests: test-html ## Serve HTML test and coverage reports on ports 8000 and 8001 respectively
+serve-tests: test-html ## Build and serve HTML test and coverage reports on ports 8000 and 8001
 	parallel --line-buffer --tag --halt now,done=1 ::: \
 		"python3 -u -m http.server -b 127.0.0.1 8000 --directory $(TESTRESULTSDIR)/html" \
 		"python3 -u -m http.server -b 127.0.0.1 8001 --directory $(TESTCOVERAGEDIR)/html"
