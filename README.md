@@ -146,8 +146,6 @@ match positive_even_integer_prompt_result:
     case PromptResultSuccess(value=value):
         print("You inputted the positive even integer:", value)
     case _:
-        # Type checkers report an error here if a new class is added to the
-        # `PromptInput` union and not handled above.
         assert_never(positive_even_integer_prompt_result)
 ```
 
