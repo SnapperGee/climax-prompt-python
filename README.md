@@ -218,7 +218,7 @@ linting, [ruff][ruff website] for formatting, [pytest][pytest website] for
 testing, and [sphinx][sphinx website] (with [numpydoc][numpydoc website]) for
 generating API documentation.
 
-All repo tasks can be executed via the `make` phony targets listed below:
+All repo tasks can be executed via the `make` targets listed below:
 
 - `all` - Run build.
 - `build` - Build distributable artifacts.
