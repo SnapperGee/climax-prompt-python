@@ -1,4 +1,4 @@
-r"""Provides classes that create prompts capable of processing inputs of arbitrary types.
+r"""Provides classes that instantiate prompt objects capable of processing inputs of arbitrary types.
 
 See Also
 --------
