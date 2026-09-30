@@ -1,7 +1,7 @@
+import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import cached_property
-from sys import stderr
 from typing import final
 
 from ._util import always_none_returning_function, string_identity_function
@@ -84,7 +84,7 @@ class StringPrompt:
 
         while (invalid_input_string_message := self._string_validator(string_input)) is not None:
             if invalid_input_string_message:
-                print(invalid_input_string_message, end="", file=stderr)
+                print(invalid_input_string_message, end="", file=sys.stderr)
             raw_unformatted_string_input = input(self.message + self._ps1)
             string_input = StringPromptInput(
                 self._formatter(raw_unformatted_string_input), raw_unformatted_string_input
