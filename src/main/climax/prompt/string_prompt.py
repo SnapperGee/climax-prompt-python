@@ -1,3 +1,11 @@
+r"""Provides classes that instantiate prompt objects capable of processing inputs of arbitrary types.
+
+See Also
+--------
+:mod:`climax.prompt.prompt` : Module that uses the class this module exports to
+    wrap.
+"""
+
 import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
