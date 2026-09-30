@@ -22,8 +22,9 @@ can process any arbitrary type.
 
 The `StringPrompt.exec_string_input_loop` and `Prompt.exec_input_loop` methods
 of each class create a loop that prompts a user for input and will reprompt
-until valid input is inputted and return the inputted string or value (if the
-string is converted to a non string value).
+until either valid input is inputted or an exception is raised when converting
+the input `string`. If valid input is inputted then the inputted string or value
+(if the string is converted to a non string value) is returned.
 
 ## Usage Examples
 
