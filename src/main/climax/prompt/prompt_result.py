@@ -1,3 +1,11 @@
+r"""Provides classes of objects capable of indicating success or failure returned by a prompt.
+
+See Also
+--------
+:mod:`climax.prompt.prompt` : Module that uses the classes this module exports
+    wrap.
+"""
+
 from dataclasses import dataclass
 from typing import final
 
@@ -12,7 +20,7 @@ class PromptResultSuccess[ValueType]:
 
     See Also
     --------
-    :class:`PromptResult`
+    :class:`PromptResult`, :meth:`climax.prompt.Prompt.exec_input_loop`
     """
 
     original_input_string: str
@@ -44,7 +52,7 @@ class PromptResultFailure:
 
     See Also
     --------
-    :class:`PromptResult`
+    :class:`PromptResult`, :meth:`climax.prompt.Prompt.exec_input_loop`
     """
 
     original_input_string: str
@@ -78,4 +86,8 @@ Either a :class:`PromptResultSuccess`, which holds the converted value, or a
 
 Intended for use as the return type of
 :meth:`climax.prompt.Prompt.exec_input_loop`.
+
+See Also
+--------
+:class:`PromptResultSuccess`, :class:`PromptResultFailure`, :meth:`climax.prompt.Prompt.exec_input_loop`
 """
