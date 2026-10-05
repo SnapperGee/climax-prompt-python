@@ -11,7 +11,7 @@ include:
   - template: Security/Secret-Detection.gitlab-ci.yml
 
 variables:
-  PYTHON_SLIM_IMAGE: python:3.14.7-slim
+  PYTHON_SLIM_IMAGE: python:3.14.8-slim
   SECRET_DETECTION_ENABLED: "true"
 
 .format_check:
