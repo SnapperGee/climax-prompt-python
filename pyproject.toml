@@ -75,8 +75,10 @@ enable_error_code = ["redundant-expr"]
 [tool.tox]
 requires = ["tox>=4.61", "tox-uv>=1.36"]
 env_list = [
-    { prefix = "py3", start = 13, stop = 14 },
-    { prefix = "mypy-py3", start = 13, stop = 14 }
+    { product = [
+        { prefix = "py3", start = 13, stop = 14 },
+        ["test", "mypy"],
+    ] },
 ]
 
 [tool.tox.env_run_base]
@@ -85,31 +87,6 @@ set_env = { POETRY_VIRTUALENVS_CREATE = "false", PYTEST_ADDOPTS = "--junit-prefi
 allowlist_externals = ["make"]
 deps = ["poetry"]
 commands_pre = [["poetry", "install"]]
-
-[tool.tox.env.py314]
-base_python = ["3.14"]
 commands = [
-    [
-        "make",
-        "test-xml",
-        "TESTRESULTSDIR=build/test/results/py314",
-    ]
+    { replace = "if", condition = "factor.mypy", then = [["make", "mypy"]], else = [["make", "test-xml", "TESTRESULTSDIR=build/results/{env_name}"]], extend = true },
 ]
-
-[tool.tox.env.py313]
-base_python = ["3.13"]
-commands = [
-    [
-        "make",
-        "test-xml",
-        "TESTRESULTSDIR=build/test/results/py313",
-    ],
-]
-
-[tool.tox.env.mypy-py314]
-base_python = ["3.14"]
-commands = [["make", "mypy"]]
-
-[tool.tox.env.mypy-py313]
-base_python = ["3.13"]
-commands = [["make", "mypy"]]

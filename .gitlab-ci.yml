@@ -128,8 +128,8 @@ unit-tests:
     #   - build/test/coverage/
     reports:
       junit:
-        - build/test/results/py314/xml/report.xml
-        - build/test/results/py313/xml/report.xml
+        - build/results/py314-test/xml/report.xml
+        - build/results/py313-test/xml/report.xml
       coverage_report:
         coverage_format: cobertura
         path: build/test/coverage/xml/coverage.xml
