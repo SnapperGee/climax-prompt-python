@@ -143,7 +143,7 @@ match positive_even_integer_prompt_result:
         original_input_string=original_input_string,
         conversion_exception=conversion_exception,
     ):
-        print(f'Error converting input to an int: "{original_input_string}"\n\n' + repr(conversion_exception))
+        print(f'Error converting input to an int: "{original_input_string}"\n\n{repr(conversion_exception)}')
     case PromptResultSuccess(value=value):
         print("You inputted the positive even integer:", value)
     case _:
