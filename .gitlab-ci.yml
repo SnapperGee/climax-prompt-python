@@ -194,7 +194,7 @@ create-release:
   stage: publish
   image: "registry.gitlab.com/gitlab-org/cli:latest"
   needs:
-    - job: publish_to_pypi
+    - job: publish-to-pypi
   rules:
     - if: *version_commit_tag
   variables:
