@@ -88,5 +88,5 @@ allowlist_externals = ["make"]
 deps = ["poetry"]
 commands_pre = [["poetry", "install"]]
 commands = [
-    { replace = "if", condition = "factor.mypy", then = [["make", "mypy"]], else = [["make", "test-xml", "TESTRESULTSDIR=build/results/{env_name}"]], extend = true },
+    { replace = "if", condition = "factor.mypy", then = [["make", "mypy"]], else = [["make", "test-xml", "TESTRESULTSDIR=build/test/results/{env_name}"]], extend = true },
 ]
