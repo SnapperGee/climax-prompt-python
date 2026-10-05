@@ -64,7 +64,7 @@ variables:
     - apt update && apt install -y --no-install-recommends make
     - uv tool install tox --with tox-uv
 
-secret-detection:
+secret_detection:
   stage: secret-detection
 
 version_tag_matches_project_version:
