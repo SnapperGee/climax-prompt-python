@@ -7,8 +7,9 @@ CACHE_DIRS := .mypy_cache .pytest_cache .ruff_cache
 BUILDDIR := build
 DOCSDIR := $(BUILDDIR)/docs
 TESTDIR := $(BUILDDIR)/test
-TESTRESULTSDIR := $(TESTDIR)/results
-TESTCOVERAGEDIR := $(TESTDIR)/coverage
+TESTENV ?= local
+TESTRESULTSDIR ?= $(TESTDIR)/results/$(TESTENV)
+TESTCOVERAGEDIR ?= $(TESTDIR)/coverage
 
 .DEFAULT_GOAL := help
 
