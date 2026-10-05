@@ -118,7 +118,7 @@ unit-tests:
   stage: test
   rules: !reference [.src-poetry-lock-pyproject-changes-rule, rules]
   script:
-    - tox run -e py313,py314
+    - tox run -f test
   coverage: '/TOTAL.*? (100(?:\.0+)?%|[1-9]?\d(?:\.\d+)?%)$/'
   artifacts:
     when: always
