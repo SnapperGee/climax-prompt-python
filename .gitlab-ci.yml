@@ -18,14 +18,14 @@ variables:
   version_commit_tag: &version_commit_tag '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
   version_like_commit_tag: &version_like_commit_tag '$CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+$/'
 
-.src_poetry_lock_pyproject_changes_rule:
+.src-poetry-lock-pyproject-changes-rule:
   rules:
     - changes:
       - src/**/*
       - poetry.lock
       - pyproject.toml
 
-.python_job_base:
+.python-job-base:
   image: $PYTHON_SLIM_IMAGE
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -41,13 +41,13 @@ variables:
     - pip install poetry
     - poetry install
 
-.make_job_base:
-  extends: .python_job_base
+.make-job-base:
+  extends: .python-job-base
   before_script:
-    - !reference [.python_job_base, before_script]
+    - !reference [.python-job-base, before_script]
     - apt update && apt install -y --no-install-recommends make
 
-.tox_job_base:
+.tox-job-base:
   image: ghcr.io/astral-sh/uv:debian-slim
   variables:
     UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
@@ -64,7 +64,7 @@ variables:
     - apt update && apt install -y --no-install-recommends make
     - uv tool install tox --with tox-uv
 
-secret_detection:
+secret-detection:
   stage: secret-detection
 
 version_tag_matches_project_version:
@@ -82,8 +82,8 @@ version_tag_matches_project_version:
         exit 1
       fi
 
-poetry_check:
-  extends: .make_job_base
+poetry-check:
+  extends: .make-job-base
   stage: lint
   rules:
     - changes:
@@ -92,31 +92,31 @@ poetry_check:
   script:
     - make poetry-check
 
-ruff_check:
-  extends: .make_job_base
+ruff-check:
+  extends: .make-job-base
   stage: lint
-  rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
+  rules: !reference [.src-poetry-lock-pyproject-changes-rule, rules]
   script:
     - make ruff-check
 
-ruff_format_check:
-  extends: .make_job_base
+ruff-format-check:
+  extends: .make-job-base
   stage: lint
-  rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
+  rules: !reference [.src-poetry-lock-pyproject-changes-rule, rules]
   script:
     - make ruff-format-check
 
 mypy:
-  extends: .tox_job_base
+  extends: .tox-job-base
   stage: lint
-  rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
+  rules: !reference [.src-poetry-lock-pyproject-changes-rule, rules]
   script:
     - tox run -e mypy-py313,mypy-py314
 
-unit_tests:
-  extends: .tox_job_base
+unit-tests:
+  extends: .tox-job-base
   stage: test
-  rules: !reference [.src_poetry_lock_pyproject_changes_rule, rules]
+  rules: !reference [.src-poetry-lock-pyproject-changes-rule, rules]
   script:
     - tox run -e py313,py314
   coverage: '/TOTAL.*? (100(?:\.0+)?%|[1-9]?\d(?:\.\d+)?%)$/'
@@ -134,7 +134,7 @@ unit_tests:
         coverage_format: cobertura
         path: build/test/coverage/xml/coverage.xml
 
-package_build:
+package-build:
   image: $PYTHON_SLIM_IMAGE
   stage: build
   before_script:
@@ -150,11 +150,11 @@ package_build:
   rules:
     - if: *version_commit_tag
 
-publish_to_test_pypi:
+publish-to-test-pypi:
   stage: publish
   image: $PYTHON_SLIM_IMAGE
   needs:
-    - job: package_build
+    - job: package-build
   environment:
     name: test-pypi
     url: https://test.pypi.org/project/climax-prompt/$CI_COMMIT_TAG
@@ -168,11 +168,11 @@ publish_to_test_pypi:
   script:
     - twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
-publish_to_pypi:
+publish-to-pypi:
   stage: publish
   image: $PYTHON_SLIM_IMAGE
   needs:
-    - job: package_build
+    - job: package-build
   environment:
     name: pypi
     url: https://pypi.org/project/climax-prompt/$CI_COMMIT_TAG
@@ -190,7 +190,7 @@ publish_to_pypi:
   script:
     - twine upload dist/*
 
-create_release:
+create-release:
   stage: publish
   image: "registry.gitlab.com/gitlab-org/cli:latest"
   needs:
@@ -209,10 +209,10 @@ create_release:
         "$(ls dist/*.whl)#Wheel#package"
 
 pages:
-  extends: .make_job_base
+  extends: .make-job-base
   stage: pages
   before_script:
-    - !reference [.make_job_base, before_script]
+    - !reference [.make-job-base, before_script]
     - apt install -y --no-install-recommends pandoc
   script:
     - make readme
