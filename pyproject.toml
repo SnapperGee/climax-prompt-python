@@ -54,6 +54,17 @@ packages = [{include = "climax/prompt", from = "src/main"}]
 testpaths = ["src/test"]
 addopts = ["--import-mode=importlib"]
 
+[tool.coverage.run]
+source = ["src/main"]
+data_file = "build/test/coverage/.coverage"
+
+[tool.ruff]
+include = ["src/**/*.py", "README.md"]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["C4", "I", "PT", "TC", "RET"]
+
 [tool.mypy]
 files = ["src"]
 strict = true
@@ -102,13 +113,3 @@ commands = [["make", "mypy"]]
 [tool.tox.env.mypy-py313]
 base_python = ["3.13"]
 commands = [["make", "mypy"]]
-
-[tool.coverage.run]
-source = ["src/main"]
-data_file = "build/test/coverage/.coverage"
-
-[tool.ruff]
-line-length = 120
-
-[tool.ruff.lint]
-extend-select = ["C4", "I", "PT", "TC", "RET"]

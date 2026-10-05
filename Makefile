@@ -37,10 +37,10 @@ poetry-check: ## Validate pyproject.toml and the lock file
 	poetry check --strict --lock
 
 ruff-check: ## Lint with ruff
-	poetry run ruff check ./src
+	poetry run ruff check
 
 ruff-format-check: ## Check formatting with ruff
-	poetry run ruff format --check ./src
+	poetry run ruff format --check
 
 mypy: ## Type check with mypy
 	poetry run mypy
@@ -48,8 +48,8 @@ mypy: ## Type check with mypy
 lint: poetry-check ruff-check ruff-format-check mypy ## Run all lint and type checks
 
 format: ## Fix lint issues and format code with ruff
-	poetry run ruff check --fix ./src
-	poetry run ruff format ./src
+	poetry run ruff check --fix
+	poetry run ruff format
 
 test: ## Run tests with terminal results and coverage report
 	poetry run pytest --cov=src/main --cov-report=term
