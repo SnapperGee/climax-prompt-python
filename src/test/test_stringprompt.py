@@ -70,7 +70,7 @@ def test_StringPrompt_execStringInputLoop_with_valid_input(
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = string_prompt.exec_string_input_loop()
 
-    mock_input.assert_called_once_with(MESSAGE + (ps1 or ""))
+    mock_input.assert_called_once_with(MESSAGE + ps1)
 
     assert isinstance(result, StringPromptInput)
     assert result == StringPromptInput(formatter(user_input), user_input)
@@ -99,7 +99,7 @@ def test_StringPrompt_execStringInputLoop_with_invalid_input(
     ):
         string_prompt.exec_string_input_loop()
 
-    message_with_ps1: Final = MESSAGE + (ps1 or "")
+    message_with_ps1: Final = MESSAGE + ps1
     invalid_message: Final = validator(StringPromptInput(formatter(user_input), user_input)) or ""
 
     assert mock_input.call_args_list == [
