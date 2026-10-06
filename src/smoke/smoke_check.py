@@ -1,4 +1,4 @@
-"""Smoke checks that run against an installed copy of the package."""
+"""Smoke tests that run against an installed copy of the package."""
 
 import json
 from importlib.metadata import distribution, version
@@ -47,7 +47,7 @@ def main() -> None:
     )
 
     origin = json.loads(distribution("climax-prompt").read_text("direct_url.json") or "{}").get("url", "unknown")
-    print(f"Smoke checks passed for climax-prompt {installed_version} (installed from {Path(origin).name}).")
+    print(f"Smoke tests passed for climax-prompt {installed_version} (installed from {Path(origin).name}).")
 
 
 if __name__ == "__main__":
