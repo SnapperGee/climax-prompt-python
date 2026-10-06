@@ -124,7 +124,7 @@ mypy:
   stage: lint
   rules: !reference [.code-and-config-changes-rule, rules]
   script:
-    - tox run -e mypy-py313,mypy-py314
+    - tox run -f mypy
 
 unit-tests:
   extends: .tox-job-base
