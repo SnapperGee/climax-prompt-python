@@ -237,6 +237,8 @@ All repo tasks can be executed via the `make` targets listed below:
   `127.0.0.1:8000` and `127.0.0.1:8001`. Depends on [parallel].
 - `setup` - Install dependencies and pre-commit hooks. This should be run right
   after cloning the repo.
+- `smoke-test` - Install the built wheel and sdist in clean venvs and run smoke
+  tests. The wheel and sdist artifacts must be built before running this target.
 - `test` - Run tests with terminal results and coverage report.
 - `test-html` - Run tests with html results and coverage reports.
 - `test-xml` - Run test with xml results and coverage reports.
