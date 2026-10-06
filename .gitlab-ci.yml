@@ -3,6 +3,7 @@ stages:
   - lint
   - test
   - build
+  - smoke-test
   - publish
   - pages
 
@@ -30,12 +31,12 @@ variables:
           - pyproject.toml
           - .gitlab-ci.yml
           - Makefile
-        compare_to: "refs/heads/$CI_DEFAULT_BRANCH"
+        compare_to: "refs/heads/${CI_DEFAULT_BRANCH}"
 
 .python-job-base:
   image: $PYTHON_SLIM_IMAGE
   variables:
-    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+    PIP_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/pip"
     POETRY_VIRTUALENVS_IN_PROJECT: "true"
   cache:
     key:
@@ -57,8 +58,8 @@ variables:
 .tox-job-base:
   image: ghcr.io/astral-sh/uv:debian-slim
   variables:
-    UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
-    UV_PYTHON_INSTALL_DIR: "$CI_PROJECT_DIR/.cache/uv-python"
+    UV_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/uv"
+    UV_PYTHON_INSTALL_DIR: "${CI_PROJECT_DIR}/.cache/uv-python"
   cache:
     key:
       files:
@@ -100,7 +101,7 @@ poetry-check:
         paths:
           - poetry.lock
           - pyproject.toml
-        compare_to: "refs/heads/$CI_DEFAULT_BRANCH"
+        compare_to: "refs/heads/${CI_DEFAULT_BRANCH}"
   script:
     - make poetry-check
 
@@ -145,6 +146,22 @@ unit-tests:
         coverage_format: cobertura
         path: build/test/coverage/xml/coverage.xml
 
+.package-build-rule:
+  rules:
+    - if: *version_commit_tag
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH
+      changes:
+        paths:
+          - src/**/*
+          - poetry.lock
+          - pyproject.toml
+          - .gitlab-ci.yml
+          - README.md
+          - LICENSE.txt
+          - Makefile
+        compare_to: "refs/heads/${CI_DEFAULT_BRANCH}"
+
 package-build:
   image: $PYTHON_SLIM_IMAGE
   stage: build
@@ -158,25 +175,28 @@ package-build:
     paths:
       - dist/
     expire_in: 1 week
-  rules:
-    - if: *version_commit_tag
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_BRANCH
-      changes:
-        paths:
-          - src/**/*
-          - poetry.lock
-          - pyproject.toml
-          - .gitlab-ci.yml
-          - README.md
-          - LICENSE.txt
-        compare_to: "refs/heads/$CI_DEFAULT_BRANCH"
+  rules: !reference [.package-build-rule, rules]
+
+smoke-test:
+  stage: smoke-test
+  image: python:${PYTHON_VERSION}-slim
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.13", "3.14"]
+  needs:
+    - job: package-build
+  rules: !reference [.package-build-rule, rules]
+  before_script:
+    - apt update && apt install -y --no-install-recommends make
+  script:
+    - make smoke-test
 
 publish-to-test-pypi:
   stage: publish
   image: $PYTHON_SLIM_IMAGE
   needs:
     - job: package-build
+    - job: smoke-test
   environment:
     name: test-pypi
     url: https://test.pypi.org/project/climax-prompt/$CI_COMMIT_TAG
@@ -195,6 +215,7 @@ publish-to-pypi:
   image: $PYTHON_SLIM_IMAGE
   needs:
     - job: package-build
+    - job: smoke-test
   environment:
     name: pypi
     url: https://pypi.org/project/climax-prompt/$CI_COMMIT_TAG

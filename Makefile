@@ -5,6 +5,7 @@ SPHINXBUILD ?= poetry run sphinx-build
 SOURCEDIR := source
 CACHE_DIRS := .mypy_cache .pytest_cache .ruff_cache
 BUILDDIR := build
+SMOKEDIR := $(BUILDDIR)/smoke
 DOCSDIR := $(BUILDDIR)/docs
 TESTDIR := $(BUILDDIR)/test
 TESTENV ?= local
@@ -13,7 +14,7 @@ TESTCOVERAGEDIR ?= $(TESTDIR)/coverage
 
 .DEFAULT_GOAL := help
 
-.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml readme html serve-docs Makefile build all
+.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml readme html serve-docs Makefile build all smoke-test
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -83,6 +84,13 @@ build: ## Build distributable artifacts
 	poetry build
 
 all: build ## Run build
+
+smoke-test: ## Install the built wheel and sdist in clean venvs and run smoke checks
+	set -e; for kind in whl tar.gz; do \
+		python3 -m venv --clear "$(SMOKEDIR)/$$kind"; \
+		"$(SMOKEDIR)/$$kind/bin/python" -m pip install --quiet dist/*.$$kind; \
+		"$(SMOKEDIR)/$$kind/bin/python" src/smoke/smoke_check.py; \
+	done
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
