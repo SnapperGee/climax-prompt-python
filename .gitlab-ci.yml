@@ -146,7 +146,7 @@ unit-tests:
         coverage_format: cobertura
         path: build/test/coverage/xml/coverage.xml
 
-.package-build-rule:
+.build-package-rule:
   rules:
     - if: *version_commit_tag
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -162,7 +162,7 @@ unit-tests:
           - Makefile
         compare_to: "refs/heads/${CI_DEFAULT_BRANCH}"
 
-package-build:
+build-package:
   image: $PYTHON_SLIM_IMAGE
   stage: build
   before_script:
@@ -175,7 +175,7 @@ package-build:
     paths:
       - dist/
     expire_in: 1 week
-  rules: !reference [.package-build-rule, rules]
+  rules: !reference [.build-package-rule, rules]
 
 smoke-test:
   stage: smoke-test
@@ -184,8 +184,8 @@ smoke-test:
     matrix:
       - PYTHON_VERSION: ["3.13", "3.14"]
   needs:
-    - job: package-build
-  rules: !reference [.package-build-rule, rules]
+    - job: build-package
+  rules: !reference [.build-package-rule, rules]
   before_script:
     - apt update && apt install -y --no-install-recommends make
   script:
@@ -195,7 +195,7 @@ publish-to-test-pypi:
   stage: publish
   image: $PYTHON_SLIM_IMAGE
   needs:
-    - job: package-build
+    - job: build-package
     - job: smoke-test
   environment:
     name: test-pypi
@@ -214,7 +214,7 @@ publish-to-pypi:
   stage: publish
   image: $PYTHON_SLIM_IMAGE
   needs:
-    - job: package-build
+    - job: build-package
     - job: smoke-test
   environment:
     name: pypi
