@@ -7,7 +7,7 @@ See Also
 """
 
 from dataclasses import dataclass
-from typing import final
+from typing import final, override
 
 
 @final
@@ -61,6 +61,7 @@ class PromptResultFailure:
     conversion_exception: Exception
     r"""The exception thrown during conversion."""
 
+    @override
     def __eq__(self, other: object) -> bool:
         if self is other:
             return True
@@ -74,6 +75,7 @@ class PromptResultFailure:
             and self.conversion_exception.args == other.conversion_exception.args
         )
 
+    @override
     def __hash__(self) -> int:
         return hash((self.original_input_string, type(self.conversion_exception)))
 
