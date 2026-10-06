@@ -14,7 +14,7 @@ TESTCOVERAGEDIR ?= $(TESTDIR)/coverage
 
 .DEFAULT_GOAL := help
 
-.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy lint format test test-html serve-tests test-xml readme html serve-docs Makefile build all smoke-test
+.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy bandit lint format test test-html serve-tests test-xml readme html serve-docs Makefile build all smoke-test
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -47,7 +47,10 @@ ruff-format-check: ## Check formatting with ruff
 mypy: ## Type check with mypy
 	poetry run mypy
 
-lint: poetry-check ruff-check ruff-format-check mypy ## Run all lint and type checks
+bandit: ##
+	poetry run bandit -r src/main
+
+lint: poetry-check ruff-check ruff-format-check mypy bandit ## Run all lint and type checks
 
 format: ## Fix lint issues and format code with ruff
 	poetry run ruff check --fix
