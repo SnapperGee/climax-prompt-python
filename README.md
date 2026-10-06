@@ -220,7 +220,7 @@ generating API documentation.
 All repo tasks can be executed via the `make` targets listed below:
 
 - `all` - Run build.
-- `bandit` - Lint with bandit.
+- `bandit` - Scan source code for security issues with bandit.
 - `build` - Build distributable artifacts.
 - `clean` - Remove build output and generated docs files.
 - `clean-all` - Run clean and clean-cache.

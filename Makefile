@@ -47,7 +47,7 @@ ruff-format-check: ## Check formatting with ruff
 mypy: ## Type check with mypy
 	poetry run mypy
 
-bandit: ##
+bandit: ## Scan source code for security issues with bandit
 	poetry run bandit -r src/main
 
 lint: poetry-check ruff-check ruff-format-check mypy bandit ## Run all lint and type checks
