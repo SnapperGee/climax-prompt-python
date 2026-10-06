@@ -14,7 +14,7 @@ TESTCOVERAGEDIR ?= $(TESTDIR)/coverage
 
 .DEFAULT_GOAL := help
 
-.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy bandit lint format test test-html serve-tests test-xml readme html serve-docs Makefile build all smoke-test
+.PHONY: help setup clean clean-cache clean-all poetry-check ruff-check ruff-format-check mypy bandit lint format test test-html serve-tests test-xml readme html serve-docs Makefile build all smoke
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -88,7 +88,7 @@ build: ## Build distributable artifacts
 
 all: build ## Run build
 
-smoke-test: ## Install the built wheel and sdist in clean venvs and run smoke checks
+smoke: ## Install the built wheel and sdist in clean venvs and run smoke checks
 	set -e; for kind in whl tar.gz; do \
 		python3 -m venv --clear "$(SMOKEDIR)/$$kind"; \
 		"$(SMOKEDIR)/$$kind/bin/python" -m pip install --quiet dist/*.$$kind; \

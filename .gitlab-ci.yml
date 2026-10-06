@@ -189,7 +189,7 @@ smoke-test:
   before_script:
     - apt update && apt install -y --no-install-recommends make
   script:
-    - make smoke-test
+    - make smoke
 
 publish-to-test-pypi:
   stage: publish
