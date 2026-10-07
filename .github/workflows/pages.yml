@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - "src/main/**"
-      - "source/**"
+      - "src/main/**/*"
+      - "source/**/*"
       - "README.md"
   workflow_dispatch:
 
