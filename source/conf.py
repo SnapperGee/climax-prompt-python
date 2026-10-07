@@ -13,7 +13,7 @@ author = "Snap"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary", "numpydoc"]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary", "sphinx.ext.intersphinx", "numpydoc"]
 
 templates_path = ["templates"]
 exclude_patterns = []
@@ -24,5 +24,7 @@ exclude_patterns = []
 
 html_theme = "furo"
 html_static_path = ["static"]
+
+intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 numpydoc_class_members_toctree = False
