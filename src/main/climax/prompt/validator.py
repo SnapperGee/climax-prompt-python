@@ -1,3 +1,5 @@
+r"""Provides types defining ``Callable``s that can be used as validator functions."""
+
 from collections.abc import Callable
 
 from .string_prompt_input import StringPromptInput
