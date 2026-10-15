@@ -127,37 +127,71 @@ def test_StringPrompt_execStringInputLoop_with_valid_input(
 
 
 @pytest.mark.parametrize(
-    ("validator", "formatter", "ps1", "user_input"),
+    ("validator", "formatter", "ps1", "invalid_input", "error_message", "valid_input"),
     [
-        (_string_is_not_empty, identity, PS1, ""),
-        (string_is_integer_validator, identity, PS1, "A123"),
-        (_string_is_palindrome, identity, PS1, "Knights who say ni"),
-        (_string_is_not_empty, str.strip, PS1, "         "),
-        (string_is_integer_validator, str.strip, PS1, "  A   123     "),
-        (_string_is_palindrome, str.strip, PS1, "Knights who say ni"),
+        pytest.param(_string_is_not_empty, identity, PS1, "", "String is empty.\n", "a", id="empty-identity"),
+        pytest.param(
+            string_is_integer_validator,
+            identity,
+            "",
+            "A123",
+            'String is not an integer: "A123".\n',
+            "123",
+            id="integer-identity-no-ps1",
+        ),
+        pytest.param(
+            _string_is_palindrome,
+            identity,
+            PS1,
+            "Knights who say ni",
+            'String is not a palindrome: "Knights who say ni".\n',
+            "level",
+            id="palindrome-identity",
+        ),
+        pytest.param(
+            _string_is_not_empty, str.strip, PS1, "         ", "String is empty.\n", "   a   ", id="empty-strip"
+        ),
+        pytest.param(
+            string_is_integer_validator,
+            str.strip,
+            PS1,
+            "  A   123     ",
+            'String is not an integer: "  A   123     ".\n',
+            "  -7  ",
+            id="integer-strip",
+        ),
+        pytest.param(
+            _string_is_palindrome,
+            str.strip,
+            "",
+            "  Knights who say ni  ",
+            'String is not a palindrome: "  Knights who say ni  ".\n',
+            "  level  ",
+            id="palindrome-strip-no-ps1",
+        ),
     ],
 )
-def test_StringPrompt_execStringInputLoop_with_invalid_input(
-    validator: StringValidator, formatter: Callable[[str], str], ps1: str, user_input: str
+def test_StringPrompt_execStringInputLoop_reprompts_after_invalid_input(
+    capsys: pytest.CaptureFixture[str],
+    validator: StringValidator,
+    formatter: Callable[[str], str],
+    ps1: str,
+    invalid_input: str,
+    error_message: str,
+    valid_input: str,
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, string_validator=validator, formatter=formatter, ps1=ps1)
 
-    with (
-        patch.object(builtins, "input", side_effect=(user_input,)) as mock_input,
-        patch.object(builtins, "print") as mock_print,
-        pytest.raises(StopIteration),
-    ):
-        string_prompt.exec_string_input_loop()
+    with patch.object(builtins, "input", side_effect=(invalid_input, valid_input)) as mock_input:
+        result: Final = string_prompt.exec_string_input_loop()
 
-    message_with_ps1: Final = MESSAGE + ps1
-    invalid_message: Final = validator(StringPromptInput(formatter(user_input), user_input))
+    captured: Final = capsys.readouterr()
 
-    assert mock_input.call_args_list == [
-        call(message_with_ps1),
-        call(message_with_ps1),
-    ]
-
-    mock_print.assert_called_once_with(invalid_message, end="", file=stderr)
+    assert isinstance(result, StringPromptInput)
+    assert result == StringPromptInput(formatter(valid_input), valid_input)
+    assert mock_input.call_args_list == [call(MESSAGE + ps1)] * 2
+    assert captured.err == error_message
+    assert captured.out == ""
 
 
 def test_StringPrompt_execStringInputLoop_returns_last_input_after_several_invalid_inputs(
