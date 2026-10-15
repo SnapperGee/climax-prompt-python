@@ -113,17 +113,25 @@ def test_Prompt_returns_failure_when_conversion_fails_after_retry() -> None:
     ],
 )
 def test_StringPrompt_execStringInputLoop_with_valid_input(
-    validator: StringValidator, formatter: Callable[[str], str], ps1: str, user_input: str
+    capsys: pytest.CaptureFixture[str],
+    validator: StringValidator,
+    formatter: Callable[[str], str],
+    ps1: str,
+    user_input: str,
 ) -> None:
     string_prompt: Final = StringPrompt(MESSAGE, string_validator=validator, formatter=formatter, ps1=ps1)
 
     with patch.object(builtins, "input", side_effect=(user_input,)) as mock_input:
         result: Final = string_prompt.exec_string_input_loop()
 
+    captured: Final = capsys.readouterr()
+
     mock_input.assert_called_once_with(MESSAGE + ps1)
 
     assert isinstance(result, StringPromptInput)
     assert result == StringPromptInput(formatter(user_input), user_input)
+    assert captured.out == ""
+    assert captured.err == ""
 
 
 @pytest.mark.parametrize(
