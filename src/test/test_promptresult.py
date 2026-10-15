@@ -10,21 +10,21 @@ class _CustomError(ValueError):
 
 _EXCEPTION: Final = Exception("An exception")
 
-_SUCCESSFUL_CONVERSION_PARAMETERS: Final = [
+_SUCCESSFUL_CONVERSION_PARAMETERS: Final = (
     ("Snake", True),
     ("1", 1),
     ("", ""),
     ("None", None),
-]
+)
 
 # (string, first exception, second exception) where the two exceptions are
 # different objects (except for the first case) that must give equal results
-_EQUAL_FAILED_CONVERSION_PARAMETERS: Final = [
+_EQUAL_FAILED_CONVERSION_PARAMETERS: Final = (
     ("1", _EXCEPTION, _EXCEPTION),
     ("1", ValueError("bad"), ValueError("bad")),
     ("", ValueError(), ValueError()),
     ("1", ValueError([1]), ValueError([1])),
-]
+)
 
 
 @pytest.mark.parametrize(("string", "value"), _SUCCESSFUL_CONVERSION_PARAMETERS)
