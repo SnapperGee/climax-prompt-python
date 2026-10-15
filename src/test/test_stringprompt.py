@@ -66,7 +66,7 @@ def test_StringPrompt_returns_last_input_after_retry() -> None:
 
     assert result == StringPromptInput("22", "  22  ")
     assert mock_input.call_count == 2
-    mock_print.assert_called_once_with('String is not a digit: "  A1  ".\n', end="", file=stderr)
+    mock_print.assert_called_once_with('String is not an integer: "  A1  ".\n', end="", file=stderr)
 
 
 def test_StringPrompt_reprompts_without_printing_when_message_is_empty() -> None:
@@ -103,12 +103,13 @@ def test_Prompt_returns_failure_when_conversion_fails_after_retry() -> None:
 @pytest.mark.parametrize(
     ("validator", "formatter", "ps1", "user_input"),
     [
-        (_string_is_empty, identity, PS1, ""),
-        (string_is_integer_validator, identity, PS1, "123"),
-        (_string_is_palindrome, identity, PS1, "level"),
-        (_string_is_empty, str.strip, PS1, "         "),
-        (string_is_integer_validator, str.strip, PS1, "     123     "),
-        (_string_is_palindrome, str.strip, PS1, "level         "),
+        pytest.param(_string_is_empty, identity, PS1, "", id="empty-identity"),
+        pytest.param(string_is_integer_validator, identity, "", "123", id="integer-identity-no-ps1"),
+        pytest.param(_string_is_palindrome, identity, PS1, "level", id="palindrome-identity"),
+        # The formatter must run before the validator: only the formatted string is empty or a palindrome.
+        pytest.param(_string_is_empty, str.strip, PS1, "         ", id="empty-strip"),
+        pytest.param(string_is_integer_validator, str.strip, PS1, "     123     ", id="integer-strip"),
+        pytest.param(_string_is_palindrome, str.strip, "", "level         ", id="palindrome-strip-no-ps1"),
     ],
 )
 def test_StringPrompt_execStringInputLoop_with_valid_input(
@@ -157,3 +158,21 @@ def test_StringPrompt_execStringInputLoop_with_invalid_input(
     ]
 
     mock_print.assert_called_once_with(invalid_message, end="", file=stderr)
+
+
+def test_StringPrompt_execStringInputLoop_returns_last_input_after_several_invalid_inputs(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    string_prompt: Final = StringPrompt(
+        MESSAGE, string_validator=string_is_integer_validator, formatter=str.strip, ps1=PS1
+    )
+
+    with patch.object(builtins, "input", side_effect=("  one  ", "  2x  ", "  3  ")) as mock_input:
+        result: Final = string_prompt.exec_string_input_loop()
+
+    captured: Final = capsys.readouterr()
+
+    assert result == StringPromptInput("3", "  3  ")
+    assert mock_input.call_args_list == [call(MESSAGE + PS1)] * 3
+    assert captured.out == ""
+    assert captured.err == 'String is not an integer: "  one  ".\nString is not an integer: "  2x  ".\n'
