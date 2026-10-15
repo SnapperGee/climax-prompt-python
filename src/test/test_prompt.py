@@ -16,7 +16,7 @@ from climax.prompt.prompt_result import (
     PromptResultSuccess,
 )
 
-from .util import MESSAGE, PS1, string_is_digit_validator
+from .util import MESSAGE, PS1, string_is_integer_validator
 
 
 def _always_none_returning_function(_: object) -> None:
@@ -54,7 +54,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
 
 _CONSTRUCTOR_ARGUMENTS_USER_INPUT_AND_RESULT: Final = (
     (
-        string_is_digit_validator,
+        string_is_integer_validator,
         int,
         _is_even_positive_integer,
         None,
@@ -63,7 +63,7 @@ _CONSTRUCTOR_ARGUMENTS_USER_INPUT_AND_RESULT: Final = (
         PromptResultSuccess("124", 124),
     ),
     (
-        string_is_digit_validator,
+        string_is_integer_validator,
         int,
         _is_even_positive_integer,
         str.strip,
@@ -72,7 +72,7 @@ _CONSTRUCTOR_ARGUMENTS_USER_INPUT_AND_RESULT: Final = (
         PromptResultSuccess("     2     ", 2),
     ),
     (
-        string_is_digit_validator,
+        string_is_integer_validator,
         int,
         _is_even_positive_integer,
         None,
@@ -81,7 +81,7 @@ _CONSTRUCTOR_ARGUMENTS_USER_INPUT_AND_RESULT: Final = (
         PromptResultSuccess("253242", 253242),
     ),
     (
-        string_is_digit_validator,
+        string_is_integer_validator,
         int,
         _is_even_positive_integer,
         str.strip,
@@ -155,18 +155,18 @@ def test_Prompt_execInputLoop_with_valid_input(
 @pytest.mark.parametrize(
     ("string_validator", "_type", "validator", "formatter", "ps1", "user_input"),
     [
-        (string_is_digit_validator, int, _is_even_positive_integer, None, None, "124XXX"),
-        (string_is_digit_validator, int, _is_even_positive_integer, None, None, "111"),
-        (string_is_digit_validator, int, _is_even_positive_integer, None, None, "-999"),
-        (string_is_digit_validator, int, _is_even_positive_integer, str.strip, None, "     7     "),
-        (string_is_digit_validator, int, _is_even_positive_integer, str.strip, None, "     2  snake   "),
-        (string_is_digit_validator, int, _is_even_positive_integer, str.strip, None, "     -2     "),
-        (string_is_digit_validator, int, _is_even_positive_integer, None, PS1, "333333"),
-        (string_is_digit_validator, int, _is_even_positive_integer, None, PS1, "253242XX"),
-        (string_is_digit_validator, int, _is_even_positive_integer, None, PS1, "-253242"),
-        (string_is_digit_validator, int, _is_even_positive_integer, str.strip, PS1, "  snake   26     "),
-        (string_is_digit_validator, int, _is_even_positive_integer, str.strip, PS1, "     21     "),
-        (string_is_digit_validator, int, _is_even_positive_integer, str.strip, PS1, "     -26     "),
+        (string_is_integer_validator, int, _is_even_positive_integer, None, None, "124XXX"),
+        (string_is_integer_validator, int, _is_even_positive_integer, None, None, "111"),
+        (string_is_integer_validator, int, _is_even_positive_integer, None, None, "-999"),
+        (string_is_integer_validator, int, _is_even_positive_integer, str.strip, None, "     7     "),
+        (string_is_integer_validator, int, _is_even_positive_integer, str.strip, None, "     2  snake   "),
+        (string_is_integer_validator, int, _is_even_positive_integer, str.strip, None, "     -2     "),
+        (string_is_integer_validator, int, _is_even_positive_integer, None, PS1, "333333"),
+        (string_is_integer_validator, int, _is_even_positive_integer, None, PS1, "253242XX"),
+        (string_is_integer_validator, int, _is_even_positive_integer, None, PS1, "-253242"),
+        (string_is_integer_validator, int, _is_even_positive_integer, str.strip, PS1, "  snake   26     "),
+        (string_is_integer_validator, int, _is_even_positive_integer, str.strip, PS1, "     21     "),
+        (string_is_integer_validator, int, _is_even_positive_integer, str.strip, PS1, "     -26     "),
         (_string_is_float, float, _float_contains_non_zero_decimals, None, None, "124"),
         (_string_is_float, float, _float_contains_non_zero_decimals, None, None, "124.000"),
         (_string_is_float, float, _float_contains_non_zero_decimals, str.strip, None, "     1     "),
