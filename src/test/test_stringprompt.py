@@ -176,3 +176,22 @@ def test_StringPrompt_execStringInputLoop_returns_last_input_after_several_inval
     assert mock_input.call_args_list == [call(MESSAGE + PS1)] * 3
     assert captured.out == ""
     assert captured.err == 'String is not an integer: "  one  ".\nString is not an integer: "  2x  ".\n'
+
+
+def test_StringPrompt_execStringInputLoop_reprompts_silently_when_error_message_is_empty(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    def validator(strings: StringPromptInput) -> str | None:
+        return "" if strings.formatted == "bad" else None
+
+    string_prompt: Final = StringPrompt(MESSAGE, string_validator=validator, ps1=PS1)
+
+    with patch.object(builtins, "input", side_effect=("bad", "good")) as mock_input:
+        result: Final = string_prompt.exec_string_input_loop()
+
+    captured: Final = capsys.readouterr()
+
+    assert result == StringPromptInput("good", "good")
+    assert mock_input.call_args_list == [call(MESSAGE + PS1)] * 2
+    assert captured.out == ""
+    assert captured.err == ""
