@@ -147,7 +147,7 @@ def test_StringPrompt_execStringInputLoop_with_invalid_input(
         string_prompt.exec_string_input_loop()
 
     message_with_ps1: Final = MESSAGE + ps1
-    invalid_message: Final = validator(StringPromptInput(formatter(user_input), user_input)) or ""
+    invalid_message: Final = validator(StringPromptInput(formatter(user_input), user_input))
 
     assert mock_input.call_args_list == [
         call(message_with_ps1),
