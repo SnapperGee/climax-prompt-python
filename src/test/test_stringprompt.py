@@ -11,6 +11,8 @@ from climax.prompt import (
     StringValidator,
 )
 from climax.prompt._util import always_none_returning_function, identity
+from climax.prompt.prompt import Prompt
+from climax.prompt.prompt_result import PromptResultFailure
 
 from .util import MESSAGE, PS1, string_is_digit
 
@@ -49,6 +51,51 @@ def test_StringPrompt_default_field_values() -> None:
     assert string_prompt.string_validator is always_none_returning_function
     assert string_prompt.formatter is identity
     assert string_prompt.ps1 == ""
+
+
+def test_StringPrompt_returns_last_input_after_retry() -> None:
+    string_prompt: Final = StringPrompt(MESSAGE, string_validator=string_is_digit, formatter=str.strip, ps1=PS1)
+
+    with (
+        patch.object(builtins, "input", side_effect=("  A1  ", "  22  ")) as mock_input,
+        patch.object(builtins, "print") as mock_print,
+    ):
+        result: Final = string_prompt.exec_string_input_loop()
+
+    assert result == StringPromptInput("22", "  22  ")
+    assert mock_input.call_count == 2
+    mock_print.assert_called_once_with('String is not a digit: "  A1  ".\n', end="", file=stderr)
+
+
+def test_StringPrompt_reprompts_without_printing_when_message_is_empty() -> None:
+    def reject_first_call(strings: StringPromptInput) -> str | None:
+        return "" if strings.formatted == "bad" else None
+
+    string_prompt: Final = StringPrompt(MESSAGE, string_validator=reject_first_call)
+
+    with (
+        patch.object(builtins, "input", side_effect=("bad", "good")),
+        patch.object(builtins, "print") as mock_print,
+    ):
+        result: Final = string_prompt.exec_string_input_loop()
+
+    assert result == StringPromptInput("good", "good")
+    mock_print.assert_not_called()
+
+
+def test_Prompt_returns_failure_when_conversion_fails_after_retry() -> None:
+    def is_even(integer: int) -> str | None:
+        return None if integer % 2 == 0 else "odd\n"
+
+    prompt: Final = Prompt.create(MESSAGE, int, validator=is_even)
+
+    with (
+        patch.object(builtins, "input", side_effect=("3", "abc")),
+        patch.object(builtins, "print"),
+    ):
+        result: Final = prompt.exec_input_loop()
+
+    assert result == PromptResultFailure("abc", ValueError("invalid literal for int() with base 10: 'abc'"))
 
 
 @pytest.mark.parametrize(
