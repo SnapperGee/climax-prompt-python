@@ -66,6 +66,7 @@ def test_PromptResultSuccess_not_equal_to_other_types(other: object) -> None:
 def test_PromptResultFailure_equality(string: str, exception: Exception, other_exception: Exception) -> None:
     prompt_input: Final = PromptResultFailure(string, exception)
     other_prompt_input: Final = PromptResultFailure(string, other_exception)
+    assert prompt_input == prompt_input  # noqa: PLR0124
     assert prompt_input == other_prompt_input
 
 
@@ -75,6 +76,7 @@ def test_PromptResultFailure_equality(string: str, exception: Exception, other_e
         ("1", ValueError("bad"), "2", ValueError("bad")),
         ("1", ValueError("bad"), "1", ValueError("worse")),
         ("1", ValueError("bad"), "1", TypeError("bad")),
+        ("1", ValueError("bad"), "2", TypeError("bad")),
         ("1", ValueError("bad"), "1", _CustomError("bad")),
     ],
 )
