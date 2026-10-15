@@ -52,7 +52,7 @@ def _float_contains_non_zero_decimals(a_float: float) -> str | None:
     return None if a_float != int(a_float) else f"Float contains no non zero decimals: {a_float}\n"
 
 
-_CONSTRUCTOR_ARGUMENTS: Final = (
+_CONSTRUCTOR_ARGUMENTS_USER_INPUT_AND_RESULT: Final = (
     (
         string_is_digit,
         int,
@@ -130,7 +130,7 @@ _CONSTRUCTOR_ARGUMENTS: Final = (
 
 @pytest.mark.parametrize(
     ("string_validator", "_type", "validator", "formatter", "ps1", "user_input", "expected"),
-    _CONSTRUCTOR_ARGUMENTS,
+    _CONSTRUCTOR_ARGUMENTS_USER_INPUT_AND_RESULT,
 )
 def test_Prompt_execInputLoop_with_valid_input(
     string_validator: StringValidator,
