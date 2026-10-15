@@ -14,7 +14,7 @@ from climax.prompt._util import always_none_returning_function, identity
 from climax.prompt.prompt import Prompt
 from climax.prompt.prompt_result import PromptResultFailure
 
-from .util import MESSAGE, PS1, string_is_digit
+from .util import MESSAGE, PS1, string_is_digit_validator
 
 
 def _string_is_empty(strings: StringPromptInput) -> str | None:
@@ -54,7 +54,9 @@ def test_StringPrompt_default_field_values() -> None:
 
 
 def test_StringPrompt_returns_last_input_after_retry() -> None:
-    string_prompt: Final = StringPrompt(MESSAGE, string_validator=string_is_digit, formatter=str.strip, ps1=PS1)
+    string_prompt: Final = StringPrompt(
+        MESSAGE, string_validator=string_is_digit_validator, formatter=str.strip, ps1=PS1
+    )
 
     with (
         patch.object(builtins, "input", side_effect=("  A1  ", "  22  ")) as mock_input,
@@ -102,10 +104,10 @@ def test_Prompt_returns_failure_when_conversion_fails_after_retry() -> None:
     ("validator", "formatter", "ps1", "user_input"),
     [
         (_string_is_empty, identity, PS1, ""),
-        (string_is_digit, identity, PS1, "123"),
+        (string_is_digit_validator, identity, PS1, "123"),
         (_string_is_palindrome, identity, PS1, "level"),
         (_string_is_empty, str.strip, PS1, "         "),
-        (string_is_digit, str.strip, PS1, "     123     "),
+        (string_is_digit_validator, str.strip, PS1, "     123     "),
         (_string_is_palindrome, str.strip, PS1, "level         "),
     ],
 )
@@ -127,10 +129,10 @@ def test_StringPrompt_execStringInputLoop_with_valid_input(
     ("validator", "formatter", "ps1", "user_input"),
     [
         (_string_is_not_empty, identity, PS1, ""),
-        (string_is_digit, identity, PS1, "A123"),
+        (string_is_digit_validator, identity, PS1, "A123"),
         (_string_is_palindrome, identity, PS1, "Knights who say ni"),
         (_string_is_not_empty, str.strip, PS1, "         "),
-        (string_is_digit, str.strip, PS1, "  A   123     "),
+        (string_is_digit_validator, str.strip, PS1, "  A   123     "),
         (_string_is_palindrome, str.strip, PS1, "Knights who say ni"),
     ],
 )
